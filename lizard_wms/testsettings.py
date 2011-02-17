@@ -40,6 +40,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     # Needs to be added for django-staticfiles to allow you to use
     # {{ STATIC_URL }}myapp/my.css in your templates.
     'staticfiles.context_processors.static_url',
+    # For lizard-map
+    "django.core.context_processors.request",
     )
 
 

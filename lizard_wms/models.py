@@ -3,7 +3,7 @@ from django.db import models
 import json
 
 from lizard_maptree.models import Category
-from lizard_map.models import ADAPTER_NAME_WMS
+from lizard_map.models import ADAPTER_CLASS_WMS
 
 
 class WMSSource(models.Model):
@@ -28,6 +28,10 @@ class WMSSource(models.Model):
     def workspace_acceptable(self):
         return {'name': self.name,
                 'type': 'workspace-acceptable',
-                'description': 'description',
-                'adapter_layer_json': json.dumps({'url': self.url}),
-                'adapter_name': ADAPTER_NAME_WMS}
+                'description': self.description,
+                'adapter_layer_json': json.dumps({
+                    'name': self.name,
+                    'url': self.url,
+                    'params': self.params,
+                    'options': self.options}),
+                'adapter_name': ADAPTER_CLASS_WMS}
