@@ -8,12 +8,20 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    (r'^admin/', include(admin.site.urls)),
+    url(r'^$',
+        'lizard_wms.views.homepage',
+        name='lizard_wms.homepage'),
+    url(r'^category/(?P<root_slug>.*)/$',
+     'lizard_wms.views.homepage',
+     name='lizard_wms.homepage'),
+    (r'^map/', include('lizard_map.urls')),
     )
 
 
 if settings.DEBUG:
     # Add this also to the projects that use this application
-    urlpatterns += patterns('',
+    urlpatterns += patterns(
+        '',
+        (r'^admin/', include(admin.site.urls)),
         (r'', include('staticfiles.urls')),
     )
