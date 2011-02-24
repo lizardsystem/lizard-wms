@@ -9,6 +9,10 @@ class AdapterWMS(WorkspaceItemAdapter):
     def layer(self, layer_ids=None, request=None):
         return [], {}
 
+    def search(self, x, y, radius=None):
+        """Never find anything"""
+        return []
+
     def symbol_url(self, identifier=None, start_date=None, end_date=None):
         """
         returns symbol
