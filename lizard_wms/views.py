@@ -14,4 +14,5 @@ def homepage(request,
         request,
         root_slug=root_slug,
         item_models=['wmssource', ],
-        template=template)
+        template=template,
+        title='WMS')
