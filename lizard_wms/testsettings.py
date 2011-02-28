@@ -75,6 +75,49 @@ STATIC_URL = '/static_media/'
 # admin's static media into STATIC_ROOT/admin.
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
+# Almere base layer
+MAP_SETTINGS = {
+    'base_layer_type': 'WMS',  # OSM or WMS
+    'projection': 'EPSG:28992',  # EPSG:900913, EPSG:28992
+    'display_projection': 'EPSG:28992',  # EPSG:900913/28992/4326
+    'startlocation_x': '127000',
+    'startlocation_y': '473000',
+    'startlocation_zoom': '4',
+    'base_layer_wms': (
+        'http://kaart.almere.nl/wmsconnector/com.esri.wms.Esrimap?'
+        'SERVICENAME=AIKWMS&'),
+    'base_layer_wms_layers': (
+        'KLHOpenbaargebied,KLHBebouwing,KLHBedrijventerrein,KLHBos,'
+        'KLHWater,KLHStrand,KLHHoofdweg,KLHWeg,KLHVliegveld,KLHSnelweg,'
+        'KLHGemeentegrens,KLHBusbaan,KLHSpoorlijn,KLHTeksten,'
+        'KLTAutosnelweg,KLTBebouwingCentrum,KLTBedrijven,'
+        'KLTBedrijventerrein,KLTBijzondereBebouwing,KLTBosvak,KLTCentrum,'
+        'KLTFietspad,KLTGras,KLTHoofdweg,KLTLandbouwVeeteelt,KLTMoerasNatuur,'
+        'KLTOVbaan,KLTOverigePaden,KLTSpoorlijnWit,KLTSpoorlijnZwart,'
+        'KLTSportvelden,KLTSteiger,KLTStrand,KLTWater,KLTWijkwegen,'
+        'KLTWoningen,KLTWoongebied,KLTGemeentegrens,KLTHoogspanningsleiding,'
+        'KLTHoogspanningsmasten,KLTInOntwerp,KLTKabelbaan,KLTKavelsloot,'
+        'KLTWijknamen,KLTParknamen,KLTOpenwaternamen,KLTIndustrienamen,'
+        'KLTDreefnamen,GBKAWater,GBKAGras,GBKAPlantvak,GBKABeton,GBKABosvak,'
+        'GBKABraakLiggend,GBKAAsfalt'),
+    }
+
+
+# MAP_SETTINGS = {
+#     'base_layer_type': 'WMS',  # OSM or WMS
+#     'projection': 'EPSG:28992',  # EPSG:900913, EPSG:28992
+#     'display_projection': 'EPSG:28992',  # EPSG:900913/28992/4326
+#     'startlocation_x': '127000',
+#     'startlocation_y': '473000',
+#     'startlocation_zoom': '4',
+#     'base_layer_wms': (
+#         'http://nederlandwms.risicokaart.nl/wmsconnector/'
+#         'com.esri.wms.Esrimap?'
+#         'SERVICENAME=risicokaart_pub_nl_met_ondergrond&'),
+#     'base_layer_wms_layers': (
+#         'Outline_nederland,Dissolve_provincies,0,2,12,3,38,5,4,9,10'),
+#     }
+
 
 try:
     # Import local settings that aren't stored in svn.
