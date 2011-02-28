@@ -1,0 +1,86 @@
+[
+  {
+    "pk": 1, 
+    "model": "lizard_wms.wmssource", 
+    "fields": {
+      "category": [
+        1
+      ], 
+      "description": "", 
+      "url": "http://afvoerkaart.lizardsystem.nl/geoserver/gwc/service/wms", 
+      "params": "{\"transparent\": \"TRUE\", \"height\": \"256\", \"width\": \"256\", \"layers\": \"afvoercoef_wgs_mp\", \"styles\": \"\", \"format\": \"image/png\", \"tiled\": \"true\"}", 
+      "options": "{\"buffer\": 0, \"reproject\": true, \"isBaseLayer\": false, \"opacity\": 0.9}", 
+      "name": "Afvoercoefficienten"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "lizard_wms.wmssource", 
+    "fields": {
+      "category": [
+        1
+      ], 
+      "description": "", 
+      "url": "http://kaart.almere.nl/wmsconnector/com.esri.wms.Esrimap", 
+      "params": "{\"height\": \"256\", \"width\": \"256\", \"layers\": \"KLHOpenbaargebied,KLHBebouwing,KLHBedrijventerrein,KLHBos,KLHWater,KLHStrand,KLHHoofdweg,KLHWeg,KLHVliegveld,KLHSnelweg,KLHGemeentegrens,KLHBusbaan,KLHSpoorlijn,KLHTeksten,KLTAutosnelweg,KLTBebouwingCentrum,KLTBedrijven,KLTBedrijventerrein,KLTBijzondereBebouwing,KLTBosvak,KLTCentrum,KLTFietspad,KLTGras,KLTHoofdweg,KLTLandbouwVeeteelt,KLTMoerasNatuur,KLTOVbaan,KLTOverigePaden,KLTSpoorlijnWit,KLTSpoorlijnZwart,KLTSportvelden,KLTSteiger,KLTStrand,KLTWater,KLTWijkwegen,KLTWoningen,KLTWoongebied,KLTGemeentegrens,KLTHoogspanningsleiding,KLTHoogspanningsmasten,KLTInOntwerp,KLTKabelbaan,KLTKavelsloot,KLTWijknamen,KLTParknamen,KLTOpenwaternamen,KLTIndustrienamen,KLTDreefnamen,GBKAWater,GBKAGras,GBKAPlantvak,GBKABeton,GBKABosvak,GBKABraakLiggend,GBKAAsfalt\", \"styles\": \"\", \"format\": \"image/png\", \"tiled\": \"true\"}", 
+      "options": "{\"buffer\": 0, \"reproject\": true, \"isBaseLayer\": true, \"opacity\": 1.0}", 
+      "name": "Almere"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "lizard_wms.wmssource", 
+    "fields": {
+      "category": [
+        1
+      ], 
+      "description": "", 
+      "url": "http://afvoerkaart.lizardsystem.nl/geoserver/gwc/service/wms", 
+      "params": "{\"transparent\": \"TRUE\", \"height\": \"256\", \"width\": \"256\", \"layers\": \"gemeente_wgs\", \"styles\": \"\", \"format\": \"image/png\"}", 
+      "options": "{\"buffer\": 0,\"reproject\": true}", 
+      "name": "Gemeentegrenzen"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "lizard_wms.wmssource", 
+    "fields": {
+      "category": [
+        1
+      ], 
+      "description": "", 
+      "url": "http://afvoerkaart.lizardsystem.nl/geoserver/gwc/service/wms", 
+      "params": "\"\"", 
+      "options": "\"\"", 
+      "name": "Test"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "lizard_wms.wmssource", 
+    "fields": {
+      "category": [
+        1
+      ], 
+      "description": "", 
+      "url": "http://afvoerkaart.lizardsystem.nl/geoserver/gwc/service/wms", 
+      "params": "{\"transparent\": \"TRUE\", \"height\": \"256\", \"width\": \"256\", \"layers\": \"watergangen_wgs\", \"styles\": \"\", \"format\": \"image/png\"}", 
+      "options": "{\"buffer\": 0, \"reproject\": true}", 
+      "name": "Watergangen"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "lizard_wms.wmssource", 
+    "fields": {
+      "category": [
+        1
+      ], 
+      "description": "", 
+      "url": "http://world.freemap.in/cgi-bin/mapserv", 
+      "params": "{\"map\": \"/www/freemap.in/world/map/factbooktrans.map\", \"transparent\": \"TRUE\", \"layers\": \"factbook\", \"isBaseLayer\": true}", 
+      "options": "{\"reproject\": true}", 
+      "name": "World Map"
+    }
+  }
+]
