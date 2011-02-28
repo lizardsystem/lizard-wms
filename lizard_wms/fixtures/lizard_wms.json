@@ -82,5 +82,41 @@
       "options": "{\"reproject\": true}", 
       "name": "World Map"
     }
+  }, 
+  {
+    "pk": 1, 
+    "model": "lizard_maptree.category", 
+    "fields": {
+      "name": "root", 
+      "parent": null, 
+      "slug": "root"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "lizard_maptree.category", 
+    "fields": {
+      "name": "sub", 
+      "parent": 1, 
+      "slug": "sub"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "lizard_maptree.category", 
+    "fields": {
+      "name": "sub2", 
+      "parent": 1, 
+      "slug": "sub2"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "lizard_maptree.category", 
+    "fields": {
+      "name": "subsub", 
+      "parent": 2, 
+      "slug": "subsub"
+    }
   }
 ]
