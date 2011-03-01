@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.2 (unreleased)
+0.2 (2011-03-01)
 ----------------
 
 - Replaced view function with generic maptree view.
