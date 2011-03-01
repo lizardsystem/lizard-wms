@@ -6,14 +6,18 @@ from django.contrib import admin
 
 admin.autodiscover()
 
+ITEM_MODELS = ['wmssource', ]  # for maptree items.
+
 urlpatterns = patterns(
     '',
     url(r'^$',
-        'lizard_wms.views.homepage',
+        'lizard_maptree.views.homepage',
+        {'title': 'WMS', 'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     url(r'^category/(?P<root_slug>.*)/$',
-     'lizard_wms.views.homepage',
-     name='lizard_wms.homepage'),
+        'lizard_maptree.views.homepage',
+        {'title': 'WMS', 'item_models': ITEM_MODELS},
+        name='lizard_wms.homepage'),
     (r'^map/', include('lizard_map.urls')),
     )
 
