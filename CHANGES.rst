@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.1 (unreleased)
+0.1 (2011-03-01)
 ----------------
 
 - Added initial functionality.
