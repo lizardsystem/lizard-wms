@@ -5,7 +5,8 @@ Changelog of lizard-wms
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Implemented workaround to handle the case that standard Python module "json"
+  is only available in Python 2.6 and later versions (ticket 2688).
 
 
 0.2 (2011-03-01)

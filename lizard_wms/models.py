@@ -1,6 +1,12 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 from django.db import models
-import json
+
+# json only became available in Python 2.6. As some of our sites still use
+# Python 2.5, we have to use the following workaround (ticket 2688).
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from lizard_maptree.models import Category
 from lizard_map.models import ADAPTER_CLASS_WMS
