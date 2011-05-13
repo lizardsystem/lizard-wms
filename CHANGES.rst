@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.3 (unreleased)
+0.3 (2011-05-13)
 ----------------
 
 - Implemented workaround to handle the case that standard Python module "json"
