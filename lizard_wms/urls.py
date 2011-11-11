@@ -3,6 +3,7 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib import admin
 
+from lizard_maptree.views import MaptreeHomepageView
 
 admin.autodiscover()
 
@@ -11,11 +12,11 @@ ITEM_MODELS = ['wmssource', ]  # for maptree items.
 urlpatterns = patterns(
     '',
     url(r'^$',
-        'lizard_maptree.views.homepage',
+        MaptreeHomepageView.as_view(),
         {'title': 'WMS', 'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     url(r'^category/(?P<root_slug>.*)/$',
-        'lizard_maptree.views.homepage',
+        MaptreeHomepageView.as_view(),
         {'title': 'WMS', 'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     (r'^map/', include('lizard_map.urls')),

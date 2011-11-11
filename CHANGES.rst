@@ -5,8 +5,9 @@ Changelog of lizard-wms
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Updated views to use the new lizard-maptree (0.3).
 
+- Set minimum requirements for lizard-maptree, -map and -ui.
 
 0.3 (2011-05-13)
 ----------------
