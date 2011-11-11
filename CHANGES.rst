@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.4 (unreleased)
+0.4 (2011-11-11)
 ----------------
 
 - Updated views to use the new lizard-maptree (0.3).
