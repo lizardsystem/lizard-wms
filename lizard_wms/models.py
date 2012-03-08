@@ -10,7 +10,7 @@ except ImportError:
 
 from lizard_maptree.models import Category
 from lizard_map.models import ADAPTER_CLASS_WMS
-from lizard_ui.layout import WorkspaceAcceptable
+from lizard_map.lizard_widgets import WorkspaceAcceptable
 
 
 class WMSSource(models.Model):
@@ -35,7 +35,6 @@ class WMSSource(models.Model):
     def workspace_acceptable(self):
         return WorkspaceAcceptable(
             name=self.name,
-            workspace_type='workspace-acceptable',
             description=self.description,
             adapter_layer_json=json.dumps({
                     'name': self.name,
