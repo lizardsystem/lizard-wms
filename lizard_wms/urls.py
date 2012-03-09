@@ -13,11 +13,11 @@ urlpatterns = patterns(
     '',
     url(r'^$',
         MaptreeHomepageView.as_view(),
-        {'title': 'WMS', 'item_models': ITEM_MODELS},
+        {'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     url(r'^category/(?P<root_slug>.*)/$',
         MaptreeHomepageView.as_view(),
-        {'title': 'WMS', 'item_models': ITEM_MODELS},
+        {'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     (r'^map/', include('lizard_map.urls')),
     )
