@@ -42,7 +42,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'staticfiles.context_processors.static_url',
     # For lizard-map
     "django.core.context_processors.request",
-    "lizard_map.context_processors.processor.processor",
     )
 
 
