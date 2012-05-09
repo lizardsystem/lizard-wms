@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from lizard_wms.models import WMSSource
+from lizard_wms.models import WMSConnection, WMSSource
 
-
-admin.site.register(WMSSource)
+for model in (WMSConnection, WMSSource):
+    admin.site.register(model)

@@ -13,6 +13,7 @@ install_requires = [
     'Django',
     'django-staticfiles',
     'django-extensions',
+    'OWSLib',
     'lizard-ui >= 3.7',
     'lizard-map >= 3.4.2',
     'lizard-maptree',

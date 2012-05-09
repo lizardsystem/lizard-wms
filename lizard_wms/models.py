@@ -12,18 +12,36 @@ from lizard_maptree.models import Category
 from lizard_map.models import ADAPTER_CLASS_WMS
 
 
+class WMSConnection(models.Model):
+    """Definition of a WMS Connection."""
+
+    title = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100)
+    url = models.URLField(verify_exists=False)
+    version = models.CharField(max_length=20)
+
+    params = models.TextField(null=True, blank=True)
+    options = models.TextField(null=True, blank=True)
+    category = models.ManyToManyField(Category, null=True, blank=True)
+
+    def __unicode__(self):
+        return u'%s' % (self.title or self.slug, )
+
+
 class WMSSource(models.Model):
     """
     Definition of a wms source.
     """
+
     name = models.CharField(max_length=80)
     url = models.URLField(verify_exists=False)
     params = models.TextField(null=True, blank=True)  # {layers: 'basic'}
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
 
     description = models.TextField(null=True, blank=True)
-
     category = models.ManyToManyField(Category, null=True, blank=True)
+
+    connection = models.ForeignKey(WMSConnection, blank=True, null=True)
 
     class Meta:
         ordering = ('name', )
