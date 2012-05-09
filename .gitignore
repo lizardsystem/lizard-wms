@@ -36,3 +36,7 @@ src
 # Ignore generated apache config files
 etc/*.apache.conf
 
+# Editor files
+*.swp
+.#*
+*~
