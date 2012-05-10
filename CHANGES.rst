@@ -2,8 +2,8 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.5.2 (unreleased)
-----------------
+0.5.2 (2012-05-10)
+------------------
 
 - Included management commands in MANIFEST.in.
 
