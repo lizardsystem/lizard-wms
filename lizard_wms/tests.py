@@ -5,7 +5,7 @@ from django.test.client import Client
 
 
 class IntegrationTest(TestCase):
-    fixtures = ['lizard_wms',]
+    fixtures = ['lizard_wms']
 
     def test_homepage(self):
         c = Client()
