@@ -2,10 +2,10 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.6 (unreleased)
+0.5.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fixed wrong graft in MANIFEST.in.
 
 
 0.5.2 (2012-05-10)
