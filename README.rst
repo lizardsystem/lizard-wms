@@ -15,4 +15,12 @@ urls.py::
 
     (r'^webmap/', include('lizard_wms.urls')),
 
-That's all.
+Fetch WMS layers
+----------------
+
+To automatically fetch wms layers define a WMS connection and execute the 
+following via a cronjon:
+
+$ bin/django/fetch_wms_layers --all
+
+

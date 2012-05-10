@@ -5,7 +5,7 @@ Changelog of lizard-wms
 0.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added rudimentary WMS getCapabilities support.
 
 
 0.4 (2011-11-11)
