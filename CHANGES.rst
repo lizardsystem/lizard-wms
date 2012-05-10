@@ -2,10 +2,10 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.6 (unreleased)
+0.5.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- README and CHANGES files are included in releases.
 
 
 0.5 (2012-05-10)
