@@ -18,10 +18,17 @@ class WMSConnection(models.Model):
     title = models.CharField(max_length=100)
     slug = models.CharField(max_length=100)
     url = models.URLField(verify_exists=False)
-    version = models.CharField(max_length=20)
+    version = models.CharField(max_length=20, default='1.3.0',
+                               help_text=u"Version number for Lizard.")
 
-    params = models.TextField(null=True, blank=True)
-    options = models.TextField(null=True, blank=True)
+    params = models.TextField(
+        default='{"height": "256", "width": "256", "layers": "%s", '
+        '"styles": "", "format": "image/png", "tiled": "true", '
+        '"transparent": "true"}'
+        )
+    options = models.TextField(
+        default='{"buffer": 0, "reproject": true, "isBaseLayer": false, '
+        '"opacity": 0.5}')
     category = models.ManyToManyField(Category, null=True, blank=True)
 
     def __unicode__(self):
