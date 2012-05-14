@@ -59,12 +59,12 @@ class Command(BaseCommand):
     @transaction.commit_on_success
     def fetch_wms(self, connection):
         wms = WebMapService(connection.url)
-        connection.title = wms.identification.title
         connection.save()
 
         for name, layer in wms.contents.iteritems():
             if layer.layers:
                 #Meta layer, don't use
+                print 'Meta Layer: %s' % name
                 continue
 
             kwargs = {'connection': connection,
@@ -72,9 +72,14 @@ class Command(BaseCommand):
             layer_instance, created = \
                 models.WMSSource.objects.get_or_create(**kwargs)
 
-            layer_instance.description = '<img src="%s" alt="%s" />' % (
-                layer.styles['default']['legend'],
-                layer.parent.title)
+            layer_style = layer.styles.values()
+            # Not all layers have a description/legend.
+            if len(layer_style):
+                layer_instance.description = '<img src="%s" alt="%s" />' % (
+                    layer_style[0]['legend'],
+                    layer_style[0]['title'])
+            else:
+                layer_instance.description = None
 
             for attribute in ('url', 'options'):
                 attr_value = getattr(connection, attribute)
