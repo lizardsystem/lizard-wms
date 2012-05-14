@@ -64,7 +64,6 @@ class Command(BaseCommand):
         for name, layer in wms.contents.iteritems():
             if layer.layers:
                 #Meta layer, don't use
-                print 'Meta Layer: %s' % name
                 continue
 
             kwargs = {'connection': connection,
