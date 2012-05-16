@@ -59,7 +59,6 @@ class Command(BaseCommand):
     @transaction.commit_on_success
     def fetch_wms(self, connection):
         wms = WebMapService(connection.url)
-        connection.save()
 
         for name, layer in wms.contents.iteritems():
             if layer.layers:
