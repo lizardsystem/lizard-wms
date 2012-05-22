@@ -83,8 +83,11 @@ class WMSConnection(models.Model):
             layer_instance.params = self.params % layer.name
 
             layer_instance.import_bounding_box(layer)
-
             layer_instance.save()
+
+            if layer_instance.bbox:
+                layer_instance.get_feature_info()
+
             fetched.add(name)
 
         return fetched
@@ -135,8 +138,12 @@ class WMSSource(models.Model):
                     }),
                 'adapter_name': ADAPTER_CLASS_WMS}
 
-    def get_feature_info(self, x, y):
-        """Gets feature info from the server, at point (x,y) in Google coordinates."""
+    def get_feature_info(self, x=None, y=None):
+        """Gets feature info from the server, at point (x,y) in Google coordinates.
+
+        If x, y isn't given, use this layer's bbox, if any. Useful to get available
+        features immediately after fetching the layer.
+        """
 
         # We use a tiny custom radius, because otherwise we don't have
         # enough control over which feature is returned, there is no
@@ -144,6 +151,17 @@ class WMSSource(models.Model):
         radius = 10
 
         params = json.loads(self.params)
+
+        if x is not None:
+            # Construct the "bounding box", a tiny area around (x,y)
+            bbox = ','.join(str(coord)
+                            for coord in
+                            (x - radius, y - radius, x + radius, y + radius))
+        else:
+            bbox = self.bbox
+
+        if not bbox:
+            return
 
         payload = {
             'REQUEST': 'GetFeatureInfo',
@@ -159,10 +177,7 @@ class WMSSource(models.Model):
             'LAYERS': params['layers'],
             'QUERY_LAYERS': params['layers'],
 
-            # Construct the "bounding box", a tiny area around (x,y)
-            'BBOX': ','.join(str(coord)
-                             for coord in
-                             (x - radius, y - radius, x + radius, y + radius)),
+            'BBOX': bbox,
 
             # Get the value at the single pixel of a 1x1 picture
             'HEIGHT': 1,
