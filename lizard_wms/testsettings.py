@@ -1,6 +1,8 @@
 import logging
 import os
 
+from lizard_ui.settingshelper import STATICFILES_FINDERS
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(name)s %(levelname)s %(message)s')
@@ -30,10 +32,14 @@ ROOT_URLCONF = 'lizard_wms.urls'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+DATABASES = {
+    'default': {'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': 'test.db'},
+    }
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     # Default items.
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",

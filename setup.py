@@ -10,13 +10,13 @@ long_description = '\n\n'.join([
     ])
 
 install_requires = [
-    'Django',
+    'Django == 1.3.1',
     'django-staticfiles',
     'django-extensions',
     'OWSLib',
-    'lizard-ui >= 3.7',
-    'lizard-map >= 3.4.2',
-    'lizard-maptree',
+    'lizard-ui == 3.15',
+    'lizard-map == 3.31',
+    'lizard-maptree < 1.0.0',
     'django-nose',
     'pkginfo',
     'requests',
