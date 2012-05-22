@@ -1,5 +1,8 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
+import owslib.wms
+
 from django.db import models
+from django.db import transaction
 
 # json only became available in Python 2.6. As some of our sites still use
 # Python 2.5, we have to use the following workaround (ticket 2688).
@@ -34,6 +37,36 @@ class WMSConnection(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.title or self.slug, )
+
+    @transaction.commit_on_success
+    def fetch(self):
+        wms = owslib.wms.WebMapService(self.url)
+
+        for name, layer in wms.contents.iteritems():
+            if layer.layers:
+                #Meta layer, don't use
+                continue
+
+            kwargs = {'connection': self,
+                      'name': name}
+            layer_instance, created = \
+                WMSSource.objects.get_or_create(**kwargs)
+
+            layer_style = layer.styles.values()
+            # Not all layers have a description/legend.
+            if len(layer_style):
+                layer_instance.description = '<img src="%s" alt="%s" />' % (
+                    layer_style[0]['legend'],
+                    layer_style[0]['title'])
+            else:
+                layer_instance.description = None
+
+            for attribute in ('url', 'options'):
+                attr_value = getattr(self, attribute)
+                setattr(layer_instance, attribute, attr_value)
+            layer_instance.category = self.category.all()
+            layer_instance.params = self.params % layer.name
+            layer_instance.save()
 
 
 class WMSSource(models.Model):
