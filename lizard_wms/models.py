@@ -184,11 +184,25 @@ class WMSSource(models.Model):
             feature, value = parts
             values[feature] = value
 
+        self._store_features(values)
         return values
 
     def _store_features(self, values):
         """Make sure the features in the 'values' dict are stored as FeatureLines
         in the database."""
+
+        values = set(values)  # Copy so we can safely mutate it
+
+        for feature_line in self.featureline_set.all():
+            if feature_line.name in values:
+                values.remove(feature_line.name)
+
+        for name in values:
+            # Loop over the names not removed yet
+            feature_line = FeatureLine(
+                wms_layer=self,
+                name=name)
+            feature_line.save()
 
     def get_feature_for_hover(self, x, y):
         """Return feature as a string useful for the mouse hover function"""
@@ -218,7 +232,7 @@ class FeatureLine(models.Model):
     use_as_id = models.BooleanField(default=False)
     render_as = models.CharField(max_length=1, choices = (
             ('T', "Tekst"),
-            ('I', "Link naar een image")))
+            ('I', "Link naar een image")), default='T')
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
 
