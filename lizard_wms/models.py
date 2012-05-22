@@ -119,10 +119,12 @@ class WMSSource(models.Model):
                 'type': 'workspace-acceptable',
                 'description': self.description,
                 'adapter_layer_json': json.dumps({
+                    'wms_source_id': self.id,
                     'name': self.name,
                     'url': self.url,
                     'params': self.params,
-                    'options': self.options}),
+                    'options': self.options,
+                    }),
                 'adapter_name': ADAPTER_CLASS_WMS}
 
     def get_feature_info(self, x, y):
@@ -219,6 +221,19 @@ class WMSSource(models.Model):
                 parts.append(values[feature_line.name])
 
         return " ".join(parts)
+
+    def get_popup_info(self, values):
+        info = []
+
+        for feature_line in (self.featureline_set.filter(visible=True).
+                             order_by('order_using')):
+            if feature_line.name in values:
+                info.append({
+                        'name': feature_line.name,
+                        'value': values[feature_line.name],
+                        'render_as': feature_line.render_as,
+                        })
+        return info
 
 
 class FeatureLine(models.Model):

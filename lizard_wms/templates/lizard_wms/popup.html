@@ -1,0 +1,9 @@
+<table>
+<thead>
+<th>Feature</th>
+<th>Waarde</th>
+</thead>
+{% for info in feature_info %}
+<tr><td>{{info.name}}</td><td>{{ info.value }}</td></tr>
+{% endfor %}
+</table>

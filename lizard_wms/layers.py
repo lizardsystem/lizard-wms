@@ -14,20 +14,23 @@ class AdapterWMS(WorkspaceItemAdapter):
     GetFeatureInfo requests.
     """
 
-    def __init__(self, *args, **kwargs):
-        super(AdapterWMS, self).__init__(*args, **kwargs)
+    @property
+    def wms_source(self):
+        if not hasattr(self, '_wms_source'):
+            self._wms_source = models.WMSSource.objects.get(
+                pk=self.layer_arguments['wms_source_id'])
 
-        # TODO: Put the actual WMS model objects in layer_arguments
-        # (or their slugs, rather), so we can use them to get at
-        # e.g. the WMS version.
-
-        self.url = self.layer_arguments['url']
-        self.params = json.loads(self.layer_arguments.get('params', '{}'))
-        self.name = self.layer_arguments['name']
-        self.options = json.loads(self.layer_arguments.get('options', '{}'))
+        return self._wms_source
 
     def layer(self, layer_ids=None, request=None):
         return [], {}
+
+    def location(self, x, y):
+        """This can't possibly be correct, but it works."""
+
+        search = self.search(x, y)
+        if search:
+            return search[0]
 
     def search(self, x, y, radius=None):
         """Get information about features at x, y from this WMS layer.
@@ -40,11 +43,8 @@ class AdapterWMS(WorkspaceItemAdapter):
         be used to reconstruct the object.
         """
 
-        # WRONG, name isn't unique
-        wms_source = models.WMSSource.objects.get(name=self.name)
-
-        feature_info = wms_source.get_feature_info(x, y)
-        name = wms_source.get_feature_name(feature_info)
+        feature_info = self.wms_source.get_feature_info(x, y)
+        name = self.wms_source.get_feature_name(feature_info)
 
         if feature_info:
             return [{
@@ -56,15 +56,20 @@ class AdapterWMS(WorkspaceItemAdapter):
                         'y': y
                         },
                     }]
-
-        return []
+        else:
+            return []
 
     def html(self, identifiers, layout_options=None):
-        logger.info(repr(identifiers))
+        identifier = identifiers[0]
+
+        feature_info = self.wms_source.get_feature_info(identifier['x'],
+                                                        identifier['y'])
+
         return self.html_default(identifiers=identifiers,
                                  template="lizard_wms/popup.html",
                                  layout_options=layout_options,
                                  extra_render_kwargs={
+                'feature_info': self.wms_source.get_popup_info(feature_info),
                 })
 
     def symbol_url(self, identifier=None, start_date=None, end_date=None):
@@ -75,6 +80,7 @@ class AdapterWMS(WorkspaceItemAdapter):
             'icon': 'polygon.png',
             'mask': ('mask.png', ),
             'color': (0, 1, 0, 0)}
+
         return super(AdapterWMS, self).symbol_url(
             identifier=identifier,
             start_date=start_date,
