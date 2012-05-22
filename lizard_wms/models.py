@@ -207,10 +207,14 @@ class WMSSource(models.Model):
     def get_feature_for_hover(self, x, y):
         """Return feature as a string useful for the mouse hover function"""
         values = self._get_feature_info(x, y)
-        if values and 'omschr' in values:
-            return values['omschr']
-        else:
-            return None
+
+        parts = []
+        for feature_line in (self.featureline_set.filter(in_hover=True).
+                             order_by('order_using')):
+            if feature_line.name in values:
+                parts.append(values[feature_line.name])
+
+        return " ".join(parts)
 
 
 class FeatureLine(models.Model):
@@ -236,3 +240,5 @@ class FeatureLine(models.Model):
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
 
+    def __unicode__(self):
+        return self.name

@@ -59,7 +59,12 @@ class AdapterWMS(WorkspaceItemAdapter):
         return []
 
     def html(self, identifiers, layout_options=None):
-        pass
+        logger.info(repr(identifiers))
+        return self.html_default(identifiers=identifiers,
+                                 template="lizard_wms/popup.html",
+                                 layout_options=layout_options,
+                                 extra_render_kwargs={
+                })
 
     def symbol_url(self, identifier=None, start_date=None, end_date=None):
         """
