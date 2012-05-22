@@ -20,10 +20,6 @@ class Command(BaseCommand):
                     action='store_true',
                     help='update all WMSConnection',
                     default=False),
-        make_option('--flush',
-                    action='store_true',
-                    help='flush all WMSSources (before doing an update)',
-                    default=False),
         )
 
     def handle(self, *args, **options):
@@ -34,23 +30,15 @@ class Command(BaseCommand):
             sys.exit(1)
 
         fetch_all = options['all']
-        if any(options.iterkeys()) == False:
+
+        if not fetch_all and not slug:
             print "Pass an argument."
             sys.exit(2)
 
-        # Delete all objects depending on --all or --name.
-        if options['flush']:
-            if slug:
-                qs_kwargs = {'connection__slug': slug}
-            else:
-                qs_kwargs = {'connection__isnull': False}
-            models.WMSSource.objects.filter(**qs_kwargs).delete()
-            if not slug and not fetch_all:
-                sys.exit(0)
-
         connections = models.WMSConnection.objects.all()
-        if slug and not fetch_all:
+        if slug:
             connections = connections.filter(slug=slug)
 
         for connection in connections:
-            connection.fetch()
+            fetched = connection.fetch()
+            connection.delete_layers(keep_layers=fetched)

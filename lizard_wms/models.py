@@ -40,7 +40,15 @@ class WMSConnection(models.Model):
 
     @transaction.commit_on_success
     def fetch(self):
+        """Fetches layers belonging to this WMS connection and stored
+        them in the database, including all the metadata we can easily
+        get at.
+
+        Returns a set of fetched layer names."""
+
         wms = owslib.wms.WebMapService(self.url)
+
+        fetched = set()
 
         for name, layer in wms.contents.iteritems():
             if layer.layers:
@@ -67,6 +75,17 @@ class WMSConnection(models.Model):
             layer_instance.category = self.category.all()
             layer_instance.params = self.params % layer.name
             layer_instance.save()
+            fetched.add(name)
+
+        return fetched
+
+    def delete_layers(self, keep_layers=set()):
+        """Deletes layers belonging to this WMS connection of which
+        the names don't occur in the set keep_layers."""
+
+        for layer in self.wmssource_set.all():
+            if layer.name not in keep_layers:
+                layer.delete()
 
 
 class WMSSource(models.Model):
