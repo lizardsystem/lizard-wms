@@ -15,7 +15,7 @@ install_requires = [
     'django-extensions',
     'OWSLib',
     'lizard-ui == 3.15',
-    'lizard-map == 3.31',
+    'lizard-map <= 3.31',
     'lizard-maptree < 1.0.0',
     'django-nose',
     'pkginfo',

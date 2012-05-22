@@ -3,59 +3,9 @@ import logging
 import requests
 
 from lizard_map.workspace import WorkspaceItemAdapter
+from lizard_wms import models
 
 logger = logging.getLogger(__name__)
-
-
-def get_feature_info(url, layer, version, x, y):
-    """Send feature info request. Define a bounding box and ask for a 1x1
-    picture in which we want the value at the pixel (0,0).
-
-    x, y are Google coordinates."""
-
-    # We use a tiny custom radius, because otherwise we don't have
-    # enough control over which feature is returned, there is no
-    # mechanism to choose the feature closest to x, y.
-    radius = 10
-
-    payload = {
-        'REQUEST': 'GetFeatureInfo',
-        'EXCEPTIONS': 'application/vnd.ogc.se_xml',
-        'INFO_FORMAT': 'text/plain',
-        'SERVICE': 'WMS',
-        'SRS': 'EPSG:900913',  # Always Google
-
-        # Get a single feature
-        'FEATURE_COUNT': 1,
-
-        # Set the layer we want
-        'LAYERS': layer,
-        'QUERY_LAYERS': layer,
-
-        # Construct the "bounding box", a tiny area around (x,y)
-        'BBOX': ','.join(str(coord)
-                         for coord in
-                         (x - radius, y - radius, x + radius, y + radius)),
-
-        # Get the value at the single pixel of a 1x1 picture
-        'HEIGHT': 1,
-        'WIDTH': 1,
-        'X': 0,
-        'Y': 0,
-
-        # Version from parameter
-        'VERSION': version,
-        }
-
-    r = requests.get(url, params=payload)
-    logger.info("GetFeatureInfo says: " + r.content)
-
-    # XXX Check result code etc
-
-    if 'no features were found' in r.content:
-        return None
-
-    return r.content
 
 
 class AdapterWMS(WorkspaceItemAdapter):
@@ -90,11 +40,10 @@ class AdapterWMS(WorkspaceItemAdapter):
         be used to reconstruct the object.
         """
 
-        feature_info = get_feature_info(
-            url=self.url,
-            layer=self.params['layers'],
-            version='1.3.0',
-            x=x, y=y)
+        # WRONG, name isn't unique
+        wms_source = models.WMSSource.objects.get(name=self.name)
+
+        feature_info = wms_source.get_feature_for_hover(x, y)
 
         if feature_info:
             return [{
