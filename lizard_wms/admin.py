@@ -15,7 +15,7 @@ source_domain.short_description = 'Domein'
 class FeatureLineInline(admin.TabularInline):
     model = models.FeatureLine
 
-    fields = ('name', 'visible', 'order_using', 'render_as', 'in_hover',
+    fields = ('name', 'description', 'visible', 'order_using', 'render_as', 'in_hover',
               'use_as_id',)
 
     ordering = ('-visible', 'order_using')
