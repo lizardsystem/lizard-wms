@@ -19,6 +19,7 @@ install_requires = [
     'lizard-maptree',
     'django-nose',
     'pkginfo',
+    'requests',
     ],
 
 tests_require = [
