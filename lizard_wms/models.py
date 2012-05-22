@@ -6,6 +6,8 @@ import requests
 from django.db import models
 from django.db import transaction
 
+from lizard_map import coordinates
+
 # json only became available in Python 2.6. As some of our sites still use
 # Python 2.5, we have to use the following workaround (ticket 2688).
 try:
@@ -79,6 +81,9 @@ class WMSConnection(models.Model):
                 setattr(layer_instance, attribute, attr_value)
             layer_instance.category = self.category.all()
             layer_instance.params = self.params % layer.name
+
+            layer_instance.import_bounding_box(layer)
+
             layer_instance.save()
             fetched.add(name)
 
@@ -105,6 +110,9 @@ class WMSSource(models.Model):
 
     description = models.TextField(null=True, blank=True)
     category = models.ManyToManyField(Category, null=True, blank=True)
+
+    # bbox: minx, miny, maxx, maxy in Google coordinates, separated by commas
+    bbox = models.CharField(max_length=100, null=True, blank=True)
 
     connection = models.ForeignKey(WMSConnection, blank=True, null=True)
 
@@ -205,6 +213,32 @@ class WMSSource(models.Model):
                 wms_layer=self,
                 name=name)
             feature_line.save()
+
+    def import_bounding_box(self, layer):
+        """Get bounding box information from the layer; layer is an instance
+        of owslib.wms.ContentMetaData."""
+
+        if layer.boundingBoxWGS84:
+            minx, miny, maxx, maxy = layer.boundingBoxWGS84
+            srs = 'EPSG:4326'
+        elif layer.boundingBox:
+            minx, miny, maxx, maxy, srs = layer.boundingBox
+
+        if srs == "ESPG:900913":
+            # Yay!
+            pass
+        elif srs == "EPSG:28992":
+            minx, miny = coordinates.rd_to_google(minx, miny)
+            maxx, maxy = coordinates.rd_to_google(maxx, maxy)
+        elif srs == "ESPG:4326":
+            minx, miny = coordinates.wgs84_to_google(minx, miny)
+            maxx, maxy = coordinates.wgs84_to_google(maxx, maxy)
+        else:
+            self.bbox = None
+            return
+
+        self.bbox = ",".join(str(coord) for coord in
+                             (minx, miny, maxx, maxy))
 
     def get_feature_name(self, values):
         """
