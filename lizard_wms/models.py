@@ -233,19 +233,26 @@ class WMSSource(models.Model):
         """Get bounding box information from the layer; layer is an instance
         of owslib.wms.ContentMetaData."""
 
-        if layer.boundingBoxWGS84:
-            minx, miny, maxx, maxy = layer.boundingBoxWGS84
-            srs = 'EPSG:4326'
-        elif layer.boundingBox:
+        logger.info("BBOX1: "+repr(layer.boundingBoxWGS84))
+        logger.info("BBOX2: "+repr(layer.boundingBox))
+
+        minx = miny = maxx = maxy = srs = None
+
+        if layer.boundingBox:
             minx, miny, maxx, maxy, srs = layer.boundingBox
 
+        if not srs and layer.boundingBoxWGS84:
+            minx, miny, maxx, maxy = layer.boundingBoxWGS84
+            srs = 'EPSG:4326'
+
+        logger.info("SRS: "+srs)
         if srs == "ESPG:900913":
             # Yay!
             pass
         elif srs == "EPSG:28992":
             minx, miny = coordinates.rd_to_google(minx, miny)
             maxx, maxy = coordinates.rd_to_google(maxx, maxy)
-        elif srs == "ESPG:4326":
+        elif srs == "EPSG:4326":
             minx, miny = coordinates.wgs84_to_google(minx, miny)
             maxx, maxy = coordinates.wgs84_to_google(maxx, maxy)
         else:
@@ -254,6 +261,7 @@ class WMSSource(models.Model):
 
         self.bbox = ",".join(str(coord) for coord in
                              (minx, miny, maxx, maxy))
+        logger.info("RESULT: "+self.bbox)
 
     def get_feature_name(self, values):
         """
