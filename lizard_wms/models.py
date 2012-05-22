@@ -263,7 +263,8 @@ class WMSSource(models.Model):
                              order_by('order_using')):
             if feature_line.name in values:
                 info.append({
-                        'name': feature_line.name,
+                        'name':
+                        (feature_line.description or feature_line.name),
                         'value': values[feature_line.name],
                         'render_as': feature_line.render_as,
                         })
@@ -284,6 +285,9 @@ class FeatureLine(models.Model):
 
     wms_layer = models.ForeignKey(WMSSource, null=False, blank=False)
     name = models.CharField(max_length=100, null=False, blank=False)
+
+    # If description is given, it is used in popups instead of name
+    description = models.CharField(max_length=100, null=True, blank=True)
 
     visible = models.BooleanField(default=True)
     use_as_id = models.BooleanField(default=False)
