@@ -1,6 +1,5 @@
-import json
+"""Defining lizard_wms' adapter."""
 import logging
-import requests
 
 from lizard_map.workspace import WorkspaceItemAdapter
 from lizard_wms import models
@@ -16,6 +15,8 @@ class AdapterWMS(WorkspaceItemAdapter):
 
     @property
     def wms_source(self):
+        """Helper method that returns this layer's WMSSource
+        object. wms_source_id is given in adapter_layer_json."""
         if not hasattr(self, '_wms_source'):
             self._wms_source = models.WMSSource.objects.get(
                 pk=self.layer_arguments['wms_source_id'])
@@ -91,8 +92,8 @@ class AdapterWMS(WorkspaceItemAdapter):
         extent = {'north': None, 'south': None, 'east': None, 'west': None}
 
         if self.wms_source and self.wms_source.bbox:
-            minx, miny, maxx, maxy = map(float, self.wms_source.bbox.split(","))
+            minx, miny, maxx, maxy = self.wms_source.bounding_box
             extent = {'north': maxy, 'south': miny, 'east': maxx, 'west': minx}
 
-        logger.debug("EX-TENT: "+repr(extent))
+        logger.debug("EX-TENT: " + repr(extent))
         return extent

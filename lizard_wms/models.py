@@ -1,3 +1,4 @@
+"""Models for lizard_wms"""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 import owslib.wms
 import logging
@@ -64,7 +65,7 @@ class WMSConnection(models.Model):
 
             kwargs = {'connection': self,
                       'name': name}
-            layer_instance, created = \
+            layer_instance, _ = \
                 WMSSource.objects.get_or_create(**kwargs)
 
             layer_style = layer.styles.values()
@@ -94,7 +95,7 @@ class WMSConnection(models.Model):
 
     def delete_layers(self, keep_layers=set()):
         """Deletes layers belonging to this WMS connection of which
-        the names don't occur in the set keep_layers."""
+        the names don't occur in keep_layers."""
 
         for layer in self.wmssource_set.all():
             if layer.name not in keep_layers:
@@ -139,10 +140,11 @@ class WMSSource(models.Model):
                 'adapter_name': ADAPTER_CLASS_WMS}
 
     def get_feature_info(self, x=None, y=None):
-        """Gets feature info from the server, at point (x,y) in Google coordinates.
+        """Gets feature info from the server, at point (x,y) in Google
+        coordinates.
 
-        If x, y isn't given, use this layer's bbox, if any. Useful to get available
-        features immediately after fetching the layer.
+        If x, y aren't given, use this layer's bbox, if any. Useful to
+        get available features immediately after fetching the layer.
         """
 
         # We use a tiny custom radius, because otherwise we don't have
@@ -204,7 +206,7 @@ class WMSSource(models.Model):
             parts = line.split(" = ")
             if len(parts) != 2:
                 continue
-            logger.info("LINE: "+line)
+            logger.info("LINE: " + line)
             logger.info(str(parts))
             feature, value = parts
             values[feature] = value
@@ -213,8 +215,8 @@ class WMSSource(models.Model):
         return values
 
     def _store_features(self, values):
-        """Make sure the features in the 'values' dict are stored as FeatureLines
-        in the database."""
+        """Make sure the features in the 'values' dict are stored as
+        FeatureLines in the database."""
 
         values = set(values)  # Copy so we can safely mutate it
 
@@ -233,8 +235,8 @@ class WMSSource(models.Model):
         """Get bounding box information from the layer; layer is an instance
         of owslib.wms.ContentMetaData."""
 
-        logger.info("BBOX1: "+repr(layer.boundingBoxWGS84))
-        logger.info("BBOX2: "+repr(layer.boundingBox))
+        logger.info("BBOX1: " + repr(layer.boundingBoxWGS84))
+        logger.info("BBOX2: " + repr(layer.boundingBox))
 
         minx = miny = maxx = maxy = srs = None
 
@@ -245,7 +247,7 @@ class WMSSource(models.Model):
             minx, miny, maxx, maxy = layer.boundingBoxWGS84
             srs = 'EPSG:4326'
 
-        logger.info("SRS: "+srs)
+        logger.info("SRS: " + srs)
         if srs == "ESPG:900913":
             # Yay!
             pass
@@ -261,7 +263,7 @@ class WMSSource(models.Model):
 
         self.bbox = ",".join(str(coord) for coord in
                              (minx, miny, maxx, maxy))
-        logger.info("RESULT: "+self.bbox)
+        logger.info("RESULT: " + self.bbox)
 
     def get_feature_name(self, values):
         """
@@ -293,6 +295,13 @@ class WMSSource(models.Model):
                         })
         return info
 
+    @property
+    def bounding_box(self):
+        if self.bbox:
+            return tuple(float(coord) for coord in self.bbox.split(","))
+        else:
+            return None
+
 
 class FeatureLine(models.Model):
     """A WMS layer has features. We want to store them in the database
@@ -314,7 +323,7 @@ class FeatureLine(models.Model):
 
     visible = models.BooleanField(default=True)
     use_as_id = models.BooleanField(default=False)
-    render_as = models.CharField(max_length=1, choices = (
+    render_as = models.CharField(max_length=1, choices=(
             ('T', "Tekst"),
             ('I', "Link naar een image")), default='T')
     in_hover = models.BooleanField(default=False)
