@@ -86,3 +86,13 @@ class AdapterWMS(WorkspaceItemAdapter):
             start_date=start_date,
             end_date=end_date,
             icon_style=icon_style)
+
+    def extent(self, identifiers=None):
+        extent = {'north': None, 'south': None, 'east': None, 'west': None}
+
+        if self.wms_source and self.wms_source.bbox:
+            minx, miny, maxx, maxy = map(float, self.wms_source.bbox.split(","))
+            extent = {'north': maxy, 'south': miny, 'east': maxx, 'west': minx}
+
+        logger.debug("EX-TENT: "+repr(extent))
+        return extent
