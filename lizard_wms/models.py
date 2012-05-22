@@ -5,6 +5,7 @@ from django.db import models
 # Python 2.5, we have to use the following workaround (ticket 2688).
 try:
     import json
+    json  # Pyflakes...
 except ImportError:
     import simplejson as json
 

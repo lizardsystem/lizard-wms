@@ -1,6 +1,3 @@
-import pdb
-
-import hashlib
 import json
 import logging
 import requests
@@ -8,6 +5,7 @@ import requests
 from lizard_map.workspace import WorkspaceItemAdapter
 
 logger = logging.getLogger(__name__)
+
 
 def get_feature_info(url, layer, version, x, y):
     """Send feature info request. Define a bounding box and ask for a 1x1
@@ -36,7 +34,8 @@ def get_feature_info(url, layer, version, x, y):
 
         # Construct the "bounding box", a tiny area around (x,y)
         'BBOX': ','.join(str(coord)
-                         for coord in (x-radius, y-radius, x+radius, y+radius)),
+                         for coord in
+                         (x - radius, y - radius, x + radius, y + radius)),
 
         # Get the value at the single pixel of a 1x1 picture
         'HEIGHT': 1,
@@ -49,7 +48,7 @@ def get_feature_info(url, layer, version, x, y):
         }
 
     r = requests.get(url, params=payload)
-    logger.info("GetFeatureInfo says: "+r.content)
+    logger.info("GetFeatureInfo says: " + r.content)
 
     # XXX Check result code etc
 
@@ -57,6 +56,7 @@ def get_feature_info(url, layer, version, x, y):
         return None
 
     return r.content
+
 
 class AdapterWMS(WorkspaceItemAdapter):
     """
@@ -85,9 +85,9 @@ class AdapterWMS(WorkspaceItemAdapter):
         The construction of the result is somewhat difficult: what do we use
         as the identifier of whatever is returned, what as the name?
 
-        It seems that we can't do better than use a x, y value as identifier,
-        it's the only bit of information we have that can be used to reconstruct
-        the object.
+        It seems that we can't do better than use a x, y value as
+        identifier, it's the only bit of information we have that can
+        be used to reconstruct the object.
         """
 
         feature_info = get_feature_info(
@@ -111,7 +111,6 @@ class AdapterWMS(WorkspaceItemAdapter):
 
     def html(self, identifiers, layout_options=None):
         pass
-
 
     def symbol_url(self, identifier=None, start_date=None, end_date=None):
         """
