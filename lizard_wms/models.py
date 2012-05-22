@@ -125,7 +125,7 @@ class WMSSource(models.Model):
                     'options': self.options}),
                 'adapter_name': ADAPTER_CLASS_WMS}
 
-    def _get_feature_info(self, x=None, y=None):
+    def get_feature_info(self, x, y):
         """Gets feature info from the server, at point (x,y) in Google coordinates."""
 
         # We use a tiny custom radius, because otherwise we don't have
@@ -204,9 +204,13 @@ class WMSSource(models.Model):
                 name=name)
             feature_line.save()
 
-    def get_feature_for_hover(self, x, y):
-        """Return feature as a string useful for the mouse hover function"""
-        values = self._get_feature_info(x, y)
+    def get_feature_name(self, values):
+        """
+        Argument is a values dict are returned from get_feature_info().
+
+        Return feature as a string useful for the mouse hover function
+        A.k.a. the item's 'name' in Lizard.
+        """
 
         parts = []
         for feature_line in (self.featureline_set.filter(in_hover=True).

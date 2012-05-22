@@ -43,11 +43,12 @@ class AdapterWMS(WorkspaceItemAdapter):
         # WRONG, name isn't unique
         wms_source = models.WMSSource.objects.get(name=self.name)
 
-        feature_info = wms_source.get_feature_for_hover(x, y)
+        feature_info = wms_source.get_feature_info(x, y)
+        name = wms_source.get_feature_name(feature_info)
 
         if feature_info:
             return [{
-                    'name': feature_info,
+                    'name': name,
                     'distance': 0,
                     'workspace_item': self.workspace_item,
                     'identifier': {
