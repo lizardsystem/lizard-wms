@@ -1,3 +1,4 @@
+from django.utils import simplejson as json
 from lizard_map.workspace import WorkspaceItemAdapter
 
 
@@ -26,3 +27,15 @@ class AdapterWMS(WorkspaceItemAdapter):
             start_date=start_date,
             end_date=end_date,
             icon_style=icon_style)
+
+    def legend_image_url(self):
+        """Return url with WMS legend image."""
+        wms_url = self.layer_arguments['url']
+        params_json = self.layer_arguments['params']
+        params = json.loads(params_json)
+        layer = params['layers']
+        url_template = (
+            "%s?REQUEST=GetLegendGraphic&FORMAT=image/png" +
+            "&WIDTH=20&HEIGHT=20&transparent=false&bgcolor=0xffffff&" +
+            "LAYER=%s")
+        return url_template % (wms_url, layer)
