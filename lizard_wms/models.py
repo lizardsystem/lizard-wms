@@ -147,15 +147,12 @@ class WMSSource(models.Model):
         get available features immediately after fetching the layer.
         """
 
-        # We use a tiny custom radius, because otherwise we don't have
-        # enough control over which feature is returned, there is no
-        # mechanism to choose the feature closest to x, y.
-        radius = 10
-
-        params = json.loads(self.params)
-
         if x is not None:
             # Construct the "bounding box", a tiny area around (x,y)
+            # We use a tiny custom radius, because otherwise we don't have
+            # enough control over which feature is returned, there is no
+            # mechanism to choose the feature closest to x, y.
+            radius = 10
             bbox = ','.join(str(coord)
                             for coord in
                             (x - radius, y - radius, x + radius, y + radius))
@@ -163,7 +160,14 @@ class WMSSource(models.Model):
             bbox = self.bbox
 
         if not bbox:
-            return
+            return set()
+
+        if self.connection and self.connection.version:
+            version = self.connection.version
+        else:
+            version = '1.1.1'
+
+        params = json.loads(self.params)
 
         payload = {
             'REQUEST': 'GetFeatureInfo',
@@ -188,20 +192,23 @@ class WMSSource(models.Model):
             'Y': 0,
 
             # Version from parameter
-            'VERSION': '1.3.0',
+            'VERSION': version,
         }
 
         r = requests.get(self.url, params=payload)
-        logger.info("GetFeatureInfo says: " + r.content)
+        logger.info("GetFeatureInfo says: " + r.text)
 
         # XXX Check result code etc
 
-        if 'no features were found' in r.content:
-            return None
+        if 'no features were found' in r.text:
+            return dict()
 
-        # Parse
+        if not r.text.startswith("Results for FeatureType"):
+            return dict()
+
+        # "Parse"
         values = dict()
-        for line in r.content.split("\n"):
+        for line in r.text.split("\n"):
             line = line.strip()
             parts = line.split(" = ")
             if len(parts) != 2:
@@ -209,6 +216,11 @@ class WMSSource(models.Model):
             logger.info("LINE: " + line)
             logger.info(str(parts))
             feature, value = parts
+
+            if value.startswith("[GEOMETRY"):
+                # I think these are always uninteresting
+                continue
+
             values[feature] = value
 
         self._store_features(values)
@@ -240,12 +252,11 @@ class WMSSource(models.Model):
 
         minx = miny = maxx = maxy = srs = None
 
-        if layer.boundingBox:
-            minx, miny, maxx, maxy, srs = layer.boundingBox
-
-        if not srs and layer.boundingBoxWGS84:
+        if layer.boundingBoxWGS84:
             minx, miny, maxx, maxy = layer.boundingBoxWGS84
             srs = 'EPSG:4326'
+        else:
+            minx, miny, maxx, maxy, srs = layer.boundingBox
 
         logger.info("SRS: " + srs)
         if srs == "ESPG:900913":
@@ -272,6 +283,8 @@ class WMSSource(models.Model):
         Return feature as a string useful for the mouse hover function
         A.k.a. the item's 'name' in Lizard.
         """
+        if not values:
+            return None
 
         parts = []
         for feature_line in (self.featureline_set.filter(in_hover=True).
@@ -282,6 +295,9 @@ class WMSSource(models.Model):
         return " ".join(parts)
 
     def get_popup_info(self, values):
+        if not values:
+            return None
+
         info = []
 
         for feature_line in (self.featureline_set.filter(visible=True).
@@ -325,7 +341,9 @@ class FeatureLine(models.Model):
     use_as_id = models.BooleanField(default=False)
     render_as = models.CharField(max_length=1, choices=(
             ('T', "Tekst"),
-            ('I', "Link naar een image")), default='T')
+            ('I', "Link naar een image"),
+            ('U', "URL"),
+            ('W', "URL-achtige tekst")), default='T')
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
 
