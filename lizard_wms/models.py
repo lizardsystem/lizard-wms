@@ -43,6 +43,8 @@ class WMSConnection(models.Model):
         '"opacity": 0.5}')
     category = models.ManyToManyField(Category, null=True, blank=True)
 
+    xml = models.TextField(default="")
+
     def __unicode__(self):
         return u'%s' % (self.title or self.slug, )
 
@@ -54,7 +56,11 @@ class WMSConnection(models.Model):
 
         Returns a set of fetched layer names."""
 
-        wms = owslib.wms.WebMapService(self.url)
+        if self.xml:
+            xml = self.xml.encode('utf8').strip()
+            wms = owslib.wms.WebMapService(self.url, xml=xml)
+        else:
+            wms = owslib.wms.WebMapService(self.url)
 
         fetched = set()
 
