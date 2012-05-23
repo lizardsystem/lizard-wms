@@ -1,3 +1,4 @@
+"""Urls for lizard_wms."""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 from django.conf.urls.defaults import *
 from django.conf import settings
@@ -12,11 +13,11 @@ ITEM_MODELS = ['wmssource', ]  # for maptree items.
 urlpatterns = patterns(
     '',
     url(r'^$',
-        MaptreeHomepageView.as_view(),
+        MaptreeHomepageView.as_view(),  # pylint: disable=E1120
         {'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     url(r'^category/(?P<root_slug>.*)/$',
-        MaptreeHomepageView.as_view(),
+        MaptreeHomepageView.as_view(),  # pylint: disable=E1120
         {'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     (r'^map/', include('lizard_map.urls')),
