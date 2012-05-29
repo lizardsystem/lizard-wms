@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-0.6 (unreleased)
+1.0 (2012-05-29)
 ----------------
 
 - Added lots of geoserver integration including getFeatureInfo.
