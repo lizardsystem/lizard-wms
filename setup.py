@@ -16,7 +16,7 @@ install_requires = [
     'OWSLib',
     'lizard-ui',
     'lizard-map',
-    'lizard-maptree',
+    'lizard-maptree >= 1.0.1',
     'django-nose',
     'pkginfo',
     'requests',
