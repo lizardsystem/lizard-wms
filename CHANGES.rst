@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.1 (unreleased)
+1.1 (2012-06-07)
 ----------------
 
 - Some popup table styling.
