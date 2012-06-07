@@ -44,7 +44,7 @@ class WMSConnection(models.Model):
         '"opacity": 0.5}')
     category = models.ManyToManyField(Category, null=True, blank=True)
 
-    xml = models.TextField(default="")
+    xml = models.TextField(default="", blank=True)
 
     def __unicode__(self):
         return u'%s' % (self.title or self.slug, )

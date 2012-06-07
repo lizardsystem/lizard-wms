@@ -7,6 +7,8 @@ Changelog of lizard-wms
 
 - Some popup table styling.
 
+- XML attribute of WMS connections doesn't need to be filled in
+
 1.0 (2012-05-29)
 ----------------
 
