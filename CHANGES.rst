@@ -5,7 +5,9 @@ Changelog of lizard-wms
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- fetch_wms_layers is now a little more resistant to errors with some layers
+
+- improved message fetch_wms_layers gives if you don't give any arguments
 
 
 1.1 (2012-06-07)
