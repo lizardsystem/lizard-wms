@@ -9,6 +9,8 @@ Changelog of lizard-wms
 
 - improved message fetch_wms_layers gives if you don't give any arguments
 
+- add a custom label for the category selection field
+
 
 1.1 (2012-06-07)
 ----------------
