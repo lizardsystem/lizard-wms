@@ -32,7 +32,10 @@ class Command(BaseCommand):
         fetch_all = options['all']
 
         if not fetch_all and not slug:
-            print "Pass an argument."
+            print "Use either --all to update all WMS connections, or use --slug <connection slug>"
+            print "Available WMS connection slugs:"
+            for wms_connection in models.WMSConnection.objects.all():
+                print "%-15s : %s" % (wms_connection.slug, wms_connection.title)
             sys.exit(2)
 
         connections = models.WMSConnection.objects.all()

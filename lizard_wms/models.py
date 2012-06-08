@@ -66,37 +66,45 @@ class WMSConnection(models.Model):
         fetched = set()
 
         for name, layer in wms.contents.iteritems():
-            if layer.layers:
-                #Meta layer, don't use
-                continue
+            try:
+                logger.info("Fetching layer name %s" % (name,))
+                if layer.layers:
+                    #Meta layer, don't use
+                    continue
 
-            kwargs = {'connection': self,
-                      'name': name}
-            layer_instance, _ = \
-                WMSSource.objects.get_or_create(**kwargs)
+                kwargs = {'connection': self,
+                          'name': name}
+                try:
+                    layer_instance = WMSSource.objects.get(**kwargs)
+                except WMSSource.DoesNotExist:
+                    layer_instance = WMSSource(**kwargs)
 
-            layer_style = layer.styles.values()
-            # Not all layers have a description/legend.
-            if len(layer_style):
-                layer_instance.description = '<img src="%s" alt="%s" />' % (
-                    layer_style[0]['legend'],
-                    layer_style[0]['title'])
+                layer_style = layer.styles.values()
+                # Not all layers have a description/legend.
+                if len(layer_style):
+                    layer_instance.description = '<img src="%s" alt="%s" />' % (
+                        layer_style[0]['legend'],
+                        layer_style[0]['title'])
+                else:
+                    layer_instance.description = None
+
+                layer_instance.url = self.url
+                layer_instance.options = self.options
+
+                layer_instance.category = self.category.all()
+                layer_instance.params = self.params % layer.name
+
+                layer_instance.import_bounding_box(layer)
+            except Exception:
+                # Something went wrong. We skip this layer.
+                pass
             else:
-                layer_instance.description = None
+                layer_instance.save()
 
-            for attribute in ('url', 'options'):
-                attr_value = getattr(self, attribute)
-                setattr(layer_instance, attribute, attr_value)
-            layer_instance.category = self.category.all()
-            layer_instance.params = self.params % layer.name
+                if layer_instance.bbox:
+                    layer_instance.get_feature_info()
 
-            layer_instance.import_bounding_box(layer)
-            layer_instance.save()
-
-            if layer_instance.bbox:
-                layer_instance.get_feature_info()
-
-            fetched.add(name)
+                fetched.add(name)
 
         return fetched
 
