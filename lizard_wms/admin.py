@@ -2,9 +2,9 @@
 import urlparse
 
 from django.contrib import admin
-
+from django import forms
+from lizard_maptree.models import Category
 from lizard_wms import models
-
 
 def source_domain(obj):
     """Return the domain of the WMSSource url."""
@@ -12,6 +12,9 @@ def source_domain(obj):
 
 source_domain.short_description = 'Domein'
 
+class CustomModelChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return "%s (%s)" % (obj.name, obj.slug)
 
 class FeatureLineInline(admin.TabularInline):
     """Show the feature lines as inlines under their WMS source."""
@@ -24,6 +27,10 @@ class FeatureLineInline(admin.TabularInline):
     readonly_fields = ('name',)
     extra = 0
 
+class WMSSourceForm(forms.ModelForm):
+    category = CustomModelChoiceField(queryset=Category.objects.all())
+    class Meta:
+        model = models.WMSSource
 
 class WMSSourceAdmin(admin.ModelAdmin):
     """WMS source admin. Show a few fields that may be edited regularly
@@ -44,7 +51,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
                 }),
         )
     inlines = [FeatureLineInline]
-
+    form = WMSSourceForm
 
 admin.site.register(models.WMSSource, WMSSourceAdmin)
 
