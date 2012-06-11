@@ -12,7 +12,7 @@ def source_domain(obj):
 
 source_domain.short_description = 'Domein'
 
-class CustomModelChoiceField(forms.ModelMultipleChoiceField):
+class CategoryField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return "%s (%s)" % (obj.name, obj.slug)
 
@@ -28,7 +28,7 @@ class FeatureLineInline(admin.TabularInline):
     extra = 0
 
 class WMSSourceForm(forms.ModelForm):
-    category = CustomModelChoiceField(queryset=Category.objects.all())
+    category = CategoryField(queryset=Category.objects.all())
     class Meta:
         model = models.WMSSource
 
@@ -55,5 +55,5 @@ class WMSSourceAdmin(admin.ModelAdmin):
 
 admin.site.register(models.WMSSource, WMSSourceAdmin)
 
-for model in (models.WMSConnection, ):
+for model in [models.WMSConnection]:
     admin.site.register(model)
