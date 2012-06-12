@@ -21,3 +21,6 @@ Refreshing/loading WMS layers
 To automatically fetch/update/delete wms layers, go to the admin screen with
 the WMS connections, select the ones you want to update, and chose the
 'reload' action from the dropdown.
+
+Note that old wms layers that used to belong to the WMS connection are
+deleted.
