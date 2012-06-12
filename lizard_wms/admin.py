@@ -6,15 +6,18 @@ from django import forms
 from lizard_maptree.models import Category
 from lizard_wms import models
 
+
 def source_domain(obj):
     """Return the domain of the WMSSource url."""
     return ("%s" % urlparse.urlparse(obj.url).netloc)
 
 source_domain.short_description = 'Domein'
 
+
 class CategoryField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return "%s (%s)" % (obj.name, obj.slug)
+
 
 class FeatureLineInline(admin.TabularInline):
     """Show the feature lines as inlines under their WMS source."""
@@ -27,10 +30,13 @@ class FeatureLineInline(admin.TabularInline):
     readonly_fields = ('name',)
     extra = 0
 
+
 class WMSSourceForm(forms.ModelForm):
     category = CategoryField(queryset=Category.objects.all())
+
     class Meta:
         model = models.WMSSource
+
 
 class WMSSourceAdmin(admin.ModelAdmin):
     """WMS source admin. Show a few fields that may be edited regularly
