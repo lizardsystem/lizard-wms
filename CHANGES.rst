@@ -5,11 +5,11 @@ Changelog of lizard-wms
 1.2 (unreleased)
 ----------------
 
-- fetch_wms_layers is now a little more resistant to errors with some layers
+- Added admin site action for reloading WMS connections. This replaces the
+  ``fetch_wms_layers`` management command. There is reasonable error reporting
+  to help debug what's wrong with a WMS connection.
 
-- improved message fetch_wms_layers gives if you don't give any arguments
-
-- add a custom label for the category selection field
+- Add a custom label for the category selection field
 
 
 1.1 (2012-06-07)
