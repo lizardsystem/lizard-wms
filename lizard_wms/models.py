@@ -35,10 +35,15 @@ class WMSConnection(models.Model):
         '"opacity": 0.5}')
     category = models.ManyToManyField(Category, null=True, blank=True)
 
-    xml = models.TextField(default="", blank=True)
+    xml = models.TextField(
+        default="",
+        blank=True,
+        help_text="""Normally, leave this empty. If filled, this xml is used
+instead of the xml from the WMS server. So use it only for temp repairs or
+overwrites.""")
 
     def __unicode__(self):
-        return u'%s' % (self.title or self.slug, )
+        return self.title or self.slug
 
     @transaction.commit_on_success
     def fetch(self):
@@ -55,12 +60,11 @@ class WMSConnection(models.Model):
             wms = owslib.wms.WebMapService(self.url)
 
         fetched = set()
-
         for name, layer in wms.contents.iteritems():
             try:
                 logger.info("Fetching layer name %s" % (name,))
                 if layer.layers:
-                    #Meta layer, don't use
+                    # Meta layer, don't use
                     continue
 
                 kwargs = {'connection': self,
@@ -78,17 +82,14 @@ class WMSConnection(models.Model):
                         layer_style[0]['title'])
                 else:
                     layer_instance.description = None
-
                 layer_instance.url = self.url
                 layer_instance.options = self.options
-
                 layer_instance.category = self.category.all()
                 layer_instance.params = self.params % layer.name
-
                 layer_instance.import_bounding_box(layer)
-            except Exception:
-                # Something went wrong. We skip this layer.
-                pass
+            except:
+                logger.exception("Something went wrong. We skip this layer")
+
             else:
                 layer_instance.save()
 
