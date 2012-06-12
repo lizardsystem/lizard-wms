@@ -73,6 +73,7 @@ overwrites.""")
                     layer_instance = WMSSource.objects.get(**kwargs)
                 except WMSSource.DoesNotExist:
                     layer_instance = WMSSource(**kwargs)
+                    layer_instance.save()
 
                 layer_style = layer.styles.values()
                 # Not all layers have a description/legend.
