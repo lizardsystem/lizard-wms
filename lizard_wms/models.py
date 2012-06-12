@@ -1,25 +1,16 @@
 """Models for lizard_wms"""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
-import owslib.wms
+import json
 import logging
-import requests
 
 from django.db import models
 from django.db import transaction
-
 from lizard_map import coordinates
-
-# json only became available in Python 2.6. As some of our sites still use
-# Python 2.5, we have to use the following workaround (ticket 2688).
-try:
-    import json
-    json  # Pyflakes...
-except ImportError:
-    import simplejson as json
-
-from lizard_maptree.models import Category
-from lizard_map.models import ADAPTER_CLASS_WMS
 from lizard_map.lizard_widgets import WorkspaceAcceptable
+from lizard_map.models import ADAPTER_CLASS_WMS
+from lizard_maptree.models import Category
+import owslib.wms
+import requests
 
 
 logger = logging.getLogger(__name__)
