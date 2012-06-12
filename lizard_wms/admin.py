@@ -59,7 +59,6 @@ class WMSSourceAdmin(admin.ModelAdmin):
     inlines = [FeatureLineInline]
     form = WMSSourceForm
 
-admin.site.register(models.WMSSource, WMSSourceAdmin)
 
-for model in [models.WMSConnection]:
-    admin.site.register(model)
+admin.site.register(models.WMSSource, WMSSourceAdmin)
+admin.site.register(models.WMSConnection)
