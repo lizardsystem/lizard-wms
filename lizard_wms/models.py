@@ -66,7 +66,7 @@ overwrites.""")
                 if layer.layers:
                     # Meta layer, don't use
                     continue
-
+                name = name.split(':', 1)[-1]  # owslib prepends with 'workspace:'.
                 kwargs = {'connection': self,
                           'name': name}
                 try:
