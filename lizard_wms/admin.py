@@ -4,6 +4,7 @@ import urllib2
 import logging
 
 from django.contrib import admin
+from django.contrib import messages
 from django import forms
 from lizard_maptree.models import Category
 from lizard_wms import models
@@ -70,19 +71,32 @@ class WMSConnectionAdmin(admin.ModelAdmin):
     actions = ['reload']
 
     def reload(self, request, queryset):
-        try:
-            for wms_connection in queryset:
-                wms_connection.fetch()
-        except AttributeError, e:
-            logger.exception(e)
-            self.message_user(
+        num_fetched_updated = 0
+        num_deleted = 0
+        for wms_connection in queryset:
+            try:
+                fetched = wms_connection.fetch()
+                num_fetched_updated += len(fetched)
+                deleted = wms_connection.delete_layers(keep_layers=fetched)
+                num_deleted += deleted
+            except AttributeError, e:
+                logger.exception(e)
+                msg = ("Probably an error message instead of a proper WMS " +
+                       "response from the url: look at %s directly. %s")
+                messages.error(
+                    request,
+                    msg % (wms_connection.url, e))
+            except urllib2.HTTPError, e:
+                logger.exception(e)
+                msg = "URL not found? Network error? Look at %s directly. %s"
+                messages.error(
+                    request,
+                    msg % (wms_connection.url, e))
+
+        self.message_user(
                 request,
-                "Probably an error in the url: view it directly. %s" % e)
-        except urllib2.HTTPError, e:
-            logger.exception(e)
-            self.message_user(
-                request,
-                "URL not found? Network error? View url directly. %s" % e)
+                "Loaded/updated %s WMS sources, deleted %s." % (
+                num_fetched_updated, num_deleted))
 
     reload.short_description = (
         "Reload WMS connections and update their WMS sources.")

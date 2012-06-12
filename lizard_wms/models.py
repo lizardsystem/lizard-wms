@@ -103,10 +103,12 @@ overwrites.""")
     def delete_layers(self, keep_layers=set()):
         """Deletes layers belonging to this WMS connection of which
         the names don't occur in keep_layers."""
-
+        num_deleted = 0
         for layer in self.wmssource_set.all():
             if layer.name not in keep_layers:
                 layer.delete()
+                num_deleted += 1
+        return num_deleted
 
 
 class WMSSource(models.Model):
