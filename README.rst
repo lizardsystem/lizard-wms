@@ -15,12 +15,9 @@ urls.py::
 
     (r'^webmap/', include('lizard_wms.urls')),
 
-Fetch WMS layers
-----------------
+Refreshing/loading WMS layers
+------------------------------
 
-To automatically fetch wms layers define a WMS connection and execute the 
-following via a cronjon:
-
-$ bin/django/fetch_wms_layers --all
-
-
+To automatically fetch/update/delete wms layers, go to the admin screen with
+the WMS connections, select the ones you want to update, and chose the
+'reload' action from the dropdown.
