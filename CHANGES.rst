@@ -11,6 +11,9 @@ Changelog of lizard-wms
 
 - Add a custom label for the category selection field
 
+- Support custom legend url for map layers and show them in the sidebar. Do
+  not show legends in the hover popup.
+
 
 1.1 (2012-06-07)
 ----------------

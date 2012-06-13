@@ -87,6 +87,7 @@ overwrites.""")
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
                 layer_instance.params = self.params % layer.name
+
                 layer_instance.import_bounding_box(layer)
             except:
                 logger.exception("Something went wrong. We skip this layer")
@@ -123,6 +124,7 @@ class WMSSource(models.Model):
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
 
     description = models.TextField(null=True, blank=True)
+    legend_url = models.CharField(null=True, blank=True, max_length=2048)
     category = models.ManyToManyField(Category, null=True, blank=True)
 
     # bbox: minx, miny, maxx, maxy in Google coordinates, separated by commas
@@ -145,6 +147,7 @@ class WMSSource(models.Model):
                     'name': self.name,
                     'url': self.url,
                     'params': self.params,
+                    'legend_url': self.legend_url,
                     'options': self.options}),
             adapter_name=ADAPTER_CLASS_WMS)
 
