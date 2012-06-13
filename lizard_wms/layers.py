@@ -1,9 +1,9 @@
-from django.utils import simplejson as json
-
 """Defining lizard_wms' adapter."""
 import logging
 
+from django.utils import simplejson as json
 from lizard_map.workspace import WorkspaceItemAdapter
+
 from lizard_wms import models
 
 logger = logging.getLogger(__name__)
@@ -109,6 +109,5 @@ class AdapterWMS(WorkspaceItemAdapter):
             minx, miny, maxx, maxy = self.wms_source.bounding_box
             extent = {'north': maxy, 'south': miny, 'east': maxx, 'west': minx}
 
-        logger.debug("EX-TENT: " + repr(extent))
+        # logger.debug("EXTENT: " + repr(extent))
         return extent
-
