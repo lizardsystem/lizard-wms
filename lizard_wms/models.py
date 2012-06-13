@@ -87,7 +87,6 @@ overwrites.""")
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
                 layer_instance.params = self.params % layer.name
-                layer_instance.legend_url = "BB1"
 
                 layer_instance.import_bounding_box(layer)
             except:
