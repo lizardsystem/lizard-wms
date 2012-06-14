@@ -146,7 +146,6 @@ overwrites.""")
         return self.url.split('?')[0] + '?' + urlqs
 
 
-
 class WMSSource(models.Model):
     """
     Definition of a wms source.
@@ -204,26 +203,30 @@ class WMSSource(models.Model):
         """
 
         if x is not None:
-            # Construct the "bounding box", a tiny area around (x,y)
-            # We use a tiny custom radius, because otherwise we don't have
-            # enough control over which feature is returned, there is no
-            # mechanism to choose the feature closest to x, y.
+            # Construct the "bounding box", a tiny area around (x,y) We use a
+            # tiny custom radius, because otherwise we don't have enough
+            # control over which feature is returned, there is no mechanism to
+            # choose the feature closest to x, y.
             if radius is not None:
-                # adjust the estimated "radius" of an icon on the map
+                # Adjust the estimated "radius" of an icon on the map.
                 radius /= 50
-                # convert to wgs84, which is the only supported format for pyproj.geodesic
+                # Convert to wgs84, which is the only supported format for
+                # pyproj.geodesic
                 lon, lat = coordinates.google_to_wgs84(x, y)
-                # translate center coordinates to lower left and upper right
-                # only supports wgs84
-                # note: 180 + 45 = 225 = bbox lower left
-                geod_bbox = coordinates.translate_coords([lon] * 2, [lat] * 2, [225, 45], [radius] * 2)
-                # convert back to web mercator
-                ll = coordinates.wgs84_to_google(geod_bbox[0][0], geod_bbox[1][0])
-                ur = coordinates.wgs84_to_google(geod_bbox[0][1], geod_bbox[1][1])
-                # format should be: minX,minY,maxX,maxY
+                # Translate center coordinates to lower left and upper right.
+                # Only supports wgs84.
+                # Note: 180 + 45 = 225 = bbox lower left.
+                geod_bbox = coordinates.translate_coords(
+                    [lon] * 2, [lat] * 2, [225, 45], [radius] * 2)
+                # Convert back to web mercator.
+                ll = coordinates.wgs84_to_google(geod_bbox[0][0],
+                                                 geod_bbox[1][0])
+                ur = coordinates.wgs84_to_google(geod_bbox[0][1],
+                                                 geod_bbox[1][1])
+                # Format should be: minX, minY, maxX, maxY.
                 bbox = '{},{},{},{}'.format(ll[0], ll[1], ur[0], ur[1])
             else:
-                # use the old method
+                # Use the old method.
                 fixed_radius = 10
                 bbox = '{},{},{},{}'.format(x - fixed_radius, y - fixed_radius,
                                             x + fixed_radius, y + fixed_radius)
