@@ -1,5 +1,7 @@
 """Models for lizard_wms"""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
+from urllib import urlencode
+import cgi
 import json
 import logging
 
@@ -12,7 +14,7 @@ from lizard_maptree.models import Category
 import owslib.wms
 import requests
 
-
+FIXED_WMS_API_VERSION = '1.1.1'
 logger = logging.getLogger(__name__)
 
 
@@ -22,8 +24,12 @@ class WMSConnection(models.Model):
     title = models.CharField(max_length=100)
     slug = models.CharField(max_length=100)
     url = models.URLField(verify_exists=False)
-    version = models.CharField(max_length=20, default='1.3.0',
-                               help_text=u"Version number for Lizard.")
+    version = models.CharField(
+        max_length=20,
+        default='1.3.0',
+        help_text=(
+            u"Version number for WMS service. Not used. 1.1.1 is used " +
+            u"because owslib can only handle 1.1.1."))
 
     params = models.TextField(
         default='{"height": "256", "width": "256", "layers": "%s", '
@@ -55,9 +61,12 @@ overwrites.""")
 
         if self.xml:
             xml = self.xml.encode('utf8').strip()
-            wms = owslib.wms.WebMapService(self.url, xml=xml)
+            wms = owslib.wms.WebMapService(self.url,
+                                           xml=xml,
+                                           version=FIXED_WMS_API_VERSION)
         else:
-            wms = owslib.wms.WebMapService(self.url)
+            wms = owslib.wms.WebMapService(self.url,
+                                           version=FIXED_WMS_API_VERSION)
 
         fetched = set()
         for name, layer in wms.contents.iteritems():
@@ -66,7 +75,8 @@ overwrites.""")
                 if layer.layers:
                     # Meta layer, don't use
                     continue
-                name = name.split(':', 1)[-1]  # owslib prepends with 'workspace:'.
+                name = name.split(':', 1)[-1]
+                # ^^^ owslib prepends with 'workspace:'.
                 kwargs = {'connection': self,
                           'name': name}
                 try:
@@ -78,11 +88,11 @@ overwrites.""")
                 layer_style = layer.styles.values()
                 # Not all layers have a description/legend.
                 if len(layer_style):
-                    layer_instance.description = '<img src="%s" alt="%s" />' % (
-                        layer_style[0]['legend'],
-                        layer_style[0]['title'])
+                    layer_instance.description = layer_style[0]['title']
+                    layer_instance.legend_url = layer_style[0]['legend']
                 else:
                     layer_instance.description = None
+                    layer_instance.legend_url = None
                 layer_instance.url = self.url
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
@@ -112,6 +122,29 @@ overwrites.""")
                 num_deleted += 1
         return num_deleted
 
+    def capabilities_url(self):
+        """Return the capabilities URL.
+
+        Copy/pasted mostly from owslib/wms.py. Only used in the admin for
+        debugging purposes.
+
+        """
+        qs = []
+        if self.url.find('?') != -1:
+            qs = cgi.parse_qsl(self.url.split('?')[1])
+
+        params = [x[0] for x in qs]
+
+        if 'service' not in params:
+            qs.append(('service', 'WMS'))
+        if 'request' not in params:
+            qs.append(('request', 'GetCapabilities'))
+        if 'version' not in params:
+            qs.append(('version', FIXED_WMS_API_VERSION))
+
+        urlqs = urlencode(tuple(qs))
+        return self.url.split('?')[0] + '?' + urlqs
+
 
 class WMSSource(models.Model):
     """
@@ -138,6 +171,16 @@ class WMSSource(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
+    def update_bounding_box(self):
+        if not self.bbox:
+            wms = owslib.wms.WebMapService(self.url)
+            params = json.loads(self.params)
+            for name, layer in wms.contents.iteritems():
+                if layer.title == params['layers']:
+                    self.import_bounding_box(layer)
+                    return True
+        return False
+
     def workspace_acceptable(self):
         return WorkspaceAcceptable(
             name=self.name,
@@ -160,26 +203,30 @@ class WMSSource(models.Model):
         """
 
         if x is not None:
-            # Construct the "bounding box", a tiny area around (x,y)
-            # We use a tiny custom radius, because otherwise we don't have
-            # enough control over which feature is returned, there is no
-            # mechanism to choose the feature closest to x, y.
+            # Construct the "bounding box", a tiny area around (x,y) We use a
+            # tiny custom radius, because otherwise we don't have enough
+            # control over which feature is returned, there is no mechanism to
+            # choose the feature closest to x, y.
             if radius is not None:
-                # adjust the estimated "radius" of an icon on the map
+                # Adjust the estimated "radius" of an icon on the map.
                 radius /= 50
-                # convert to wgs84, which is the only supported format for pyproj.geodesic
+                # Convert to wgs84, which is the only supported format for
+                # pyproj.geodesic
                 lon, lat = coordinates.google_to_wgs84(x, y)
-                # translate center coordinates to lower left and upper right
-                # only supports wgs84
-                # note: 180 + 45 = 225 = bbox lower left
-                geod_bbox = coordinates.translate_coords([lon] * 2, [lat] * 2, [225, 45], [radius] * 2)
-                # convert back to web mercator
-                ll = coordinates.wgs84_to_google(geod_bbox[0][0], geod_bbox[1][0])
-                ur = coordinates.wgs84_to_google(geod_bbox[0][1], geod_bbox[1][1])
-                # format should be: minX,minY,maxX,maxY
+                # Translate center coordinates to lower left and upper right.
+                # Only supports wgs84.
+                # Note: 180 + 45 = 225 = bbox lower left.
+                geod_bbox = coordinates.translate_coords(
+                    [lon] * 2, [lat] * 2, [225, 45], [radius] * 2)
+                # Convert back to web mercator.
+                ll = coordinates.wgs84_to_google(geod_bbox[0][0],
+                                                 geod_bbox[1][0])
+                ur = coordinates.wgs84_to_google(geod_bbox[0][1],
+                                                 geod_bbox[1][1])
+                # Format should be: minX, minY, maxX, maxY.
                 bbox = '{},{},{},{}'.format(ll[0], ll[1], ur[0], ur[1])
             else:
-                # use the old method
+                # Use the old method.
                 fixed_radius = 10
                 bbox = '{},{},{},{}'.format(x - fixed_radius, y - fixed_radius,
                                             x + fixed_radius, y + fixed_radius)

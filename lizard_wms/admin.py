@@ -50,6 +50,23 @@ class WMSSourceAdmin(admin.ModelAdmin):
     list_display = ('name',  source_domain, 'connection')
     search_fields = ('name', 'url', 'category__name', 'connection__title')
     list_filter = ('category', )
+    actions = ['update_bounding_box']
+
+    def update_bounding_box(self, request, queryset):
+        num_updated = 0
+        for wms_source in queryset:
+            if wms_source.update_bounding_box():
+                num_updated += 1
+        self.message_user(request, "Loaded/updated %s bounding boxes." % (num_updated))
+
+    def save_model(self, request, layer_instance, form, change):
+        layer_instance.save()
+        layer_instance.update_bounding_box()
+        if layer_instance.bbox:
+            inlines = layer_instance.featureline_set
+            if len(inlines.all()) < 1:
+                layer_instance.get_feature_info()
+                self.message_user(request, "Loaded/updated feature info.")
 
     fieldsets = (
         (None, {
@@ -89,12 +106,12 @@ class WMSConnectionAdmin(admin.ModelAdmin):
                 deleted = wms_connection.delete_layers(keep_layers=fetched)
                 num_deleted += deleted
             except AttributeError, e:
-                logger.exception(e)
                 msg = ("Probably an error message instead of a proper WMS " +
-                       "response from the url: look at %s directly. %s")
-                messages.error(
-                    request,
-                    msg % (wms_connection.url, e))
+                       "response from the url: look at %s directly. " +
+                       "Or the server doesn't support WMS 1.1.1. %s")
+                msg = msg % (wms_connection.capabilities_url(), e)
+                logger.exception(msg)
+                messages.error(request, msg)
             except urllib2.HTTPError, e:
                 logger.exception(e)
                 msg = "URL not found? Network error? Look at %s directly. %s"

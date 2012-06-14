@@ -5,6 +5,9 @@ Changelog of lizard-wms
 1.2 (unreleased)
 ----------------
 
+- Hardcoded WMS version to 1.1.1 because owslib doesn't support 1.3.0. See
+  https://github.com/lizardsystem/lizard-wms/issues/5
+
 - Added admin site action for reloading WMS connections. This replaces the
   ``fetch_wms_layers`` management command. There is reasonable error reporting
   to help debug what's wrong with a WMS connection.
@@ -14,7 +17,9 @@ Changelog of lizard-wms
 - Support custom legend url for map layers and show them in the sidebar. Do
   not show legends in the hover popup.
 
-- deal with zoom ratio (radius) on mouseover and popup (click) searches
+- Update WMS source features upon 'save'. Also added action to update the bbox.
+
+- Deal with zoom ratio (radius) on mouseover and popup (click) searches
 
 
 1.1 (2012-06-07)
