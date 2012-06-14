@@ -153,7 +153,7 @@ class WMSSource(models.Model):
                     'options': self.options}),
             adapter_name=ADAPTER_CLASS_WMS)
 
-    def get_feature_info(self, x=None, y=None):
+    def get_feature_info(self, x=None, y=None, radius=None):
         """Gets feature info from the server, at point (x,y) in Google
         coordinates.
 
@@ -166,10 +166,25 @@ class WMSSource(models.Model):
             # We use a tiny custom radius, because otherwise we don't have
             # enough control over which feature is returned, there is no
             # mechanism to choose the feature closest to x, y.
-            radius = 10
-            bbox = ','.join(str(coord)
-                            for coord in
-                            (x - radius, y - radius, x + radius, y + radius))
+            if radius is not None:
+                # adjust the estimated "radius" of an icon on the map
+                radius /= 50
+                # convert to wgs84, which is the only supported format for pyproj.geodesic
+                lon, lat = coordinates.google_to_wgs84(x, y)
+                # translate center coordinates to lower left and upper right
+                # only supports wgs84
+                # note: 180 + 45 = 225 = bbox lower left
+                geod_bbox = coordinates.translate_coords([lon] * 2, [lat] * 2, [225, 45], [radius] * 2)
+                # convert back to web mercator
+                ll = coordinates.wgs84_to_google(geod_bbox[0][0], geod_bbox[1][0])
+                ur = coordinates.wgs84_to_google(geod_bbox[0][1], geod_bbox[1][1])
+                # format should be: minX,minY,maxX,maxY
+                bbox = '{},{},{},{}'.format(ll[0], ll[1], ur[0], ur[1])
+            else:
+                # use the old method
+                fixed_radius = 10
+                bbox = '{},{},{},{}'.format(x - fixed_radius, y - fixed_radius,
+                                            x + fixed_radius, y + fixed_radius)
         else:
             bbox = self.bbox
 
@@ -188,7 +203,7 @@ class WMSSource(models.Model):
             'EXCEPTIONS': 'application/vnd.ogc.se_xml',
             'INFO_FORMAT': 'text/plain',
             'SERVICE': 'WMS',
-            'SRS': 'EPSG:900913',  # Always Google
+            'SRS': 'EPSG:3857',  # Always Google (web mercator)
 
             # Get a single feature
             'FEATURE_COUNT': 1,

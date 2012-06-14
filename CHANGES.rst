@@ -11,6 +11,8 @@ Changelog of lizard-wms
 
 - add a custom label for the category selection field
 
+- deal with zoom ratio (radius) on mouseover and popup (click) searches
+
 
 1.1 (2012-06-07)
 ----------------
