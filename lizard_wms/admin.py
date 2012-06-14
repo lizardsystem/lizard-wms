@@ -75,7 +75,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
         ('Details', {
                 'classes': ('collapse',),
                 'fields':
-                ('url', 'params', 'options', 'description', 'legend_url', 'connection'),
+                ('url', 'params', 'options', 'description', 'connection',
+                 'legend_url', 'bbox'),
                 }),
         )
     inlines = [FeatureLineInline]

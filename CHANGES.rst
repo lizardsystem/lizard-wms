@@ -16,6 +16,8 @@ Changelog of lizard-wms
   
 - Update WMS source features upon 'save'. Also added action to update the bbox.
 
+- deal with zoom ratio (radius) on mouseover and popup (click) searches
+
 
 1.1 (2012-06-07)
 ----------------

@@ -1,9 +1,9 @@
-from django.utils import simplejson as json
-
 """Defining lizard_wms' adapter."""
 import logging
 
+from django.utils import simplejson as json
 from lizard_map.workspace import WorkspaceItemAdapter
+
 from lizard_wms import models
 
 logger = logging.getLogger(__name__)
@@ -28,10 +28,10 @@ class AdapterWMS(WorkspaceItemAdapter):
     def layer(self, layer_ids=None, request=None):
         return [], {}
 
-    def location(self, x, y):
+    def location(self, x, y, radius):
         """This can't possibly be correct, but it works."""
 
-        search = self.search(x, y)
+        search = self.search(x, y, radius)
         if search:
             return search[0]
 
@@ -46,7 +46,7 @@ class AdapterWMS(WorkspaceItemAdapter):
         be used to reconstruct the object.
         """
 
-        feature_info = self.wms_source.get_feature_info(x, y)
+        feature_info = self.wms_source.get_feature_info(x, y, radius)
         name = self.wms_source.get_feature_name(feature_info)
 
         if feature_info:
@@ -56,7 +56,8 @@ class AdapterWMS(WorkspaceItemAdapter):
                     'workspace_item': self.workspace_item,
                     'identifier': {
                         'x': x,
-                        'y': y
+                        'y': y,
+                        'radius': radius
                         },
                     }]
         else:
@@ -66,7 +67,8 @@ class AdapterWMS(WorkspaceItemAdapter):
         identifier = identifiers[0]
 
         feature_info = self.wms_source.get_feature_info(identifier['x'],
-                                                        identifier['y'])
+                                                        identifier['y'],
+                                                        identifier['radius'])
 
         return self.html_default(identifiers=identifiers,
                                  template="lizard_wms/popup.html",
@@ -113,6 +115,5 @@ class AdapterWMS(WorkspaceItemAdapter):
             minx, miny, maxx, maxy = self.wms_source.bounding_box
             extent = {'north': maxy, 'south': miny, 'east': maxx, 'west': minx}
 
-        logger.debug("EX-TENT: " + repr(extent))
+        # logger.debug("EXTENT: " + repr(extent))
         return extent
-
