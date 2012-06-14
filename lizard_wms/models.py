@@ -78,11 +78,11 @@ overwrites.""")
                 layer_style = layer.styles.values()
                 # Not all layers have a description/legend.
                 if len(layer_style):
-                    layer_instance.description = '<img src="%s" alt="%s" />' % (
-                        layer_style[0]['legend'],
-                        layer_style[0]['title'])
+                    layer_instance.description = layer_style[0]['title']
+                    layer_instance.legend_url = layer_style[0]['legend']
                 else:
                     layer_instance.description = None
+                    layer_instance.legend_url = None
                 layer_instance.url = self.url
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
@@ -137,6 +137,16 @@ class WMSSource(models.Model):
 
     def __unicode__(self):
         return u'%s' % self.name
+
+    def update_bounding_box(self):
+        if not self.bbox:
+            wms = owslib.wms.WebMapService(self.url)
+            params = json.loads(self.params)
+            for name, layer in wms.contents.iteritems():
+                if layer.title == params['layers']:
+                    self.import_bounding_box(layer)
+                    return True
+        return False
 
     def workspace_acceptable(self):
         return WorkspaceAcceptable(
