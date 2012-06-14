@@ -1,9 +1,9 @@
-from django.utils import simplejson as json
-
 """Defining lizard_wms' adapter."""
 import logging
 
+from django.utils import simplejson as json
 from lizard_map.workspace import WorkspaceItemAdapter
+
 from lizard_wms import models
 
 logger = logging.getLogger(__name__)
@@ -94,6 +94,10 @@ class AdapterWMS(WorkspaceItemAdapter):
 
     def legend_image_url(self):
         """Return url with WMS legend image."""
+        if 'legend_url' in self.layer_arguments:
+            legend_url = self.layer_arguments['legend_url']
+            if legend_url:
+                return legend_url
         wms_url = self.layer_arguments['url']
         params_json = self.layer_arguments['params']
         params = json.loads(params_json)
@@ -111,6 +115,5 @@ class AdapterWMS(WorkspaceItemAdapter):
             minx, miny, maxx, maxy = self.wms_source.bounding_box
             extent = {'north': maxy, 'south': miny, 'east': maxx, 'west': minx}
 
-        logger.debug("EX-TENT: " + repr(extent))
+        # logger.debug("EXTENT: " + repr(extent))
         return extent
-

@@ -1,25 +1,16 @@
 """Models for lizard_wms"""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
-import owslib.wms
+import json
 import logging
-import requests
 
 from django.db import models
 from django.db import transaction
-
 from lizard_map import coordinates
-
-# json only became available in Python 2.6. As some of our sites still use
-# Python 2.5, we have to use the following workaround (ticket 2688).
-try:
-    import json
-    json  # Pyflakes...
-except ImportError:
-    import simplejson as json
-
-from lizard_maptree.models import Category
-from lizard_map.models import ADAPTER_CLASS_WMS
 from lizard_map.lizard_widgets import WorkspaceAcceptable
+from lizard_map.models import ADAPTER_CLASS_WMS
+from lizard_maptree.models import Category
+import owslib.wms
+import requests
 
 
 logger = logging.getLogger(__name__)
@@ -44,10 +35,15 @@ class WMSConnection(models.Model):
         '"opacity": 0.5}')
     category = models.ManyToManyField(Category, null=True, blank=True)
 
-    xml = models.TextField(default="", blank=True)
+    xml = models.TextField(
+        default="",
+        blank=True,
+        help_text="""Normally, leave this empty. If filled, this xml is used
+instead of the xml from the WMS server. So use it only for temp repairs or
+overwrites.""")
 
     def __unicode__(self):
-        return u'%s' % (self.title or self.slug, )
+        return self.title or self.slug
 
     @transaction.commit_on_success
     def fetch(self):
@@ -64,20 +60,20 @@ class WMSConnection(models.Model):
             wms = owslib.wms.WebMapService(self.url)
 
         fetched = set()
-
         for name, layer in wms.contents.iteritems():
             try:
                 logger.info("Fetching layer name %s" % (name,))
                 if layer.layers:
-                    #Meta layer, don't use
+                    # Meta layer, don't use
                     continue
-
+                name = name.split(':', 1)[-1]  # owslib prepends with 'workspace:'.
                 kwargs = {'connection': self,
                           'name': name}
                 try:
                     layer_instance = WMSSource.objects.get(**kwargs)
                 except WMSSource.DoesNotExist:
                     layer_instance = WMSSource(**kwargs)
+                    layer_instance.save()
 
                 layer_style = layer.styles.values()
                 # Not all layers have a description/legend.
@@ -87,17 +83,15 @@ class WMSConnection(models.Model):
                         layer_style[0]['title'])
                 else:
                     layer_instance.description = None
-
                 layer_instance.url = self.url
                 layer_instance.options = self.options
-
                 layer_instance.category = self.category.all()
                 layer_instance.params = self.params % layer.name
 
                 layer_instance.import_bounding_box(layer)
-            except Exception:
-                # Something went wrong. We skip this layer.
-                pass
+            except:
+                logger.exception("Something went wrong. We skip this layer")
+
             else:
                 layer_instance.save()
 
@@ -111,10 +105,12 @@ class WMSConnection(models.Model):
     def delete_layers(self, keep_layers=set()):
         """Deletes layers belonging to this WMS connection of which
         the names don't occur in keep_layers."""
-
+        num_deleted = 0
         for layer in self.wmssource_set.all():
             if layer.name not in keep_layers:
                 layer.delete()
+                num_deleted += 1
+        return num_deleted
 
 
 class WMSSource(models.Model):
@@ -128,6 +124,7 @@ class WMSSource(models.Model):
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
 
     description = models.TextField(null=True, blank=True)
+    legend_url = models.CharField(null=True, blank=True, max_length=2048)
     category = models.ManyToManyField(Category, null=True, blank=True)
 
     # bbox: minx, miny, maxx, maxy in Google coordinates, separated by commas
@@ -150,6 +147,7 @@ class WMSSource(models.Model):
                     'name': self.name,
                     'url': self.url,
                     'params': self.params,
+                    'legend_url': self.legend_url,
                     'options': self.options}),
             adapter_name=ADAPTER_CLASS_WMS)
 
