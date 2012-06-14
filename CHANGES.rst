@@ -17,6 +17,10 @@ Changelog of lizard-wms
 - Support custom legend url for map layers and show them in the sidebar. Do
   not show legends in the hover popup.
 
+- Update WMS source features upon 'save'. Also added action to update the bbox.
+
+- Deal with zoom ratio (radius) on mouseover and popup (click) searches
+
 
 1.1 (2012-06-07)
 ----------------
