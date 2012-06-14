@@ -81,12 +81,12 @@ class WMSConnectionAdmin(admin.ModelAdmin):
                 deleted = wms_connection.delete_layers(keep_layers=fetched)
                 num_deleted += deleted
             except AttributeError, e:
-                logger.exception(e)
                 msg = ("Probably an error message instead of a proper WMS " +
-                       "response from the url: look at %s directly. %s")
-                messages.error(
-                    request,
-                    msg % (wms_connection.url, e))
+                       "response from the url: look at %s directly. " +
+                       "Or the server doesn't support WMS 1.1.1. %s")
+                msg = msg % (wms_connection.capabilities_url(), e)
+                logger.exception(msg)
+                messages.error(request, msg)
             except urllib2.HTTPError, e:
                 logger.exception(e)
                 msg = "URL not found? Network error? Look at %s directly. %s"
