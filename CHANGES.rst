@@ -12,15 +12,14 @@ Changelog of lizard-wms
   ``fetch_wms_layers`` management command. There is reasonable error reporting
   to help debug what's wrong with a WMS connection.
 
-- Add a custom label for the category selection field
+- Add a custom label for the category selection field.
 
 - Support custom legend url for map layers and show them in the sidebar. Do
   not show legends in the hover popup.
 
 - Update WMS source features upon 'save'. Also added action to update the bbox.
 
-- Deal with zoom ratio (radius) on mouseover and popup (click) searches
-
+- Deal with zoom ratio (radius) on mouseover and popup (click) searches.
 
 1.1 (2012-06-07)
 ----------------
