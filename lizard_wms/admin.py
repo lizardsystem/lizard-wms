@@ -66,10 +66,18 @@ class WMSSourceAdmin(admin.ModelAdmin):
     form = WMSSourceForm
 
 
+class WMSConnectionForm(forms.ModelForm):
+    category = CategoryField(queryset=Category.objects.all())
+
+    class Meta:
+        model = models.WMSConnection
+
+
 class WMSConnectionAdmin(admin.ModelAdmin):
 
     list_display = ('slug', 'title', 'url')
     actions = ['reload']
+    form = WMSConnectionForm
 
     def reload(self, request, queryset):
         num_fetched_updated = 0
