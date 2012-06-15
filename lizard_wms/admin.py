@@ -50,14 +50,31 @@ class WMSSourceAdmin(admin.ModelAdmin):
     list_display = ('name',  source_domain, 'connection')
     search_fields = ('name', 'url', 'category__name', 'connection__title')
     list_filter = ('category', )
-    actions = ['update_bounding_box']
+    actions = ['update_bounding_box', 'initialize_bounding_box']
 
-    def update_bounding_box(self, request, queryset):
+    def update_bounding_box(self, request, queryset, force=True):
         num_updated = 0
         for wms_source in queryset:
-            if wms_source.update_bounding_box():
-                num_updated += 1
+            try:
+                if wms_source.update_bounding_box(force=force):
+                    num_updated += 1
+            except Exception, e:
+                msg = ("Something went wrong when updating %s. " +
+                       "Look at %s directly. %s")
+                msg = msg % (wms_source.name,
+                             wms_source.capabilities_url(),
+                             e)
+                logger.exception(msg)
+                messages.error(request, msg)
         self.message_user(request, "Loaded/updated %s bounding boxes." % (num_updated))
+
+    update_bounding_box.short_description = "Update all bounding boxes"
+
+    def initialize_bounding_box(self, request, queryset):
+        self.update_bounding_box(request, queryset, force=False)
+
+    initialize_bounding_box.short_description = (
+        "Set the not-yet-set bounding boxes")
 
     def save_model(self, request, layer_instance, form, change):
         layer_instance.save()

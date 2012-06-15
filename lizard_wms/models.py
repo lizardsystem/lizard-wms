@@ -18,6 +18,30 @@ FIXED_WMS_API_VERSION = '1.1.1'
 logger = logging.getLogger(__name__)
 
 
+def capabilities_url(url):
+    """Return the capabilities URL.
+
+    Copy/pasted mostly from owslib/wms.py. Only used in the admin for
+    debugging purposes.
+
+    """
+    qs = []
+    if url.find('?') != -1:
+        qs = cgi.parse_qsl(url.split('?')[1])
+
+    params = [x[0] for x in qs]
+
+    if 'service' not in params:
+        qs.append(('service', 'WMS'))
+    if 'request' not in params:
+        qs.append(('request', 'GetCapabilities'))
+    if 'version' not in params:
+        qs.append(('version', FIXED_WMS_API_VERSION))
+
+    urlqs = urlencode(tuple(qs))
+    return url.split('?')[0] + '?' + urlqs
+
+
 class WMSConnection(models.Model):
     """Definition of a WMS Connection."""
 
@@ -71,7 +95,7 @@ overwrites.""")
         fetched = set()
         for name, layer in wms.contents.iteritems():
             try:
-                logger.info("Fetching layer name %s" % (name,))
+                logger.debug("Fetching layer name %s" % (name,))
                 if layer.layers:
                     # Meta layer, don't use
                     continue
@@ -97,7 +121,7 @@ overwrites.""")
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
                 layer_instance.params = self.params % layer.name
-
+                print layer_instance.params
                 layer_instance.import_bounding_box(layer)
             except:
                 logger.exception("Something went wrong. We skip this layer")
@@ -123,27 +147,7 @@ overwrites.""")
         return num_deleted
 
     def capabilities_url(self):
-        """Return the capabilities URL.
-
-        Copy/pasted mostly from owslib/wms.py. Only used in the admin for
-        debugging purposes.
-
-        """
-        qs = []
-        if self.url.find('?') != -1:
-            qs = cgi.parse_qsl(self.url.split('?')[1])
-
-        params = [x[0] for x in qs]
-
-        if 'service' not in params:
-            qs.append(('service', 'WMS'))
-        if 'request' not in params:
-            qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', FIXED_WMS_API_VERSION))
-
-        urlqs = urlencode(tuple(qs))
-        return self.url.split('?')[0] + '?' + urlqs
+        return capabilities_url(self.url)
 
 
 class WMSSource(models.Model):
@@ -169,16 +173,18 @@ class WMSSource(models.Model):
         ordering = ('name', )
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return self.name
 
-    def update_bounding_box(self):
-        if not self.bbox:
+    def update_bounding_box(self, force=False):
+        if force or not self.bbox:
             wms = owslib.wms.WebMapService(self.url)
             params = json.loads(self.params)
+            # import pdb;pdb.set_trace()
             for name, layer in wms.contents.iteritems():
-                if layer.title == params['layers']:
+                if layer.name == params['layers']:
                     self.import_bounding_box(layer)
                     return True
+            logger.warn(u"Layer %s not found." % params['layers'])
         return False
 
     def workspace_acceptable(self):
@@ -193,6 +199,9 @@ class WMSSource(models.Model):
                     'legend_url': self.legend_url,
                     'options': self.options}),
             adapter_name=ADAPTER_CLASS_WMS)
+
+    def capabilities_url(self):
+        return capabilities_url(self.url)
 
     def get_feature_info(self, x=None, y=None, radius=None):
         """Gets feature info from the server, at point (x,y) in Google
