@@ -15,6 +15,7 @@ import owslib.wms
 import requests
 
 FIXED_WMS_API_VERSION = '1.1.1'
+#FIXED_WMS_API_VERSION = '1.3.0'
 logger = logging.getLogger(__name__)
 
 
@@ -177,7 +178,7 @@ class WMSSource(models.Model):
 
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
-            wms = owslib.wms.WebMapService(self.url)
+            wms = owslib.wms.WebMapService(self.url, version=FIXED_WMS_API_VERSION)
             params = json.loads(self.params)
             # import pdb;pdb.set_trace()
             for name, layer in wms.contents.iteritems():

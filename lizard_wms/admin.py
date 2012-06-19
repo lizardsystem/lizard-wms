@@ -78,11 +78,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
         "Set the not-yet-set bounding boxes")
 
     def save_model(self, request, layer_instance, form, change):
-        # Only call update_bounding_box() if the bbox has
-        # not been set, so one still has the option to
-        # define/override this value manually?
-        if not layer_instance.bbox:
-            layer_instance.update_bounding_box()
+        # Update the bounding box if it has not been set.
+        layer_instance.update_bounding_box(force=False)
         layer_instance.save()
         if layer_instance.bbox:
             inlines = layer_instance.featureline_set
