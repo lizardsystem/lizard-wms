@@ -57,6 +57,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
         for wms_source in queryset:
             try:
                 if wms_source.update_bounding_box(force=force):
+                    wms_source.save()
                     num_updated += 1
             except Exception, e:
                 msg = ("Something went wrong when updating %s. " +
@@ -77,8 +78,12 @@ class WMSSourceAdmin(admin.ModelAdmin):
         "Set the not-yet-set bounding boxes")
 
     def save_model(self, request, layer_instance, form, change):
+        # Only call update_bounding_box() if the bbox has
+        # not been set, so one still has the option to
+        # define/override this value manually?
+        if not layer_instance.bbox:
+            layer_instance.update_bounding_box()
         layer_instance.save()
-        layer_instance.update_bounding_box()
         if layer_instance.bbox:
             inlines = layer_instance.featureline_set
             if len(inlines.all()) < 1:
