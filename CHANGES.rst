@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.2 (unreleased)
+1.2 (2012-06-20)
 ----------------
 
 - Hardcoded WMS version to 1.1.1 because owslib doesn't support 1.3.0. See
