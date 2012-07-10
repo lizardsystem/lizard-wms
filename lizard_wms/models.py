@@ -7,6 +7,7 @@ import logging
 
 from django.db import models
 from django.db import transaction
+from django.utils.translation import ugettext_lazy as _
 from lizard_map import coordinates
 from lizard_map.lizard_widgets import WorkspaceAcceptable
 from lizard_map.models import ADAPTER_CLASS_WMS
@@ -169,6 +170,11 @@ class WMSSource(models.Model):
     bbox = models.CharField(max_length=100, null=True, blank=True)
 
     connection = models.ForeignKey(WMSConnection, blank=True, null=True)
+
+    show_legend = models.BooleanField(
+        verbose_name=_('show legend'),
+        help_text=_("Uncheck it if you want to hide the legend."),
+        default=True)
 
     class Meta:
         ordering = ('name', )

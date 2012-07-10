@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added checkbox for showing the legend of a WMS source (default: True). This
+  way you can hide the legend if you know it to be bad or unclear.
 
 
 1.2 (2012-06-20)

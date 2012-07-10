@@ -94,6 +94,8 @@ class AdapterWMS(WorkspaceItemAdapter):
 
     def legend_image_url(self):
         """Return url with WMS legend image."""
+        if not self.wms_source.show_legend:
+            return
         if 'legend_url' in self.layer_arguments:
             legend_url = self.layer_arguments['legend_url']
             if legend_url:
