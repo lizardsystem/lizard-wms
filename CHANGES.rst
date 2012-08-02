@@ -5,7 +5,7 @@ Changelog of lizard-wms
 1.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added error handling for GetCapabilities 1.1.1 calls.
 
 
 1.3 (2012-07-10)

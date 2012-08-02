@@ -54,11 +54,14 @@ class WMSSourceAdmin(admin.ModelAdmin):
 
     def update_bounding_box(self, request, queryset, force=True):
         num_updated = 0
+        num_failed = 0
         for wms_source in queryset:
             try:
                 if wms_source.update_bounding_box(force=force):
                     wms_source.save()
                     num_updated += 1
+                else:
+                    num_failed += 1
             except Exception, e:
                 msg = ("Something went wrong when updating %s. " +
                        "Look at %s directly. %s")
@@ -67,6 +70,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
                              e)
                 logger.exception(msg)
                 messages.error(request, msg)
+        if num_failed > 0:
+            messages.error(request, "Failed to load/update %s bounding boxes." % (num_failed))
         self.message_user(request, "Loaded/updated %s bounding boxes." % (num_updated))
 
     update_bounding_box.short_description = "Update all bounding boxes"
@@ -79,7 +84,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
 
     def save_model(self, request, layer_instance, form, change):
         # Update the bounding box if it has not been set.
-        layer_instance.update_bounding_box(force=False)
+        if not layer_instance.update_bounding_box(force=False):
+            messages.error(request, "Error updating bounding box.")
         layer_instance.save()
         if layer_instance.bbox:
             inlines = layer_instance.featureline_set

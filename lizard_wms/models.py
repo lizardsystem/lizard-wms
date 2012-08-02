@@ -184,14 +184,22 @@ class WMSSource(models.Model):
 
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
-            wms = owslib.wms.WebMapService(self.url, version=FIXED_WMS_API_VERSION)
-            params = json.loads(self.params)
-            # import pdb;pdb.set_trace()
-            for name, layer in wms.contents.iteritems():
-                if layer.name == params['layers']:
-                    self.import_bounding_box(layer)
-                    return True
-            logger.warn(u"Layer %s not found." % params['layers'])
+            try:
+                wms = owslib.wms.WebMapService(self.url, version=FIXED_WMS_API_VERSION)
+                params = json.loads(self.params)
+                # import pdb;pdb.set_trace()
+                for name, layer in wms.contents.iteritems():
+                    if layer.name == params['layers']:
+                        self.import_bounding_box(layer)
+                        return True
+                logger.warn(u"Layer %s not found." % params['layers'])
+            except Exception, e:
+                msg = ("Something went wrong when updating %s. " +
+                       "Look at %s directly. %s")
+                msg = msg % (self.name,
+                             self.capabilities_url(),
+                             e)
+                logger.exception(msg)
         return False
 
     def workspace_acceptable(self):
