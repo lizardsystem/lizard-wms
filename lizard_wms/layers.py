@@ -92,23 +92,26 @@ class AdapterWMS(WorkspaceItemAdapter):
             end_date=end_date,
             icon_style=icon_style)
 
-    def legend_image_url(self):
+    def legend_image_urls(self):
         """Return url with WMS legend image."""
         if not self.wms_source.show_legend:
-            return
+            return []
         if 'legend_url' in self.layer_arguments:
             legend_url = self.layer_arguments['legend_url']
             if legend_url:
-                return legend_url
+                return [legend_url]
         wms_url = self.layer_arguments['url']
         params_json = self.layer_arguments['params']
         params = json.loads(params_json)
-        layer = params['layers']
+        layers = params['layers'].split(",")
+        urls = []
         url_template = (
             "%s?REQUEST=GetLegendGraphic&FORMAT=image/png" +
             "&WIDTH=20&HEIGHT=20&transparent=false&bgcolor=0xffffff&" +
             "LAYER=%s")
-        return url_template % (wms_url, layer)
+        for layer in layers:
+            urls.append(url_template % (wms_url, layer))
+        return urls
 
     def extent(self, identifiers=None):
         extent = {'north': None, 'south': None, 'east': None, 'west': None}
