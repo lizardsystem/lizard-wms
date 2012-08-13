@@ -20,9 +20,12 @@ class AdapterWMS(WorkspaceItemAdapter):
         """Helper method that returns this layer's WMSSource
         object. wms_source_id is given in adapter_layer_json."""
         if not hasattr(self, '_wms_source'):
-            self._wms_source = models.WMSSource.objects.get(
-                pk=self.layer_arguments['wms_source_id'])
-
+            pk = self.layer_arguments.get('wms_source_id')
+            if pk is None:
+                # This shouldn't happen, but it does
+                # Just ignore it and carry on.
+                return
+            self._wms_source = models.WMSSource.objects.get(pk=pk)
         return self._wms_source
 
     def layer(self, layer_ids=None, request=None):
