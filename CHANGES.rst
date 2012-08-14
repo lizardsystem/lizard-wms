@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.5 (unreleased)
+1.5 (2012-08-14)
 ----------------
 
 - Added multi-url legend support.
