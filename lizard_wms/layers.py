@@ -107,7 +107,7 @@ class AdapterWMS(WorkspaceItemAdapter):
         urls = []
         url_template = (
             "%s?REQUEST=GetLegendGraphic&FORMAT=image/png" +
-            "&WIDTH=20&HEIGHT=20&transparent=false&bgcolor=0xffffff&" +
+            "&WIDTH=20&HEIGHT=20&transparent=true&" +
             "LAYER=%s")
         for layer in layers:
             urls.append(url_template % (wms_url, layer))

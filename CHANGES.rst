@@ -9,6 +9,8 @@ Changelog of lizard-wms
 
 - Put a timeout of 10 seconds on WMS calls.
 
+- Made legend background transparent.
+
 
 1.4 (2012-08-02)
 ----------------
