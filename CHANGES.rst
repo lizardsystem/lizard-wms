@@ -5,17 +5,15 @@ Changelog of lizard-wms
 1.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Put a timeout of 10 seconds on WMS calls.
+
+- Made legend background transparent.
 
 
 1.5 (2012-08-14)
 ----------------
 
 - Added multi-url legend support.
-
-- Put a timeout of 10 seconds on WMS calls.
-
-- Made legend background transparent.
 
 
 1.4 (2012-08-02)
