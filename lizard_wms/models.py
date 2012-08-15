@@ -16,9 +16,34 @@ import owslib.wms
 import requests
 
 FIXED_WMS_API_VERSION = '1.1.1'
+WMS_TIMEOUT = 10
 #FIXED_WMS_API_VERSION = '1.3.0'
 logger = logging.getLogger(__name__)
 
+
+class TimeoutException(Exception): 
+    pass 
+
+def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
+    """This function will spawn a thread and run the given function
+    using the args, kwargs and return the given default value if the
+    timeout_duration is exceeded.
+    """ 
+    import threading
+    class InterruptableThread(threading.Thread):
+        def __init__(self):
+            threading.Thread.__init__(self)
+            self.result = default
+        def run(self):
+            self.result = func(*args, **kwargs)
+    it = InterruptableThread()
+    it.start()
+    it.join(timeout_duration)
+    if it.isAlive():
+        raise TimeoutException("Timeout of %s s expired calling %s " %
+                (timeout_duration, func.__name__))
+    else:
+        return it.result
 
 def capabilities_url(url):
     """Return the capabilities URL.
@@ -185,7 +210,8 @@ class WMSSource(models.Model):
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
             try:
-                wms = owslib.wms.WebMapService(self.url, version=FIXED_WMS_API_VERSION)
+                wms = timeout(owslib.wms.WebMapService, (self.url,
+                        FIXED_WMS_API_VERSION), timeout_duration=WMS_TIMEOUT)
                 params = json.loads(self.params)
                 # import pdb;pdb.set_trace()
                 for name, layer in wms.contents.iteritems():
