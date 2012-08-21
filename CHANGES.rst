@@ -9,6 +9,8 @@ Changelog of lizard-wms
 
 - Made legend background transparent.
 
+- Support GetFeatureInfo for multi-layers.
+
 
 1.5 (2012-08-14)
 ----------------

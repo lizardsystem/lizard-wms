@@ -292,60 +292,61 @@ class WMSSource(models.Model):
             version = '1.1.1'
 
         params = json.loads(self.params)
-
-        payload = {
-            'REQUEST': 'GetFeatureInfo',
-            'EXCEPTIONS': 'application/vnd.ogc.se_xml',
-            'INFO_FORMAT': 'text/plain',
-            'SERVICE': 'WMS',
-            'SRS': 'EPSG:3857',  # Always Google (web mercator)
-
-            # Get a single feature
-            'FEATURE_COUNT': 1,
-
-            # Set the layer we want
-            'LAYERS': params['layers'],
-            'QUERY_LAYERS': params['layers'],
-
-            'BBOX': bbox,
-
-            # Get the value at the single pixel of a 1x1 picture
-            'HEIGHT': 1,
-            'WIDTH': 1,
-            'X': 0,
-            'Y': 0,
-
-            # Version from parameter
-            'VERSION': version,
-        }
-
-        r = requests.get(self.url, params=payload)
-        logger.info("GetFeatureInfo says: " + r.text)
-
-        # XXX Check result code etc
-
-        if 'no features were found' in r.text:
-            return dict()
-
-        if not r.text.startswith("Results for FeatureType"):
-            return dict()
-
-        # "Parse"
         values = dict()
-        for line in r.text.split("\n"):
-            line = line.strip()
-            parts = line.split(" = ")
-            if len(parts) != 2:
-                continue
-            logger.info("LINE: " + line)
-            logger.info(str(parts))
-            feature, value = parts
+        for layer in params['layers'].split(","):
 
-            if value.startswith("[GEOMETRY"):
-                # I think these are always uninteresting
+            payload = {
+                'REQUEST': 'GetFeatureInfo',
+                'EXCEPTIONS': 'application/vnd.ogc.se_xml',
+                'INFO_FORMAT': 'text/plain',
+                'SERVICE': 'WMS',
+                'SRS': 'EPSG:3857',  # Always Google (web mercator)
+
+                # Get a single feature
+                'FEATURE_COUNT': 1,
+
+                # Set the layer we want
+                'LAYERS': layer,
+                'QUERY_LAYERS': layer,
+
+                'BBOX': bbox,
+
+                # Get the value at the single pixel of a 1x1 picture
+                'HEIGHT': 1,
+                'WIDTH': 1,
+                'X': 0,
+                'Y': 0,
+
+                # Version from parameter
+                'VERSION': version,
+            }
+
+            r = requests.get(self.url, params=payload)
+            logger.info("GetFeatureInfo says: " + r.text)
+
+            # XXX Check result code etc
+
+            if 'no features were found' in r.text:
                 continue
 
-            values[feature] = value
+            if not r.text.startswith("Results for FeatureType"):
+                continue
+
+            # "Parse"
+            for line in r.text.split("\n"):
+                line = line.strip()
+                parts = line.split(" = ")
+                if len(parts) != 2:
+                    continue
+                logger.info("LINE: " + line)
+                logger.info(str(parts))
+                feature, value = parts
+
+                if value.startswith("[GEOMETRY"):
+                    # I think these are always uninteresting
+                    continue
+
+                values[feature] = value
 
         self._store_features(values)
         return values
