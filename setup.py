@@ -19,6 +19,7 @@ install_requires = [
     'lizard-maptree >= 1.0.1',
     'django-nose',
     'pkginfo',
+    'GChartWrapper',
     'requests',
     ],
 

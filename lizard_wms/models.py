@@ -5,6 +5,7 @@ import cgi
 import json
 import logging
 
+from GChartWrapper import *
 from django.db import models
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
@@ -23,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 class TimeoutException(Exception): 
     pass 
+
 
 def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
     """This function will spawn a thread and run the given function
@@ -44,6 +46,63 @@ def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
                 (timeout_duration, func.__name__))
     else:
         return it.result
+
+
+def google_column_chart_url(data):
+    header = data.pop(0)
+    primary = -1
+    sortcolumn = 0
+    colors = []
+    legend = []
+    units = ''
+    for j in range(len(header)):
+        if 'primary' in header[j] and \
+                    header[j]['primary'] == 'true':
+            primary = j
+        else:
+            if 'color' in header[j]:
+                colors.append(header[j]['color'])
+            else:
+                colors.append(default_colors[color_idx])
+                color_idx = (color_idx + 1) % 3
+            if 'label' in header[j]:
+                legend.append(header[j]['label'])
+            else:
+                legend.append("")
+            if 'units' in header[j]:
+                units = header[j]['units']
+        if 'sort' in header[j] and \
+                    header[j]['sort'] == 'true':
+            sortcolumn = j
+    data.sort(key=lambda row: row[sortcolumn])
+    maxy = 0
+    for i in range(len(data)):
+        sum = 0
+        for j in range(len(header)):
+            if j != primary:
+                sum += data[i][j]
+        maxy = max(sum, maxy)
+    data = zip(*data)
+    if primary > -1:
+        xaxis = data.pop(primary)
+    chart = VerticalBarStack(data, encoding='text')
+    chart.axes.range(0, 0, maxy)
+    axes = 'y'
+    if primary > -1:
+        chart.axes.label(1, *xaxis)
+        axes = axes + 'x'
+    if units != '':
+        chart.axes.label(len(axes), None, units, None)
+        axes = axes + 'y'
+    chart.axes(axes)
+    chart.color(*colors)
+    chart.fill('bg','s','ffffff00')
+    chart.bar(17)
+    chart.size(760, 200)
+    chart.scale(0, maxy)
+    chart.legend(*legend)
+    return chart.url
+
 
 def capabilities_url(url):
     """Return the capabilities URL.
@@ -322,7 +381,7 @@ class WMSSource(models.Model):
             }
 
             r = requests.get(self.url, params=payload)
-            logger.info("GetFeatureInfo says: " + r.text)
+            #logger.info("GetFeatureInfo says: " + r.text)
 
             # XXX Check result code etc
 
@@ -338,7 +397,7 @@ class WMSSource(models.Model):
                 parts = line.split(" = ")
                 if len(parts) != 2:
                     continue
-                logger.info("LINE: " + line)
+#                logger.info("LINE: " + line)
                 logger.info(str(parts))
                 feature, value = parts
 
@@ -425,9 +484,15 @@ class WMSSource(models.Model):
 
         info = []
 
+        default_colors = ['ff0000', '00ff00', '0000ff']
+        color_idx = 0
         for feature_line in (self.featureline_set.filter(visible=True).
                              order_by('order_using')):
             if feature_line.name in values:
+                if feature_line.render_as == 'C':
+                    data = json.loads(values[feature_line.name])
+                    values[feature_line.name] = google_column_chart_url(data)
+                    feature_line.render_as = 'I'
                 info.append({
                         'name':
                         (feature_line.description or feature_line.name),
@@ -468,7 +533,8 @@ class FeatureLine(models.Model):
             ('T', "Tekst"),
             ('I', "Link naar een image"),
             ('U', "URL"),
-            ('W', "URL-achtige tekst")), default='T')
+            ('W', "URL-achtige tekst"),
+            ('C', "Google column chart")), default='T')
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
 

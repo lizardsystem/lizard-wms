@@ -78,6 +78,7 @@ class AdapterWMS(WorkspaceItemAdapter):
                                  layout_options=layout_options,
                                  extra_render_kwargs={
                 'feature_info': self.wms_source.get_popup_info(feature_info),
+                'show_labels': False
                 })
 
     def symbol_url(self, identifier=None, start_date=None, end_date=None):

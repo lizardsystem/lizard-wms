@@ -11,6 +11,8 @@ Changelog of lizard-wms
 
 - Support GetFeatureInfo for multi-layers.
 
+- Added Google column chart support.
+
 
 1.5 (2012-08-14)
 ----------------
