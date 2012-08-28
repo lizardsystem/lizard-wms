@@ -49,6 +49,8 @@ def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
 
 
 def google_column_chart_url(data):
+    default_colors = ['ff0000', '00ff00', '0000ff']
+    color_idx = 0
     header = data.pop(0)
     primary = -1
     sortcolumn = 0
@@ -484,8 +486,6 @@ class WMSSource(models.Model):
 
         info = []
 
-        default_colors = ['ff0000', '00ff00', '0000ff']
-        color_idx = 0
         for feature_line in (self.featureline_set.filter(visible=True).
                              order_by('order_using')):
             if feature_line.name in values:
