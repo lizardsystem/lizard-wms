@@ -13,6 +13,7 @@ install_requires = [
     'Django',
     'django-staticfiles',
     'django-extensions',
+    'django-jsonfield',
     'OWSLib',
     'lizard-ui',
     'lizard-map',
