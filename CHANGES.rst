@@ -13,6 +13,8 @@ Changelog of lizard-wms
 
 - Added Google column chart support.
 
+- Added popup with subtabs.
+
 
 1.5 (2012-08-14)
 ----------------

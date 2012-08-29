@@ -1,14 +1,12 @@
 <table class="table">
-{% if show_labels %}
 <thead>
 <th>Feature</th>
 <th>Waarde</th>
 </thead>
-{% endif %}
 <tbody>
 {% for info in feature_info %}
-<tr>{% if show_labels %}<td>{{info.name}}</td>{% endif %}
-<td>{% if info.render_as == 'T' %}{{ info.value }}{% endif %}
+<tr>{% if info.show_label == 'false' %}<td colspan=2>{% else %}<td>{{info.name}}</td>
+<td>{% endif %}{% if info.render_as == 'T' %}{{ info.value }}{% endif %}
 {% if info.render_as == 'I' %}<img src="{{ info.value }}">{% endif %}
 {% if info.render_as == 'U' %}<a href="{{ info.value }}">{{ info.value }}</a>{% endif %}
 {% if info.render_as == 'W' %}<a href="http://{{ info.value }}">{{ info.value }}</a>{% endif %}
