@@ -5,6 +5,7 @@ import cgi
 import json
 import logging
 
+from GChartWrapper import VerticalBarStack
 from django.db import models
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
@@ -101,7 +102,7 @@ def google_column_chart_url(data):
     chart.color(*colors)
     chart.fill('bg','s','ffffff00')
     chart.bar(17)
-    chart.size(760, 200)
+    chart.size(758, 200)
     chart.scale(0, maxy)
     chart.legend(*legend)
     return chart.url
@@ -403,7 +404,7 @@ class WMSSource(models.Model):
                 if len(parts) != 2:
                     continue
 #                logger.info("LINE: " + line)
-                logger.info(str(parts))
+#                logger.info(str(parts))
                 feature, value = parts
 
                 if value.startswith("[GEOMETRY"):
@@ -496,11 +497,15 @@ class WMSSource(models.Model):
                     data = json.loads(values[feature_line.name])
                     values[feature_line.name] = google_column_chart_url(data)
                     feature_line.render_as = 'I'
+                    feature_line.show_label = 'false'
+                else:
+                    feature_line.show_label = 'true'
                 info.append({
                         'name':
                         (feature_line.description or feature_line.name),
                         'value': values[feature_line.name],
                         'render_as': feature_line.render_as,
+                        'show_label': feature_line.show_label,
                         })
         return info
 
