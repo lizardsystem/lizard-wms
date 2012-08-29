@@ -5,11 +5,10 @@ import cgi
 import json
 import logging
 
-from GChartWrapper import VerticalBarStack
 from django.db import models
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
-from GChartWrapper import *
+from GChartWrapper import VerticalBarStack
 from jsonfield import JSONField
 from lizard_map import coordinates
 from lizard_map.lizard_widgets import WorkspaceAcceptable
@@ -252,7 +251,7 @@ class WMSSource(models.Model):
 
     description = models.TextField(null=True, blank=True)
     metadata = models.TextField(null=True, blank=True)
-    
+
     legend_url = models.CharField(null=True, blank=True, max_length=2048)
     category = models.ManyToManyField(Category, null=True, blank=True)
 
