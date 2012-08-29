@@ -20,6 +20,12 @@ import requests
 FIXED_WMS_API_VERSION = '1.1.1'
 WMS_TIMEOUT = 10
 #FIXED_WMS_API_VERSION = '1.3.0'
+RENDER_TEXT = 'T'
+RENDER_IMAGE = 'I'
+RENDER_URL = 'U'
+RENDER_URL_LIKE = 'W'
+RENDER_GC_COLUMN = 'C'
+
 logger = logging.getLogger(__name__)
 
 
@@ -492,10 +498,10 @@ class WMSSource(models.Model):
         for feature_line in (self.featureline_set.filter(visible=True).
                              order_by('order_using')):
             if feature_line.name in values:
-                if feature_line.render_as == 'C':
+                if feature_line.render_as == RENDER_GC_COLUMN:
                     data = json.loads(values[feature_line.name])
                     values[feature_line.name] = google_column_chart_url(data)
-                    feature_line.render_as = 'I'
+                    feature_line.render_as = RENDER_IMAGE
                     feature_line.show_label = 'false'
                 else:
                     feature_line.show_label = 'true'
@@ -537,11 +543,11 @@ class FeatureLine(models.Model):
     visible = models.BooleanField(default=True)
     use_as_id = models.BooleanField(default=False)
     render_as = models.CharField(max_length=1, choices=(
-            ('T', "Tekst"),
-            ('I', "Link naar een image"),
-            ('U', "URL"),
-            ('W', "URL-achtige tekst"),
-            ('C', "Google column chart")), default='T')
+            (RENDER_TEXT, "Tekst"),
+            (RENDER_IMAGE, "Link naar een image"),
+            (RENDER_URL, "URL"),
+            (RENDER_URL_LIKE, "URL-achtige tekst"),
+            (RENDER_GC_COLUMN, "Google column chart")), default=RENDER_TEXT)
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
 
