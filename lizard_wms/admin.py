@@ -37,7 +37,8 @@ class FeatureLineInline(admin.TabularInline):
 
 
 class WMSSourceForm(forms.ModelForm):
-    category = CategoryField(queryset=Category.objects.all())
+    category = CategoryField(queryset=Category.objects.all(),
+                             required=False)
 
     class Meta:
         model = models.WMSSource
@@ -71,8 +72,11 @@ class WMSSourceAdmin(admin.ModelAdmin):
                 logger.exception(msg)
                 messages.error(request, msg)
         if num_failed > 0:
-            messages.error(request, "Failed to load/update %s bounding boxes." % (num_failed))
-        self.message_user(request, "Loaded/updated %s bounding boxes." % (num_updated))
+            messages.error(
+                request, "Failed to load/update %s bounding boxes." % (
+                    num_failed))
+        self.message_user(request, "Loaded/updated %s bounding boxes." % (
+                num_updated))
 
     update_bounding_box.short_description = "Update all bounding boxes"
 
@@ -100,8 +104,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
         ('Details', {
                 'classes': ('collapse',),
                 'fields':
-                ('url', 'params', 'options', 'description', 'metadata', 'connection',
-                 'legend_url', 'bbox', 'show_legend'),
+                ('url', 'params', 'options', 'description', 'metadata',
+                 'connection', 'legend_url', 'bbox', 'show_legend'),
                 }),
         )
     inlines = [FeatureLineInline]
