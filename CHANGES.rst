@@ -15,6 +15,8 @@ Changelog of lizard-wms
 
 - Added popup with subtabs.
 
+- Support ascending and descending sort on column charts.
+
 
 1.5 (2012-08-14)
 ----------------

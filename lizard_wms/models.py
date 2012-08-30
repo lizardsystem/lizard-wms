@@ -20,11 +20,15 @@ import requests
 FIXED_WMS_API_VERSION = '1.1.1'
 WMS_TIMEOUT = 10
 #FIXED_WMS_API_VERSION = '1.3.0'
+RENDER_NONE = ''
 RENDER_TEXT = 'T'
 RENDER_IMAGE = 'I'
 RENDER_URL = 'U'
 RENDER_URL_LIKE = 'W'
 RENDER_GC_COLUMN = 'C'
+
+SORT_ORDER_ASC = 'asc'
+SORT_ORDER_DESC = 'desc'
 
 logger = logging.getLogger(__name__)
 
@@ -59,8 +63,10 @@ def google_column_chart_url(data):
     default_colors = ['ff0000', '00ff00', '0000ff']
     color_idx = 0
     header = data.pop(0)
+    length = len(data)
     primary = -1
-    sortcolumn = 0
+    sortcolumn = -1
+    sortorder = SORT_ORDER_ASC
     colors = []
     legend = []
     units = ''
@@ -80,10 +86,13 @@ def google_column_chart_url(data):
                 legend.append("")
             if 'units' in header[j]:
                 units = header[j]['units']
-        if 'sort' in header[j] and \
-                    header[j]['sort'] == 'true':
+        if 'sort' in header[j]:
             sortcolumn = j
-    data.sort(key=lambda row: row[sortcolumn])
+            sortorder = header[j]['sort']
+    if sortcolumn > -1:
+        data.sort(key=lambda row: row[sortcolumn])
+        if sortorder == SORT_ORDER_DESC:
+            data.reverse()
     maxy = 0
     for i in range(len(data)):
         sum = 0
@@ -92,6 +101,8 @@ def google_column_chart_url(data):
                 sum += data[i][j]
         maxy = max(sum, maxy)
     data = zip(*data)
+    if len(data) == 0:
+        return ''
     if primary > -1:
         xaxis = data.pop(primary)
     chart = VerticalBarStack(data, encoding='text')
@@ -106,7 +117,7 @@ def google_column_chart_url(data):
     chart.axes(axes)
     chart.color(*colors)
     chart.fill('bg','s','ffffff00')
-    chart.bar(17)
+    chart.bar(17, 630 / length - 17)
     chart.size(758, 200)
     chart.scale(0, maxy)
     chart.legend(*legend)
@@ -500,8 +511,12 @@ class WMSSource(models.Model):
             if feature_line.name in values:
                 if feature_line.render_as == RENDER_GC_COLUMN:
                     data = json.loads(values[feature_line.name])
-                    values[feature_line.name] = google_column_chart_url(data)
-                    feature_line.render_as = RENDER_IMAGE
+                    url = google_column_chart_url(data)
+                    values[feature_line.name] = url
+                    if url == '':
+                        feature_line.render_as = RENDER_NONE
+                    else:
+                        feature_line.render_as = RENDER_IMAGE
                     feature_line.show_label = 'false'
                 else:
                     feature_line.show_label = 'true'
