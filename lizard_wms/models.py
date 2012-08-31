@@ -310,7 +310,8 @@ class WMSSource(models.Model):
         return False
 
     def workspace_acceptable(self):
-        return WorkspaceAcceptable(
+        
+        result = WorkspaceAcceptable(
             name=self.name,
             description=self.description,
             adapter_layer_json=json.dumps({
@@ -321,6 +322,8 @@ class WMSSource(models.Model):
                     'legend_url': self.legend_url,
                     'options': self.options}),
             adapter_name=ADAPTER_CLASS_WMS)
+        result.metadata = self.metadata
+        return result
 
     def capabilities_url(self):
         return capabilities_url(self.url)
