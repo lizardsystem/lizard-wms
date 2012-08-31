@@ -106,7 +106,11 @@ class AdapterWMS(WorkspaceItemAdapter):
                 return [legend_url]
         wms_url = self.layer_arguments['url']
         params_json = self.layer_arguments['params']
-        params = json.loads(params_json)
+        try:
+            params = json.loads(params_json)
+        except ValueError, e:
+            logger.error("Invalid json in workspace item: %s", e)
+            return []
         layers = params['layers'].split(",")
         urls = []
         url_template = (
