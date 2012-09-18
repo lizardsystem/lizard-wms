@@ -29,30 +29,32 @@ RENDER_GC_COLUMN = 'C'
 logger = logging.getLogger(__name__)
 
 
-class TimeoutException(Exception): 
-    pass 
+class TimeoutException(Exception):
+    pass
 
 
 def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
     """This function will spawn a thread and run the given function
     using the args, kwargs and return the given default value if the
     timeout_duration is exceeded.
-    """ 
+    """
     import threading
+
     class InterruptableThread(threading.Thread):
         def __init__(self):
             threading.Thread.__init__(self)
             self.result = default
+
         def run(self):
             self.result = func(*args, **kwargs)
+
     it = InterruptableThread()
     it.start()
     it.join(timeout_duration)
     if it.isAlive():
         raise TimeoutException("Timeout of %s s expired calling %s " %
                 (timeout_duration, func.__name__))
-    else:
-        return it.result
+    return it.result
 
 
 def google_column_chart_url(data):
@@ -86,11 +88,11 @@ def google_column_chart_url(data):
     data.sort(key=lambda row: row[sortcolumn])
     maxy = 0
     for i in range(len(data)):
-        sum = 0
+        total = 0
         for j in range(len(header)):
             if j != primary:
-                sum += data[i][j]
-        maxy = max(sum, maxy)
+                total += data[i][j]
+        maxy = max(total, maxy)
     data = zip(*data)
     if primary > -1:
         xaxis = data.pop(primary)
@@ -105,7 +107,7 @@ def google_column_chart_url(data):
         axes = axes + 'y'
     chart.axes(axes)
     chart.color(*colors)
-    chart.fill('bg','s','ffffff00')
+    chart.fill('bg', 's', 'ffffff00')
     chart.bar(17)
     chart.size(758, 200)
     chart.scale(0, maxy)
