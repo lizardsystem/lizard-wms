@@ -111,9 +111,10 @@ def google_column_chart_url(data):
     axes = 'y'
     if primary > -1:
         chart.axes.label(1, *xaxis)
-        if 'units' in header[primary]:
-            chart.axes.label(1, None, header[primary]['units'], None)
         axes += 'x'
+        if 'units' in header[primary]:
+            chart.axes.label(len(axes), None, header[primary]['units'], None)
+            axes += 'x'
     if units != '':
         chart.axes.label(len(axes), None, units, None)
         axes += 'y'
