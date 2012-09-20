@@ -7,7 +7,8 @@
     {% for info in feature_info %}
       <tr>
         {% if info.show_label == 'false' %}
-          <td colspan="2">
+          <td colspan="2">{% if info.name %}{{ info.name }}{% endif %}</td>
+		  <td colspan="2">
         {% else %}
            <td>{{info.name}}</td>
            <td>

@@ -9,7 +9,6 @@ from django.db import models
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from GChartWrapper import VerticalBarStack
-from jsonfield import JSONField
 from lizard_map import coordinates
 from lizard_map.lizard_widgets import WorkspaceAcceptable
 from lizard_map.models import ADAPTER_CLASS_WMS
