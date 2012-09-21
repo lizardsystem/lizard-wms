@@ -1,6 +1,7 @@
+{% if feature_info %}
 <table class="table">
   <thead>
-    <th>Feature</th>
+    <th>Attribuut</th>
     <th>Waarde</th>
   </thead>
   <tbody>
@@ -24,3 +25,8 @@
     {% endfor %}
   </tbody>
 </table>
+{% else %}
+<div class="alert">
+  <h3>Geen data</h3>
+</div>
+{% endif %}
