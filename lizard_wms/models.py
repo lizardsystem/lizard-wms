@@ -125,6 +125,7 @@ def google_column_chart_url(data):
     chart.size(758, 200)
     chart.scale(0, maxy)
     chart.legend(*legend)
+    chart.legend_pos('r', 'r')
     return chart.url
 
 
