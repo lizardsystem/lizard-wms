@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.6 (unreleased)
+1.6 (2012-10-04)
 ----------------
 
 - Put a timeout of 10 seconds on WMS calls.
