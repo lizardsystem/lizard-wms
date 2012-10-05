@@ -174,7 +174,7 @@ class WMSConnection(models.Model):
         '"transparent": "true"}'
         )
     options = models.TextField(
-        default='{"buffer": 0, "reproject": true, "isBaseLayer": false, '
+        default='{"buffer": 0, "isBaseLayer": false, '
         '"opacity": 0.5}')
     category = models.ManyToManyField(Category, null=True, blank=True)
 
