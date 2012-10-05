@@ -5,7 +5,7 @@ Changelog of lizard-wms
 1.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added a migration that removes the reproject option from all WMSSource and WMSConnection instances.
 
 
 1.6 (2012-10-04)
