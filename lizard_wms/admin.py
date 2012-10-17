@@ -5,7 +5,9 @@ import logging
 
 from django.contrib import admin
 from django.contrib import messages
+from django.db import models as django_models
 from django import forms
+
 from lizard_maptree.models import Category
 from lizard_wms import models
 
@@ -98,22 +100,32 @@ class WMSSourceAdmin(admin.ModelAdmin):
                 self.message_user(request, "Loaded/updated feature info.")
 
     fieldsets = (
-        (None, {
-                'fields': ('name', 'category'),
-                }),
-        ('Details', {
-                'classes': ('collapse',),
-                'fields':
-                ('url', 'params', 'options', 'description', 'metadata',
-                 'connection', 'legend_url', 'bbox', 'show_legend'),
-                }),
-        )
+        (None, {'fields': ('name', 'category')}),
+        ('Details',
+         {'classes': ('collapse',),
+          'fields': ('url', 'params', 'options', 'description', 'metadata',
+                     'cql_filter', 'connection', 'legend_url', 'bbox',
+                     'show_legend'),
+          }),
+    )
     inlines = [FeatureLineInline]
     form = WMSSourceForm
 
 
+class SourceInline(admin.TabularInline):
+    model = models.WMSSource
+    fields = ('name', 'params', 'options', 'category')
+    extra = 0
+    formfield_overrides = {
+        django_models.TextField: {
+            'widget': forms.Textarea(attrs={'rows': '3', 'cols': '50'})
+        }
+    }
+
+
 class WMSConnectionForm(forms.ModelForm):
-    category = CategoryField(queryset=Category.objects.all())
+    category = CategoryField(queryset=Category.objects.all(),
+                             required=False)
 
     class Meta:
         model = models.WMSConnection
@@ -124,6 +136,7 @@ class WMSConnectionAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'url')
     actions = ['reload']
     form = WMSConnectionForm
+    inlines = [SourceInline]
 
     def reload(self, request, queryset):
         num_fetched_updated = 0
