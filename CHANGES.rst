@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.7 (unreleased)
+1.7 (2012-10-18)
 ----------------
 
 - Added cql_filter options in the adapter_layer_json.
