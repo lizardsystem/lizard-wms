@@ -1,5 +1,8 @@
 """Models for lizard_wms"""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
+from __future__ import (print_function, unicode_literals, absolute_import,
+                        division)
+
 from urllib import urlencode
 import cgi
 import json
@@ -56,7 +59,7 @@ def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
     it.join(timeout_duration)
     if it.isAlive():
         raise TimeoutException("Timeout of %s s expired calling %s " %
-                (timeout_duration, func.__name__))
+                               (timeout_duration, func.__name__))
     return it.result
 
 
@@ -72,8 +75,7 @@ def google_column_chart_url(data):
     legend = []
     units = ''
     for j in range(len(header)):
-        if 'primary' in header[j] and \
-                    header[j]['primary'] == 'true':
+        if 'primary' in header[j] and header[j]['primary'] == 'true':
             primary = j
         else:
             if 'color' in header[j]:
@@ -171,13 +173,11 @@ class WMSConnection(models.Model):
     params = models.TextField(
         default='{"height": "256", "width": "256", "layers": "%s", '
         '"styles": "", "format": "image/png", "tiled": "true", '
-        '"transparent": "true"}'
-        )
+        '"transparent": "true"}')
     options = models.TextField(
         default='{"buffer": 0, "isBaseLayer": false, '
         '"opacity": 0.5}')
     category = models.ManyToManyField(Category, null=True, blank=True)
-
     xml = models.TextField(
         default="",
         blank=True,
@@ -196,14 +196,11 @@ overwrites.""")
 
         Returns a set of fetched layer names."""
 
+        wms_kwargs = {'version': FIXED_WMS_API_VERSION}
         if self.xml:
-            xml = self.xml.encode('utf8').strip()
-            wms = owslib.wms.WebMapService(self.url,
-                                           xml=xml,
-                                           version=FIXED_WMS_API_VERSION)
-        else:
-            wms = owslib.wms.WebMapService(self.url,
-                                           version=FIXED_WMS_API_VERSION)
+            wms_kwargs['xml'] = self.xml.encode('utf8').strip()
+
+        wms = owslib.wms.WebMapService(self.url, **wms_kwargs)
 
         fetched = set()
         for name, layer in wms.contents.iteritems():
@@ -214,13 +211,8 @@ overwrites.""")
                     continue
                 name = name.split(':', 1)[-1]
                 # ^^^ owslib prepends with 'workspace:'.
-                kwargs = {'connection': self,
-                          'name': name}
-                try:
-                    layer_instance = WMSSource.objects.get(**kwargs)
-                except WMSSource.DoesNotExist:
-                    layer_instance = WMSSource(**kwargs)
-                    layer_instance.save()
+                layer_instance, _ = WMSSource.objects.get_or_create(
+                    connection=self, name=name)
 
                 layer_style = layer.styles.values()
                 # Not all layers have a description/legend.
@@ -230,11 +222,11 @@ overwrites.""")
                 else:
                     layer_instance.description = None
                     layer_instance.legend_url = None
+
                 layer_instance.url = self.url
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
                 layer_instance.params = self.params % layer.name
-                print layer_instance.params
                 layer_instance.import_bounding_box(layer)
             except:
                 logger.exception("Something went wrong. We skip this layer")
@@ -249,7 +241,7 @@ overwrites.""")
 
         return fetched
 
-    def delete_layers(self, keep_layers=set()):
+    def delete_layers(self, keep_layers=frozenset()):
         """Deletes layers belonging to this WMS connection of which
         the names don't occur in keep_layers."""
         num_deleted = 0
@@ -272,7 +264,6 @@ class WMSSource(models.Model):
     url = models.URLField(verify_exists=False)
     params = models.TextField(null=True, blank=True)  # {layers: 'basic'}
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
-
     description = models.TextField(null=True, blank=True)
     metadata = models.TextField(null=True, blank=True)
 
@@ -298,10 +289,10 @@ class WMSSource(models.Model):
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
             try:
-                wms = timeout(owslib.wms.WebMapService, (self.url,
-                        FIXED_WMS_API_VERSION), timeout_duration=WMS_TIMEOUT)
+                wms = timeout(owslib.wms.WebMapService,
+                              (self.url, FIXED_WMS_API_VERSION),
+                              timeout_duration=WMS_TIMEOUT)
                 params = json.loads(self.params)
-                # import pdb;pdb.set_trace()
                 for name, layer in wms.contents.iteritems():
                     if layer.name == params['layers']:
                         self.import_bounding_box(layer)
@@ -317,17 +308,23 @@ class WMSSource(models.Model):
         return False
 
     def workspace_acceptable(self):
-
+        django_cql_filters = self.featureline_set.all().values_list('name',
+                                                                    flat=True)
+        # A ValuesListQuerySet is not serializable to JSON,
+        # A list is.
+        cql_filters = list(django_cql_filters)
         result = WorkspaceAcceptable(
             name=self.name,
             description=self.description,
-            adapter_layer_json=json.dumps({
-                    'wms_source_id': self.id,
-                    'name': self.name,
-                    'url': self.url,
-                    'params': self.params,
-                    'legend_url': self.legend_url,
-                    'options': self.options}),
+            adapter_layer_json=json.dumps(
+                {'wms_source_id': self.id,
+                 'name': self.name,
+                 'url': self.url,
+                 'params': self.params,
+                 'legend_url': self.legend_url,
+                 'options': self.options,
+                 'cql_filters': cql_filters,
+                 }),
             adapter_name=ADAPTER_CLASS_WMS)
         result.metadata = self.metadata
         return result
@@ -385,7 +382,6 @@ class WMSSource(models.Model):
         params = json.loads(self.params)
         values = dict()
         for layer in params['layers'].split(","):
-
             payload = {
                 'REQUEST': 'GetFeatureInfo',
                 'EXCEPTIONS': 'application/vnd.ogc.se_xml',
@@ -429,8 +425,6 @@ class WMSSource(models.Model):
                 parts = line.split(" = ")
                 if len(parts) != 2:
                     continue
-#                logger.info("LINE: " + line)
-#                logger.info(str(parts))
                 feature, value = parts
 
                 if value.startswith("[GEOMETRY"):
@@ -512,7 +506,7 @@ class WMSSource(models.Model):
 
     def get_popup_info(self, values):
         if not values:
-            return None
+            return
 
         info = []
 
@@ -530,21 +524,18 @@ class WMSSource(models.Model):
                     feature_line.show_label = 'false'
                 else:
                     feature_line.show_label = 'true'
-                info.append({
-                        'name':
-                        (feature_line.description or feature_line.name),
-                        'value': values[feature_line.name],
-                        'render_as': feature_line.render_as,
-                        'show_label': feature_line.show_label,
-                        })
+                info.append(
+                    {'name': (feature_line.description or feature_line.name),
+                     'value': values[feature_line.name],
+                     'render_as': feature_line.render_as,
+                     'show_label': feature_line.show_label,
+                     })
         return info
 
     @property
     def bounding_box(self):
         if self.bbox:
             return tuple(float(coord) for coord in self.bbox.split(","))
-        else:
-            return None
 
 
 class FeatureLine(models.Model):
@@ -567,7 +558,8 @@ class FeatureLine(models.Model):
 
     visible = models.BooleanField(default=True)
     use_as_id = models.BooleanField(default=False)
-    render_as = models.CharField(max_length=1, choices=(
+    render_as = models.CharField(
+        max_length=1, choices=(
             (RENDER_TEXT, "Tekst"),
             (RENDER_IMAGE, "Link naar een image"),
             (RENDER_URL, "URL"),

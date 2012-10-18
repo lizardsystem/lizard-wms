@@ -5,6 +5,8 @@ Changelog of lizard-wms
 1.7 (unreleased)
 ----------------
 
+- Added cql_filter options in the adapter_layer_json.
+
 - Added a migration that removes the reproject option from all WMSSource and WMSConnection instances.
 
 

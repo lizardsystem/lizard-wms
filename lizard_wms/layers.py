@@ -60,11 +60,9 @@ class AdapterWMS(WorkspaceItemAdapter):
                     'identifier': {
                         'x': x,
                         'y': y,
-                        'radius': radius
-                        },
+                        'radius': radius},
                     }]
-        else:
-            return []
+        return []
 
     def html(self, identifiers, layout_options=None,
              template="lizard_wms/popup.html"):
@@ -74,12 +72,12 @@ class AdapterWMS(WorkspaceItemAdapter):
                                                         identifier['y'],
                                                         identifier['radius'])
 
-        return self.html_default(identifiers=identifiers,
-                                 template=template,
-                                 layout_options=layout_options,
-                                 extra_render_kwargs={
-                'feature_info': self.wms_source.get_popup_info(feature_info)
-                })
+        return self.html_default(
+            identifiers=identifiers,
+            template=template,
+            layout_options=layout_options,
+            extra_render_kwargs=
+            {'feature_info': self.wms_source.get_popup_info(feature_info)})
 
     def symbol_url(self, identifier=None, start_date=None, end_date=None):
         """
