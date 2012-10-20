@@ -211,8 +211,10 @@ overwrites.""")
                     continue
                 name = name.split(':', 1)[-1]
                 # ^^^ owslib prepends with 'workspace:'.
-                layer_instance, _ = WMSSource.objects.get_or_create(
+                layer_instance, created = WMSSource.objects.get_or_create(
                     connection=self, name=name)
+                if created:
+                    layer_instance.display_name = name
 
                 layer_style = layer.styles.values()
                 # Not all layers have a description/legend.
@@ -260,7 +262,8 @@ class WMSSource(models.Model):
     Definition of a wms source.
     """
 
-    name = models.CharField(max_length=80)
+    layer_name = models.CharField(max_length=80)
+    display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(verify_exists=False)
     params = models.TextField(null=True, blank=True)  # {layers: 'basic'}
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
@@ -281,10 +284,10 @@ class WMSSource(models.Model):
         default=True)
 
     class Meta:
-        ordering = ('name', )
+        ordering = ('layer_name', )
 
     def __unicode__(self):
-        return self.name
+        return 'WMS Layer {}'.format(self.layer_name)
 
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
@@ -301,7 +304,7 @@ class WMSSource(models.Model):
             except Exception, e:
                 msg = ("Something went wrong when updating %s. " +
                        "Look at %s directly. %s")
-                msg = msg % (self.name,
+                msg = msg % (self.layer_name,
                              self.capabilities_url(),
                              e)
                 logger.exception(msg)
@@ -314,11 +317,11 @@ class WMSSource(models.Model):
         # A list is.
         cql_filters = list(django_cql_filters)
         result = WorkspaceAcceptable(
-            name=self.name,
+            name=self.display_name,
             description=self.description,
             adapter_layer_json=json.dumps(
                 {'wms_source_id': self.id,
-                 'name': self.name,
+                 'name': self.layer_name,
                  'url': self.url,
                  'params': self.params,
                  'legend_url': self.legend_url,
@@ -537,6 +540,9 @@ class WMSSource(models.Model):
         if self.bbox:
             return tuple(float(coord) for coord in self.bbox.split(","))
 
+    @property
+    def name(self):
+        return self.display_name or self.layer_name
 
 class FeatureLine(models.Model):
     """A WMS layer has features. We want to store them in the database

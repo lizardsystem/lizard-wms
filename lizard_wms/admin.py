@@ -50,8 +50,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
     """WMS source admin. Show a few fields that may be edited regularly
     (layer name, category) and hide the rest in a collapsed section."""
 
-    list_display = ('name',  source_domain, 'connection')
-    search_fields = ('name', 'url', 'category__name', 'connection__title')
+    list_display = ('display_name', 'layer_name',  source_domain, 'connection')
+    search_fields = ('display_name', 'layer_name', 'url', 'category__name', 'connection__title')
     list_filter = ('category', )
     actions = ['update_bounding_box', 'initialize_bounding_box']
 
@@ -68,7 +68,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
             except Exception, e:
                 msg = ("Something went wrong when updating %s. " +
                        "Look at %s directly. %s")
-                msg = msg % (wms_source.name,
+                msg = msg % (wms_source.layer_name,
                              wms_source.capabilities_url(),
                              e)
                 logger.exception(msg)
@@ -100,7 +100,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
                 self.message_user(request, "Loaded/updated feature info.")
 
     fieldsets = (
-        (None, {'fields': ('name', 'category')}),
+        (None, {'fields': ('display_name', 'layer_name', 'category')}),
         ('Details',
          {'classes': ('collapse',),
           'fields': ('url', 'params', 'options', 'description', 'metadata',
@@ -113,7 +113,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
 
 class SourceInline(admin.TabularInline):
     model = models.WMSSource
-    fields = ('name', 'params', 'options', 'category')
+    fields = ('display_name', 'layer_name', 'params', 'options', 'category')
     extra = 0
     formfield_overrides = {
         django_models.TextField: {
