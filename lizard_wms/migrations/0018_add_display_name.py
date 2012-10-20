@@ -8,10 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.rename_column('lizard_wms_wmssource', 'name', 'layer_name')
+        # Adding field 'WMSSource.display_name'
+        db.add_column('lizard_wms_wmssource', 'display_name',
+                      self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+                      keep_default=False)
+
 
     def backwards(self, orm):
-        db.rename_column('lizard_wms_wmssource', 'layer_name', 'name')
+        # Deleting field 'WMSSource.display_name'
+        db.delete_column('lizard_wms_wmssource', 'display_name')
+
 
     models = {
         'lizard_maptree.category': {
@@ -46,16 +52,17 @@ class Migration(SchemaMigration):
             'xml': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'})
         },
         'lizard_wms.wmssource': {
-            'Meta': {'ordering': "(u'layer_name',)", 'object_name': 'WMSSource'},
+            'Meta': {'ordering': "(u'name',)", 'object_name': 'WMSSource'},
             'bbox': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'connection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSConnection']", 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'layer_name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'legend_url': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'null': 'True', 'blank': 'True'}),
-            'metadata': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'metadata': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
+            'old_metadata': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'options': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'params': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'show_legend': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),

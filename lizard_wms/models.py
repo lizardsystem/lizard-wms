@@ -1,17 +1,17 @@
 """Models for lizard_wms"""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
-from __future__ import (print_function, unicode_literals, absolute_import,
-                        division)
-
+from __future__ import print_function
+from __future__ import unicode_literals
 from urllib import urlencode
 import cgi
 import json
 import logging
 
+from GChartWrapper import VerticalBarStack
 from django.db import models
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
-from GChartWrapper import VerticalBarStack
+from jsonfield.fields import JSONField
 from lizard_map import coordinates
 from lizard_map.lizard_widgets import WorkspaceAcceptable
 from lizard_map.models import ADAPTER_CLASS_WMS
@@ -268,7 +268,17 @@ class WMSSource(models.Model):
     params = models.TextField(null=True, blank=True)  # {layers: 'basic'}
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
     description = models.TextField(null=True, blank=True)
-    metadata = models.TextField(null=True, blank=True)
+    metadata = JSONField(
+        help_text=_('''Key/value metadata for for instance copyright.
+It should be a dictionary, so surround it with braces and use double quotes,
+like {"key": "value", "key2": "value2"}.
+'''),
+        null=True,
+        blank=True)
+    old_metadata = models.TextField(
+        help_text=_("Deprecated. Should be moved to metadata."),
+        null=True,
+        blank=True)
 
     legend_url = models.CharField(null=True, blank=True, max_length=2048)
     category = models.ManyToManyField(Category, null=True, blank=True)
@@ -329,7 +339,6 @@ class WMSSource(models.Model):
                  'cql_filters': cql_filters,
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
-        result.metadata = self.metadata
         return result
 
     def capabilities_url(self):
@@ -543,6 +552,19 @@ class WMSSource(models.Model):
     @property
     def name(self):
         return self.display_name or self.layer_name
+
+    @property
+    def metadata_for_display(self):
+        """Return list of key/value metadata tuples.
+
+        We store the metadata as a dict, so the keys need sorting.
+        """
+        if not self.metadata:
+            return
+        keys = sorted(self.metadata.keys())
+        result = [(key, self.metadata[key]) for key in keys]
+        return result
+
 
 class FeatureLine(models.Model):
     """A WMS layer has features. We want to store them in the database

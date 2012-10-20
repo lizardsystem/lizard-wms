@@ -1,21 +1,22 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
-        for wms_source in orm['lizard_wms.WMSSource'].objects.all():
-            # copy name
-            wms_source.display_name = wms_source.name
-            wms_source.save()
+        
+        # Adding field 'WMSSource.metadata'
+        db.add_column('lizard_wms_wmssource', 'metadata', self.gf('jsonfield.fields.JSONField')(null=True, blank=True), keep_default=False)
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        
+        # Deleting field 'WMSSource.metadata'
+        db.delete_column('lizard_wms_wmssource', 'metadata')
+
 
     models = {
         'lizard_maptree.category': {
@@ -23,7 +24,7 @@ class Migration(DataMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '20'})
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '20', 'db_index': 'True'})
         },
         'lizard_wms.featureline': {
             'Meta': {'object_name': 'FeatureLine'},
@@ -55,11 +56,11 @@ class Migration(DataMigration):
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'connection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSConnection']", 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'display_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'legend_url': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'null': 'True', 'blank': 'True'}),
-            'metadata': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'metadata': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
+            'old_metadata': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'options': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'params': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'show_legend': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -68,4 +69,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['lizard_wms']
-    symmetrical = True

@@ -103,7 +103,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
         (None, {'fields': ('display_name', 'layer_name', 'category')}),
         ('Details',
          {'classes': ('collapse',),
-          'fields': ('url', 'params', 'options', 'description', 'metadata',
+          'fields': ('url', 'params', 'options', 'description',
+                     'metadata', 'old_metadata',
                      'connection', 'legend_url', 'bbox', 'show_legend'),
           }),
     )
