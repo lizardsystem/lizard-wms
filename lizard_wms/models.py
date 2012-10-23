@@ -327,8 +327,6 @@ class WMSSource(models.Model):
                  'cql_filters': cql_filters,
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
-        result.metadata = self.old_metadata
-        # ^^^ TODO: replace with adapter metadata.
         return result
 
     def capabilities_url(self):
@@ -545,6 +543,8 @@ class WMSSource(models.Model):
 
         We store the metadata as a dict, so the keys need sorting.
         """
+        if not self.metadata:
+            return
         keys = sorted(self.metadata.keys())
         result = [(key, self.metadata[key]) for key in keys]
         # TODO: handle hyperlinks somewhere.
