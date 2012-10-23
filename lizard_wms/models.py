@@ -266,7 +266,10 @@ class WMSSource(models.Model):
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
     description = models.TextField(null=True, blank=True)
     metadata = JSONField(
-        help_text=_("Key/value metadata for for instance copyright."),
+        help_text=_('''Key/value metadata for for instance copyright.
+It should be a dictionary, so surround it with braces and use double quotes,
+like {"key": "value", "key2": "value2"}.
+'''),
         null=True,
         blank=True)
     old_metadata = models.TextField(
