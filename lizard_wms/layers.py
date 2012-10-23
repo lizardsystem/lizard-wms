@@ -128,3 +128,6 @@ class AdapterWMS(WorkspaceItemAdapter):
 
         # logger.debug("EXTENT: " + repr(extent))
         return extent
+
+    def metadata(self):
+        return self.wms_source.metadata_for_display

@@ -539,6 +539,17 @@ class WMSSource(models.Model):
         if self.bbox:
             return tuple(float(coord) for coord in self.bbox.split(","))
 
+    @property
+    def metadata_for_display(self):
+        """Return list of key/value metadata tuples.
+
+        We store the metadata as a dict, so the keys need sorting.
+        """
+        keys = sorted(self.metadata.keys())
+        result = [(key, self.metadata[key]) for key in keys]
+        # TODO: handle hyperlinks somewhere.
+        return result
+
 
 class FeatureLine(models.Model):
     """A WMS layer has features. We want to store them in the database
