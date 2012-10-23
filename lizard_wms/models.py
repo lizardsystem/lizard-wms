@@ -1,17 +1,17 @@
 """Models for lizard_wms"""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
-from __future__ import (print_function, unicode_literals, absolute_import,
-                        division)
-
+from __future__ import print_function
+from __future__ import unicode_literals
 from urllib import urlencode
 import cgi
 import json
 import logging
 
+from GChartWrapper import VerticalBarStack
 from django.db import models
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
-from GChartWrapper import VerticalBarStack
+from jsonfield.fields import JSONField
 from lizard_map import coordinates
 from lizard_map.lizard_widgets import WorkspaceAcceptable
 from lizard_map.models import ADAPTER_CLASS_WMS
@@ -265,6 +265,7 @@ class WMSSource(models.Model):
     params = models.TextField(null=True, blank=True)  # {layers: 'basic'}
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
     description = models.TextField(null=True, blank=True)
+    metadata = JSONField(null=True, blank=True)
     old_metadata = models.TextField(null=True, blank=True)
 
     legend_url = models.CharField(null=True, blank=True, max_length=2048)
