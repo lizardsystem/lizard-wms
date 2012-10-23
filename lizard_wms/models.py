@@ -265,8 +265,14 @@ class WMSSource(models.Model):
     params = models.TextField(null=True, blank=True)  # {layers: 'basic'}
     options = models.TextField(null=True, blank=True)  # {buffer: 0}
     description = models.TextField(null=True, blank=True)
-    metadata = JSONField(null=True, blank=True)
-    old_metadata = models.TextField(null=True, blank=True)
+    metadata = JSONField(
+        help_text=_("Key/value metadata for for instance copyright."),
+        null=True,
+        blank=True)
+    old_metadata = models.TextField(
+        help_text=_("Deprecated. Should be moved to metadata."),
+        null=True,
+        blank=True)
 
     legend_url = models.CharField(null=True, blank=True, max_length=2048)
     category = models.ManyToManyField(Category, null=True, blank=True)
@@ -547,7 +553,6 @@ class WMSSource(models.Model):
             return
         keys = sorted(self.metadata.keys())
         result = [(key, self.metadata[key]) for key in keys]
-        # TODO: handle hyperlinks somewhere.
         return result
 
 
