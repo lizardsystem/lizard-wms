@@ -212,9 +212,9 @@ overwrites.""")
                 name = name.split(':', 1)[-1]
                 # ^^^ owslib prepends with 'workspace:'.
                 layer_instance, created = WMSSource.objects.get_or_create(
-                    connection=self, name=name)
+                    connection=self, layer_name=name)
                 if created:
-                    layer_instance.display_name = name
+                    layer_instance.display_name = layer.title
 
                 layer_style = layer.styles.values()
                 # Not all layers have a description/legend.
@@ -248,7 +248,7 @@ overwrites.""")
         the names don't occur in keep_layers."""
         num_deleted = 0
         for layer in self.wmssource_set.all():
-            if layer.name not in keep_layers:
+            if layer.layer_name not in keep_layers:
                 layer.delete()
                 num_deleted += 1
         return num_deleted
