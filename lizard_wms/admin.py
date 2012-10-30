@@ -51,7 +51,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
     (layer name, category) and hide the rest in a collapsed section."""
 
     list_display = ('display_name', 'layer_name',  source_domain, 'connection')
-    search_fields = ('display_name', 'layer_name', 'url', 'category__name', 'connection__title')
+    search_fields = ('display_name', 'layer_name', 'url', 'category__name',
+                     'connection__title')
     list_filter = ('category', )
     actions = ['update_bounding_box', 'initialize_bounding_box']
 
@@ -77,8 +78,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
             messages.error(
                 request, "Failed to load/update %s bounding boxes." % (
                     num_failed))
-        self.message_user(request, "Loaded/updated %s bounding boxes." % (
-                num_updated))
+        self.message_user(request,
+                          "Loaded/updated %s bounding boxes." % (num_updated))
 
     update_bounding_box.short_description = "Update all bounding boxes"
 
