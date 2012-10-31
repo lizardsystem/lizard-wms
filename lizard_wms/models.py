@@ -10,6 +10,7 @@ import logging
 from GChartWrapper import VerticalBarStack
 from django.db import models
 from django.db import transaction
+from django.template.defaultfilters import urlizetrunc
 from django.utils.translation import ugettext_lazy as _
 from jsonfield.fields import JSONField
 from lizard_map import coordinates
@@ -325,10 +326,17 @@ like {"key": "value", "key2": "value2"}.
                                                                     flat=True)
         # A ValuesListQuerySet is not serializable to JSON,
         # A list is.
+        description = self.description or ''
+        # TODO: Do it with a template instead of hacked string tags.
+        if self.metadata:
+            description += '<dl>'
+            for key, value in self.metadata_for_display:
+                description += '<dt>%s</dt><dd>%s</dd>' % (key, urlizetrunc(value, 35))
+            description += '</dl>'
         cql_filters = list(django_cql_filters)
         result = WorkspaceAcceptable(
             name=self.display_name,
-            description=self.description,
+            description=description,
             adapter_layer_json=json.dumps(
                 {'wms_source_id': self.id,
                  'name': self.layer_name,
