@@ -6,10 +6,8 @@ Changelog of lizard-wms
 ----------------
 
 - Added jsonfield-based metadata field to wms sources. The old metadata text
-  field has been removed. Display of the metadata currently requires on the
-  'deltaportaal' lizard-map branch, which needs to be merged with
-  master. Lizard-wms works just fine without that lizard-map functionality,
-  only the metadata isn't shown.
+  field has been removed. The metadata is shown in the description (which
+  means a popup for workspace acceptables).
 
 - Split WMSSource name into a display_name and a layer_name, so synchonization won't
   break the display name.
