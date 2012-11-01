@@ -206,10 +206,6 @@ like {"key": "value", "key2": "value2"}.
 '''),
         null=True,
         blank=True)
-    old_metadata = models.TextField(
-        help_text=_("Deprecated. Should be moved to metadata."),
-        null=True,
-        blank=True)
 
     legend_url = models.CharField(null=True, blank=True, max_length=2048)
     category = models.ManyToManyField(Category, null=True, blank=True)
