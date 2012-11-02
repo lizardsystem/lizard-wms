@@ -5,6 +5,9 @@ Changelog of lizard-wms
 1.8 (unreleased)
 ----------------
 
+- Added a checkbox on wms sources to omit them when searching (="clicking on
+  the map").
+
 - Added jsonfield-based metadata field to wms sources. The old metadata text
   field has been removed. The metadata is shown in the description (which
   means a popup for workspace acceptables).

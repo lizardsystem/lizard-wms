@@ -219,6 +219,11 @@ like {"key": "value", "key2": "value2"}.
         verbose_name=_('show legend'),
         help_text=_("Uncheck it if you want to hide the legend."),
         default=True)
+    enable_search = models.BooleanField(
+        verbose_name=_('enable search'),
+        help_text=_(
+            "Uncheck it if you don't want a click on the map to search us."),
+        default=True)
 
     class Meta:
         ordering = ('layer_name', )

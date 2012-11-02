@@ -48,7 +48,8 @@ class AdapterWMS(WorkspaceItemAdapter):
         identifier, it's the only bit of information we have that can
         be used to reconstruct the object.
         """
-
+        if not self.wms_source.enable_search:
+            return []
         feature_info = self.wms_source.get_feature_info(x, y, radius)
         name = self.wms_source.get_feature_name(feature_info)
 
