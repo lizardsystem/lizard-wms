@@ -24,3 +24,11 @@ the WMS connections, select the ones you want to update, and chose the
 
 Note that old wms layers that used to belong to the WMS connection are
 deleted.
+
+GoogleChart urls
+----------------
+
+To use the google chart integration JSON needs to be given as an attribute::
+
+  [[{"primary": "true"},{"units": "m/3", "sort":"desc", "color": "993366"},
+  ["'87", 35], ["'90", 40]]

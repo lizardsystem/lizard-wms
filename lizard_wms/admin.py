@@ -50,7 +50,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
     """WMS source admin. Show a few fields that may be edited regularly
     (layer name, category) and hide the rest in a collapsed section."""
 
-    list_display = ('display_name', 'layer_name',  source_domain, 'connection')
+    list_display = ('display_name', 'layer_name',  source_domain, 'connection',
+                    'enable_search')
     search_fields = ('display_name', 'layer_name', 'url', 'category__name',
                      'connection__title')
     list_filter = ('category', )
@@ -105,8 +106,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
         ('Details',
          {'classes': ('collapse',),
           'fields': ('url', 'params', 'options', 'description',
-                     'metadata', 'old_metadata',
-                     'connection', 'legend_url', 'bbox', 'show_legend'),
+                     'metadata', 'connection', 'legend_url', 'bbox',
+                     'show_legend', 'enable_search'),
           }),
     )
     inlines = [FeatureLineInline]
