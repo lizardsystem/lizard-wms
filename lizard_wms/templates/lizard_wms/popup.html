@@ -24,12 +24,14 @@
           {% if info.render_as == 'W' %}<a href="http://{{ info.value }}">{{ info.value }}</a>{% endif %}
         </td>
       </tr>
+		  {% endfor %}
   </tbody>
 </table>
+
   {# Extra buttons #}
+{% if add_snippet %}
   <table cellspacing="0" cellpadding="0">
     <tr>
-      {% if add_snippet %}
         <td class="button">
           <a
              href="{% url lizard_map_collage_add %}"
@@ -41,16 +43,9 @@
              data-target-id="#edit-collage"
              title="Toevoegen aan selectie">&nbsp;</a>
         </td>
-      {% endif %}
-      <td class="button">
-        <a href="{{ info.url }}"
-           class="ss_table_save ss_sprite noprint"
-           title="Export csv"
-           >exporteer tijdreeksen</a>
-      </td>
     </tr>
   </table>
-{% endfor %}
+  {% endif %}
 {% else %}
 <div class="alert">
   <h3>Geen data</h3>
