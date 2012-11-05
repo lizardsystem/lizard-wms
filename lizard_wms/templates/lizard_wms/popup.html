@@ -1,3 +1,5 @@
+{% load workspaces %}
+{% load utility %}
 {% if feature_info %}
 <table class="table table-bordered">
   <thead>
@@ -22,9 +24,33 @@
           {% if info.render_as == 'W' %}<a href="http://{{ info.value }}">{{ info.value }}</a>{% endif %}
         </td>
       </tr>
-    {% endfor %}
   </tbody>
 </table>
+  {# Extra buttons #}
+  <table cellspacing="0" cellpadding="0">
+    <tr>
+      {% if add_snippet %}
+        <td class="button">
+          <a
+             href="{% url lizard_map_collage_add %}"
+             class="ss_sprite ss_star collage-add"
+             data-name="Item uit {{ workspace_item.name }}"
+             data-adapter-class="{{ workspace_item.adapter_class }}"
+             data-adapter-layer-json="{{ workspace_item.adapter_layer_json }}"
+             data-identifier="{{ identifier }}"
+             data-target-id="#edit-collage"
+             title="Toevoegen aan selectie">&nbsp;</a>
+        </td>
+      {% endif %}
+      <td class="button">
+        <a href="{{ info.url }}"
+           class="ss_table_save ss_sprite noprint"
+           title="Export csv"
+           >exporteer tijdreeksen</a>
+      </td>
+    </tr>
+  </table>
+{% endfor %}
 {% else %}
 <div class="alert">
   <h3>Geen data</h3>

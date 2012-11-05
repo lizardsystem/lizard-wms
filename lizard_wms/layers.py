@@ -2,7 +2,7 @@
 import logging
 
 from django.utils import simplejson as json
-from lizard_map.workspace import WorkspaceItemAdapter
+from lizard_map.workspace import WorkspaceItemAdapter, adapter_serialize
 
 from lizard_wms import models
 
@@ -77,7 +77,11 @@ class AdapterWMS(WorkspaceItemAdapter):
             template=template,
             layout_options=layout_options,
             extra_render_kwargs=
-            {'feature_info': self.wms_source.get_popup_info(feature_info)})
+            {
+            'feature_info': self.wms_source.get_popup_info(feature_info), 
+            'workspace_item' : self.workspace_item,
+            'identifier': adapter_serialize(identifier),
+            })
 
     def symbol_url(self, identifier=None, start_date=None, end_date=None):
         """
