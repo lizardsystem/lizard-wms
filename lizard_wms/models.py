@@ -522,7 +522,7 @@ class FeatureLine(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
 
     # If description is given, it is used in popups instead of name
-    description = models.CharField(max_length=100, null=True, blank=True)
+    description = models.CharField(max_length=200, null=True, blank=True)
 
     visible = models.BooleanField(default=True)
     use_as_id = models.BooleanField(default=False)
