@@ -1,6 +1,7 @@
 """Defining lizard_wms' adapter."""
 import logging
 
+from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from lizard_map.workspace import WorkspaceItemAdapter, adapter_serialize
 
@@ -27,6 +28,13 @@ class AdapterWMS(WorkspaceItemAdapter):
                 return
             self._wms_source = models.WMSSource.objects.get(pk=pk)
         return self._wms_source
+
+    def edit_link(self):
+        if not self.wms_source:
+            return
+        url = reverse('admin:lizard_wms_wmssource_change',
+                       args=(self.wms_source.id,))
+        return url
 
     def layer(self, layer_ids=None, request=None):
         return [], {}
@@ -79,7 +87,7 @@ class AdapterWMS(WorkspaceItemAdapter):
             layout_options=layout_options,
             extra_render_kwargs=
             {
-            'feature_info': self.wms_source.get_popup_info(feature_info), 
+            'feature_info': self.wms_source.get_popup_info(feature_info),
             'workspace_item' : self.workspace_item,
             'identifier': adapter_serialize(identifier),
             })
