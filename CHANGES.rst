@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.8 (unreleased)
+1.8 (2012-11-27)
 ----------------
 
 - Added a checkbox on wms sources to omit them when searching (="clicking on
