@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.10 (unreleased)
+1.10 (2012-11-27)
 -----------------
 
 - Properly set dependency versions.
