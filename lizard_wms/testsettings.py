@@ -125,6 +125,8 @@ MAP_SETTINGS = {
 #         'Outline_nederland,Dissolve_provincies,0,2,12,3,38,5,4,9,10'),
 #     }
 
+SKIP_SOUTH_TESTS = True
+SOUTH_TESTS_MIGRATE = False
 
 try:
     # Import local settings that aren't stored in svn.
