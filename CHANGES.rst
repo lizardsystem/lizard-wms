@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add sort for WMSSource by index and display name; in admin sort is on display 
+name.
 
 
 1.8 (2012-11-27)

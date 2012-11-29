@@ -227,9 +227,11 @@ like {"key": "value", "key2": "value2"}.
         help_text=_(
             "Uncheck it if you don't want a click on the map to search us."),
         default=True)
+    index = models.IntegerField(verbose_name=_('index'), default=1000,
+        help_text=_("Number used for ordering categories relative to each other."))
 
     class Meta:
-        ordering = ('display_name', )
+        ordering = ('index', 'display_name')
 
     def __unicode__(self):
         return 'WMS Layer {}'.format(self.layer_name)
