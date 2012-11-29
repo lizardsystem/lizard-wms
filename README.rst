@@ -1,6 +1,9 @@
 lizard-wms
 ==========================================
 
+.. image:: https://secure.travis-ci.org/lizardsystem/lizard-wms.png?branch=master
+   :target: http://travis-ci.org/#!/lizardsystem/lizard-wms
+
 Introduction
 ------------
 
