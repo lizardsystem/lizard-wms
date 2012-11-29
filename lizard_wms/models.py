@@ -229,7 +229,7 @@ like {"key": "value", "key2": "value2"}.
         default=True)
 
     class Meta:
-        ordering = ('layer_name', )
+        ordering = ('display_name', )
 
     def __unicode__(self):
         return 'WMS Layer {}'.format(self.layer_name)
