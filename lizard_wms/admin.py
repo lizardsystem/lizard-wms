@@ -116,13 +116,14 @@ class WMSSourceAdmin(admin.ModelAdmin):
 
 class SourceInline(admin.TabularInline):
     model = models.WMSSource
-    fields = ('display_name', 'layer_name', 'params', 'options', 'category')
+    fields = ('display_name', 'layer_name', 'params', 'options', 'category', 'index')
     extra = 0
     formfield_overrides = {
         django_models.TextField: {
             'widget': forms.Textarea(attrs={'rows': '3', 'cols': '50'})
         }
     }
+    ordering = ('display_name',)
 
 
 class WMSConnectionForm(forms.ModelForm):

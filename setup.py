@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '1.9.dev0'
+version = '1.11.dev0'
 
 long_description = '\n\n'.join([
     open('README.rst').read(),
@@ -15,9 +15,9 @@ install_requires = [
     'django-extensions',
     'django-jsonfield',
     'OWSLib',
-    'lizard-ui',
-    'lizard-map',
-    'lizard-maptree >= 1.0.1',
+    'lizard-ui >= 4.0, < 5.0',
+    'lizard-map >= 4.0, < 5.0',
+    'lizard-maptree',
     'django-nose',
     'pkginfo',
     'GChartWrapper',

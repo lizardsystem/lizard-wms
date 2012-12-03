@@ -2,10 +2,23 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.9 (unreleased)
-----------------
+1.11 (unreleased)
+-----------------
 
 - Nothing changed yet.
+
+
+1.10 (2012-11-27)
+-----------------
+
+- Properly set dependency versions.
+
+
+1.9 (2012-11-29)
+----------------
+
+- Add sort for WMSSource by index and display name; in admin sort is on display 
+name.
 
 
 1.8 (2012-11-27)
