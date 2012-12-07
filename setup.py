@@ -13,6 +13,7 @@ install_requires = [
     'Django',
     'django-staticfiles',
     'django-extensions',
+    'djangorestframework',
     'django-jsonfield',
     'OWSLib',
     'lizard-ui >= 4.0, < 5.0',
