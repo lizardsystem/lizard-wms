@@ -4,6 +4,7 @@ from __future__ import absolute_import, division
 import factory
 
 from django.test import TestCase
+from django.utils import simplejson as json
 
 
 from lizard_wms.models import WMSSource
@@ -14,10 +15,10 @@ class WMSSourceFactory(factory.Factory):
     layer_name = 'layer_name'
     display_name = 'Display Name'
     url = 'http://test.com'
-    _params = """{"height": "256", "width": "256",
-               "styles": "", "format": "image/png", "tiled": "true",
-               "transparent": "true,
-               "layers": "%s" }""" % layer_name
+    _params = ('{"height": "256", "width": "256",'
+               '"styles": "", "format": "image/png", "tiled": "true",'
+               '"transparent": true,'
+               '"layers": "%s" }' % layer_name)
 
     options = {"buffer": 0, "isBaseLayer": False, "opacity": 1}
 
@@ -34,5 +35,6 @@ class WMSSourceTest(TestCase):
 
     def test_parse_layer_workspace_acceptable(self):
         wms_source = WMSSourceFactory.build()
-        factory_params = WMSSourceFactory._params
+        factory_params = json.loads(WMSSourceFactory._params)
+        factory_params['layers'] = WMSSourceFactory.attributes()['layer_name']
         self.assertEquals(wms_source.params, factory_params)

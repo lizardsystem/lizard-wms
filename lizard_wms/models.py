@@ -196,7 +196,7 @@ class WMSSource(models.Model):
     layer_name = models.CharField(max_length=80)
     display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(verify_exists=False)
-    _params = models.TextField(null=True, blank=True, db_column='params')
+    _params = JSONField(null=True, blank=True, db_column='params')
     options = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     metadata = JSONField(
@@ -237,7 +237,9 @@ like {"key": "value", "key2": "value2"}.
 
     @property
     def params(self):
-        return self._params
+        params = self._params.copy()
+        params['layers'] = self.layer_name
+        return params
 
     def update_bounding_box(self, force=False):
         if force or not self.bbox:

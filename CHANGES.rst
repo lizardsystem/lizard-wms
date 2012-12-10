@@ -9,6 +9,7 @@ Changelog of lizard-wms
 
 - Added travis integration.
 
+- WMSSource params combines _params and layer_name. This is to ease wms layer configuration.
 
 1.10 (2012-11-27)
 -----------------
@@ -19,7 +20,7 @@ Changelog of lizard-wms
 1.9 (2012-11-29)
 ----------------
 
-- Add sort for WMSSource by index and display name; in admin sort is on display 
+- Add sort for WMSSource by index and display name; in admin sort is on display
 name.
 
 
