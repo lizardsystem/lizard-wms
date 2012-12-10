@@ -8,23 +8,11 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'WMSSource.params'
-        db.delete_column('lizard_wms_wmssource', 'params')
-
-        # Adding field 'WMSSource._params'
-        db.add_column('lizard_wms_wmssource', '_params',
-                      self.gf('jsonfield.fields.JSONField')(null=True, db_column=u'params', blank=True),
-                      keep_default=False)
-
+        # Deleting field 'WMSSource.new_params'
+        db.rename_column('lizard_wms_wmssource', 'new_params', '_params')
 
     def backwards(self, orm):
-        # Adding field 'WMSSource.params'
-        db.add_column('lizard_wms_wmssource', 'params',
-                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
-                      keep_default=False)
-
-        # Deleting field 'WMSSource._params'
-        db.delete_column('lizard_wms_wmssource', u'params')
+        db.rename_column('lizard_wms_wmssource', '_params', 'params')
 
 
     models = {
@@ -63,7 +51,7 @@ class Migration(SchemaMigration):
         },
         'lizard_wms.wmssource': {
             'Meta': {'ordering': "(u'index', u'display_name')", 'object_name': 'WMSSource'},
-            '_params': ('jsonfield.fields.JSONField', [], {'null': 'True', 'db_column': "u'params'", 'blank': 'True'}),
+            '_params': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'bbox': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'connection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSConnection']", 'null': 'True', 'blank': 'True'}),
