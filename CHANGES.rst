@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.12 (unreleased)
+1.12 (2012-12-10)
 -----------------
 
 - Rerelease due to missing migrations.
