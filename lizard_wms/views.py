@@ -1,14 +1,16 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 import pkginfo
 import lizard_maptree
-from rest_framework import generics
+# from rest_framework.generics import SingleObjectAPIView
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 # from rest_framework.decorators import api_view
 # from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from lizard_maptree.models import Category
 
-from lizard_wms.serializers import MenuSerializer
+from lizard_wms.serializers import CategorySerializer
 import lizard_wms
 
 # Data source: bare-bones pointer at categories
@@ -32,12 +34,12 @@ class DataSourceView(APIView):
         """
         return pkginfo.installed.Installed(package).version
 
-    @property
-    def metadata(self):
-        """Return metadata, in this case just wms/maptree versions."""
-        return {'generator': 'Lizard-wms {} (and lizard-maptree {})'.format(
-                self._version_of_package(lizard_wms),
-                self._version_of_package(lizard_maptree))}
+    # @property
+    # def metadata(self):
+    #     """Return metadata, in this case just wms/maptree versions."""
+    #     return {'generator': 'Lizard-wms {} (and lizard-maptree {})'.format(
+    #             self._version_of_package(lizard_wms),
+    #             self._version_of_package(lizard_maptree))}
 
     @property
     def projects(self):
@@ -46,10 +48,21 @@ class DataSourceView(APIView):
         Maptree categories are usable as root objects of lizard pages.
         """
         categories = Category.objects.all()
-        return [category.name for category in categories]
+        # TODO: also return 'root' object.
+        return CategorySerializer(categories).data
 
     def get(self, response, format=None):
         result = {}
-        result['metadata'] = self.metadata
+        # result['metadata'] = self.metadata
         result['projects'] = self.projects
         return Response(result)
+
+
+# class DataSourceView(ListAPIView):
+#     model = Category
+#     serializer_class = CategorySerializer
+
+
+class ProjectView(RetrieveAPIView):
+    model = Category
+    serializer_class = CategorySerializer

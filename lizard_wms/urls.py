@@ -16,6 +16,7 @@ api_urlpatterns = patterns('',
     # url(r'^$', 'api_root'),
     # url(r'^users/$', UserList.as_view(), name='user-list'),
     url(r'^$', views.DataSourceView.as_view(), name='wms_api_root'),
+    url(r'^category/(?P<slug>.+)/$', views.ProjectView.as_view(), name='wms_api_project'),
     # url(r'^groups/$', GroupList.as_view(), name='group-list'),
     # url(r'^groups/(?P<pk>\d+)/$', GroupDetail.as_view(), name='group-detail'),
 )
