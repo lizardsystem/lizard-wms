@@ -20,7 +20,7 @@ class WMSConnectionFactory(factory.Factory):
                             'getCapabilities.xml')).read()
 
 
-class Geoserver(TestCase):
+class WMSConnectionTest(TestCase):
 
     @mock.patch('lizard_wms.models.WMSSource.import_bounding_box',
                 return_value=None)
