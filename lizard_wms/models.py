@@ -193,7 +193,7 @@ class WMSSource(models.Model):
     Definition of a wms source.
     """
 
-    layer_name = models.CharField(max_length=80)
+    layer_name = models.CharField(max_length=100)
     display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(verify_exists=False)
     _params = JSONField(null=True, blank=True)
