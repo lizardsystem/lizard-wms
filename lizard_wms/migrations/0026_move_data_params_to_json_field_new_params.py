@@ -10,12 +10,16 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         for wmssource in orm.WMSSource.objects.all():
-            wmssource.new_params = wmssource.params
+            params = json.loads(wmssource.params)
+            del params['layers']
+            wmssource.new_params = params
             wmssource.save()
 
     def backwards(self, orm):
         for wmssource in orm.WMSSource.objects.all():
-            wmssource.params = json.dumps(wmssource.new_params)
+            params = wmssource.new_params
+            params['layers'] = wmssource.layer_name
+            wmssource.params = json.dumps(params)
             wmssource.save()
 
     no_dry_run = True
