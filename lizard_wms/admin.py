@@ -105,7 +105,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
         (None, {'fields': ('display_name', 'layer_name', 'category')}),
         ('Details',
          {'classes': ('collapse',),
-          'fields': ('url', 'params', 'options', 'description',
+          'fields': ('url', '_params', 'options', 'description',
                      'metadata', 'connection', 'legend_url', 'bbox',
                      'show_legend', 'enable_search'),
           }),
@@ -116,7 +116,8 @@ class WMSSourceAdmin(admin.ModelAdmin):
 
 class SourceInline(admin.TabularInline):
     model = models.WMSSource
-    fields = ('display_name', 'layer_name', 'params', 'options', 'category', 'index')
+    fields = ('display_name', 'layer_name', '_params', 'options', 'category',
+              'index')
     extra = 0
     formfield_overrides = {
         django_models.TextField: {

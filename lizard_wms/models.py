@@ -196,7 +196,8 @@ class WMSSource(models.Model):
     layer_name = models.CharField(max_length=80)
     display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(verify_exists=False)
-    _params = JSONField(null=True, blank=True, db_column='params')
+    _params = JSONField(null=True, blank=True, db_column='params',
+                        verbose_name=_("WMS parameters"))
     options = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     metadata = JSONField(
