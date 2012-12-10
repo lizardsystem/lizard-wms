@@ -159,7 +159,7 @@ overwrites.""")
                 layer_instance.url = self.url
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
-                layer_instance.params = self.params % layer.name
+                layer_instance._params = self.params % layer.name
                 layer_instance.import_bounding_box(layer)
             except:
                 logger.exception("Something went wrong. We skip this layer")
@@ -196,7 +196,7 @@ class WMSSource(models.Model):
     layer_name = models.CharField(max_length=80)
     display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(verify_exists=False)
-    params = models.TextField(null=True, blank=True, db_column='params')
+    _params = models.TextField(null=True, blank=True, db_column='params')
     options = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     metadata = JSONField(
@@ -234,6 +234,10 @@ like {"key": "value", "key2": "value2"}.
 
     def __unicode__(self):
         return 'WMS Layer {}'.format(self.layer_name)
+
+    @property
+    def params(self):
+        return self._params
 
     def update_bounding_box(self, force=False):
         if force or not self.bbox:

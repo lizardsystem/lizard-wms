@@ -14,17 +14,25 @@ class WMSSourceFactory(factory.Factory):
     layer_name = 'layer_name'
     display_name = 'Display Name'
     url = 'http://test.com'
-    params = """{"height": "256", "width": "256",
+    _params = """{"height": "256", "width": "256",
                "styles": "", "format": "image/png", "tiled": "true",
                "transparent": "true,
                "layers": "%s" }""" % layer_name
 
     options = {"buffer": 0, "isBaseLayer": False, "opacity": 1}
 
+    @classmethod
+    def _prepare(cls, create, **kwargs):
+        wms_source = super(WMSSourceFactory, cls)._prepare(create, **kwargs)
+        wms_source._params = cls._params
+        if create:
+                wms_source.save()
+        return wms_source
+
 
 class WMSSourceTest(TestCase):
 
     def test_parse_layer_workspace_acceptable(self):
         wms_source = WMSSourceFactory.build()
-        factory_params = WMSSourceFactory.attributes()['params']
+        factory_params = WMSSourceFactory._params
         self.assertEquals(wms_source.params, factory_params)
