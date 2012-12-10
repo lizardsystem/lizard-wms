@@ -1,0 +1,1551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://test-geoserver1.lizard.net:80/geoserver/schemas/wms/1.1.1/WMS_MS_Capabilities.dtd">
+<WMT_MS_Capabilities version="1.1.1" updateSequence="7227">
+  <Service>
+    <Name>OGC:WMS</Name>
+    <Title>GeoServer Web Map Service</Title>
+    <Abstract>A compliant implementation of WMS plus most of the SLD extension (dynamic styling). Can also generate PDF, SVG, KML, GeoRSS</Abstract>
+    <KeywordList>
+      <Keyword>WFS</Keyword>
+      <Keyword>WMS</Keyword>
+      <Keyword>GEOSERVER</Keyword>
+    </KeywordList>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://geoserver.sourceforge.net/html/index.php"/>
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson>Jonas van Schrojenstein Lantman</ContactPerson>
+        <ContactOrganization>Nelen &amp; Schuurmans</ContactOrganization>
+      </ContactPersonPrimary>
+      <ContactPosition>GIS Advisor</ContactPosition>
+      <ContactAddress>
+        <AddressType>Work</AddressType>
+        <Address/>
+        <City>Utrecht</City>
+        <StateOrProvince/>
+        <PostCode/>
+        <Country>Netherlands</Country>
+      </ContactAddress>
+      <ContactVoiceTelephone/>
+      <ContactFacsimileTelephone/>
+      <ContactElectronicMailAddress>jonas.vanschrojenstein@nelen-schuurmans.nl</ContactElectronicMailAddress>
+    </ContactInformation>
+    <Fees>NONE</Fees>
+    <AccessConstraints>NONE</AccessConstraints>
+  </Service>
+  <Capability>
+    <Request>
+      <GetCapabilities>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Get>
+            <Post>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Post>
+          </HTTP>
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        <Format>image/png</Format>
+        <Format>application/atom xml</Format>
+        <Format>application/atom+xml</Format>
+        <Format>application/openlayers</Format>
+        <Format>application/pdf</Format>
+        <Format>application/rss xml</Format>
+        <Format>application/rss+xml</Format>
+        <Format>application/vnd.google-earth.kml</Format>
+        <Format>application/vnd.google-earth.kml xml</Format>
+        <Format>application/vnd.google-earth.kml+xml</Format>
+        <Format>application/vnd.google-earth.kmz</Format>
+        <Format>application/vnd.google-earth.kmz xml</Format>
+        <Format>application/vnd.google-earth.kmz+xml</Format>
+        <Format>atom</Format>
+        <Format>image/geotiff</Format>
+        <Format>image/geotiff8</Format>
+        <Format>image/gif</Format>
+        <Format>image/gif;subtype=animated</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/png8</Format>
+        <Format>image/png; mode=8bit</Format>
+        <Format>image/svg</Format>
+        <Format>image/svg xml</Format>
+        <Format>image/svg+xml</Format>
+        <Format>image/tiff</Format>
+        <Format>image/tiff8</Format>
+        <Format>kml</Format>
+        <Format>kmz</Format>
+        <Format>openlayers</Format>
+        <Format>rss</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetMap>
+      <GetFeatureInfo>
+        <Format>text/plain</Format>
+        <Format>application/vnd.ogc.gml</Format>
+        <Format>text/html</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Get>
+            <Post>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Post>
+          </HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+      <DescribeLayer>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </DescribeLayer>
+      <GetLegendGraphic>
+        <Format>image/png</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/gif</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetLegendGraphic>
+      <GetStyles>
+        <Format>application/vnd.ogc.sld+xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetStyles>
+    </Request>
+    <Exception>
+      <Format>application/vnd.ogc.se_xml</Format>
+      <Format>application/vnd.ogc.se_inimage</Format>
+    </Exception>
+    <UserDefinedSymbolization SupportSLD="1" UserLayer="1" UserStyle="1" RemoteWFS="1"/>
+    <Layer>
+      <Title>GeoServer Web Map Service</Title>
+      <Abstract>A compliant implementation of WMS plus most of the SLD extension (dynamic styling). Can also generate PDF, SVG, KML, GeoRSS</Abstract>
+      <!--Limited list of EPSG projections:-->
+      <SRS>EPSG:28992</SRS>
+      <SRS>EPSG:3857</SRS>
+      <SRS>EPSG:4326</SRS>
+      <SRS>EPSG:900913</SRS>
+      <LatLonBoundingBox minx="3.31585190503684" miny="8.558609" maxx="109.466377" maxy="47.97529070694331"/>
+      <BoundingBox SRS="EPSG:28992" minx="-109456.16203799716" miny="-4614444.27480555" maxx="1.27498112219923E7" maxy="5489236.72291599"/>
+      <BoundingBox SRS="EPSG:4326" minx="3.31585190503684" miny="8.558609" maxx="109.466377" maxy="47.97529070694331"/>
+      <BoundingBox SRS="EPSG:900913" minx="369118.94561460713" miny="956302.9961551096" maxx="1.2185741346624512E7" maxy="6102745.072950932"/>
+      <BoundingBox SRS="EPSG:3857" minx="369118.94561460713" miny="956302.9961551096" maxx="1.2185741346624512E7" maxy="6102745.072950932"/>
+      <Layer queryable="1">
+        <Name>mekong_case_december:Population density</Name>
+        <Title>Population density</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>popextr</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031525" maxx="108.7071706531913" maxy="33.84401916203153"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031525" maxx="108.7071706531913" maxy="33.84401916203153"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.212708478" miny="1388341.511763495" maxx="1.2482849771757077E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.9594994704" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.9594994704" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>Population density</Name>
+          <Title>AHN2</Title>
+          <Abstract>AHn Watergraafsmeer</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=Population+density"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:apr_spi_hi</Name>
+        <Title>apr_spi_hi</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>apr_spi_hi</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=apr_spi_hi"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:apr_spi_t3</Name>
+        <Title>apr_spi_t3</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>apr_spi_t3</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.95717065319128" miny="9.644019162031483" maxx="108.5071706531913" maxy="33.69401916203148"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.95717065319128" miny="9.644019162031483" maxx="108.5071706531913" maxy="33.69401916203148"/>
+        <BoundingBox SRS="EPSG:28992" minx="7474039.4530557" miny="1414919.0404926506" maxx="1.2446663992327927E7" maxy="5199257.3624535"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.045926439348996E7" miny="1078672.8163334946" maxx="1.2078962984532094E7" maxy="3987789.9017861816"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.045926439348996E7" miny="1078672.8163334946" maxx="1.2078962984532094E7" maxy="3987789.9017861816"/>
+        <Style>
+          <Name>mekong_drought_spi_apr</Name>
+          <Title>avprecextr</Title>
+          <Abstract>average precipitation sum</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=apr_spi_t3"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:avemonthprec</Name>
+        <Title>avemonthprec</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>avemonthprec</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031525" maxx="108.70717065319131" maxy="33.844019162031536"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031525" maxx="108.70717065319131" maxy="33.844019162031536"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.212708475" miny="1388341.511763495" maxx="1.2482849771757077E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.9594994704" maxx="1.2101226882690748E7" maxy="4007876.7910076124"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.9594994704" maxx="1.2101226882690748E7" maxy="4007876.7910076124"/>
+        <Style>
+          <Name>mekong_drought_prec_apr</Name>
+          <Title>avprecextr</Title>
+          <Abstract>average precipitation sum</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=avemonthprec"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:avndviextr</Name>
+        <Title>avndviextr</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>avndviextr</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031518" maxx="108.7071706531913" maxy="33.84401916203152"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031518" maxx="108.7071706531913" maxy="33.84401916203152"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.511763495" maxx="1.2482849771757077E7" maxy="5230456.3499177005"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.9594994693" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.9594994693" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_drought_av_ndvi</Name>
+          <Title>avendviextr</Title>
+          <Abstract>average ndvi</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=avndviextr"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:basin_mekong_dd</Name>
+        <Title>basin_mekong_dd</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>features</Keyword>
+          <Keyword>basin_mekong_dd</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031507" maxx="108.7236461309031" maxy="33.82513662608753"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031507" maxx="108.7236461309031" maxy="33.82513662608753"/>
+        <BoundingBox SRS="EPSG:28992" minx="7450671.863066235" miny="1388341.5117634935" maxx="1.2484109356623525E7" maxy="5232319.255035597"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2103060924480202E7" maxy="4005346.245217434"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2103060924480202E7" maxy="4005346.245217434"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=basin_mekong_dd"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dhi</Name>
+        <Title>dhi</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dhi</Name>
+          <Title>dhi</Title>
+          <Abstract>drought hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dhi"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dhi_sub1_60</Name>
+        <Title>dhi_sub1_60</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi_sub1_60</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dhi</Name>
+          <Title>dhi</Title>
+          <Abstract>drought hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dhi_sub1_60"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dhi_sub1_auto</Name>
+        <Title>dhi_sub1_auto</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi_sub1_auto</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dhi_sub1_auto"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dhi_sub2_40</Name>
+        <Title>dhi_sub2_40</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi_sub2_40</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dhi</Name>
+          <Title>dhi</Title>
+          <Abstract>drought hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dhi_sub2_40"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:disrivextr</Name>
+        <Title>disrivextr</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>disrivextr</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031525" maxx="108.7071706531913" maxy="33.84401916203153"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031525" maxx="108.7071706531913" maxy="33.84401916203153"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.212708478" miny="1388341.511763495" maxx="1.2482849771757077E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.9594994704" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.9594994704" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=disrivextr"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:distriv</Name>
+        <Title>distriv</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>distriv</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634935" maxx="1.2482849771757077E7" maxy="5230456.3499177005"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=distriv"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dri</Name>
+        <Title>dri</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dri"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dri_sub1_100</Name>
+        <Title>dri_sub1_100</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_sub1_100</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dri_sub1_100"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dri_sub1_60</Name>
+        <Title>dri_sub1_60</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_sub1_60</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dri_sub1_60"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dri_sub1_auto</Name>
+        <Title>dri_sub1_auto</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_sub1_auto</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dri_sub1_auto"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:dvicopy</Name>
+        <Title>dvicopy</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dvicopy</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634935" maxx="1.2482849771757077E7" maxy="5230456.3499177005"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_drought_dvi</Name>
+          <Title>dvi</Title>
+          <Abstract>drought vulnerability index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=dvicopy"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:gdp</Name>
+        <Title>gdp</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>gdp</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634935" maxx="1.2482849771757077E7" maxy="5230456.3499177005"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=gdp"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:gdpextr</Name>
+        <Title>gdpextr</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>gdpextr</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031482" maxx="108.70717065319133" maxy="33.84401916203153"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031482" maxx="108.70717065319133" maxy="33.84401916203153"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.212708478" miny="1388341.5117634907" maxx="1.2482849771757094E7" maxy="5230456.349917705"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.9594994658" maxx="1.210122688269075E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.9594994658" maxx="1.210122688269075E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_gdp_per_capita</Name>
+          <Title>AHN2</Title>
+          <Abstract>AHn Watergraafsmeer</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=gdpextr"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:landu</Name>
+        <Title>landu</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>landu</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031482" maxx="108.70717065319133" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031482" maxx="108.70717065319133" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757094E7" maxy="5230456.349917704"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.9594994658" maxx="1.210122688269075E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.9594994658" maxx="1.210122688269075E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=landu"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:landuextr</Name>
+        <Title>landuextr</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>landuextr</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.544019162031496" maxx="108.75717065319131" maxy="33.8440191620315"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.544019162031496" maxx="108.75717065319131" maxy="33.8440191620315"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634921" maxx="1.2486670107480073E7" maxy="5237396.262664577"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2106792857230412E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2106792857230412E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_landuse</Name>
+          <Title>Landgebruikskaart Nederland</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=landuextr"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dhi_combi</Name>
+        <Title>mekong_dhi_combi</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi_combi</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dhi</Name>
+          <Title>dhi</Title>
+          <Abstract>drought hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dhi_combi"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dhi_sub1_100</Name>
+        <Title>mekong_dhi_sub1_100</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi_sub1_100</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dhi</Name>
+          <Title>dhi</Title>
+          <Abstract>drought hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dhi_sub1_100"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dhi_sub1_40</Name>
+        <Title>mekong_dhi_sub1_40</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi_sub1_40</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dhi</Name>
+          <Title>dhi</Title>
+          <Abstract>drought hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dhi_sub1_40"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dhi_sub1_80</Name>
+        <Title>mekong_dhi_sub1_80</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dhi_sub1_80</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dhi</Name>
+          <Title>dhi</Title>
+          <Abstract>drought hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dhi_sub1_80"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dri_combi</Name>
+        <Title>mekong_dri_combi</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_combi</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dri_combi"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dri_sub1_40</Name>
+        <Title>mekong_dri_sub1_40</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_sub1_40</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dri_sub1_40"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dri_sub1_80</Name>
+        <Title>mekong_dri_sub1_80</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_sub1_80</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dri_sub1_80"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dri_sub2_40</Name>
+        <Title>mekong_dri_sub2_40</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_sub2_40</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dri_sub2_40"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:mekong_dri_sub2_60</Name>
+        <Title>mekong_dri_sub2_60</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>dri_sub2_60</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_dri</Name>
+          <Title>dri</Title>
+          <Abstract>drought risk index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=mekong_dri_sub2_60"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:ndvi_ano_hi</Name>
+        <Title>ndvi_ano_hi</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>ndvi_ano_hi</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=ndvi_ano_hi"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:ndvi_anom</Name>
+        <Title>ndvi_anom</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>ndvi_anom</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_prec_anom</Name>
+          <Title>avprecextr</Title>
+          <Abstract>average precipitation sum</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=ndvi_anom"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:per_prec_ano</Name>
+        <Title>per_prec_ano</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>per_prec_ano</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.95717065319128" miny="9.644019162031483" maxx="108.5071706531913" maxy="33.69401916203148"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.95717065319128" miny="9.644019162031483" maxx="108.5071706531913" maxy="33.69401916203148"/>
+        <BoundingBox SRS="EPSG:28992" minx="7474039.4530557" miny="1414919.0404926506" maxx="1.2446663992327927E7" maxy="5199257.3624535"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.045926439348996E7" miny="1078672.8163334946" maxx="1.2078962984532094E7" maxy="3987789.9017861816"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.045926439348996E7" miny="1078672.8163334946" maxx="1.2078962984532094E7" maxy="3987789.9017861816"/>
+        <Style>
+          <Name>mekong_drought_prec_anom</Name>
+          <Title>avprecextr</Title>
+          <Abstract>average precipitation sum</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=per_prec_ano"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:pop</Name>
+        <Title>pop</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>pop</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203151" maxx="108.7071706531913" maxy="33.844019162031515"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634935" maxx="1.2482849771757077E7" maxy="5230456.3499177005"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499468" maxx="1.2101226882690746E7" maxy="4007876.791007608"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=pop"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:prec_ano_hi</Name>
+        <Title>prec_ano_hi</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>WCS</Keyword>
+          <Keyword>GeoTIFF</Keyword>
+          <Keyword>prec_ano_hi</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.85717065319129" miny="9.54401916203149" maxx="108.7071706531913" maxy="33.844019162031486"/>
+        <BoundingBox SRS="EPSG:28992" minx="7448001.2127084825" miny="1388341.5117634907" maxx="1.2482849771757092E7" maxy="5230456.349917701"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0448132444410633E7" miny="1067382.959499467" maxx="1.2101226882690746E7" maxy="4007876.7910076054"/>
+        <Style>
+          <Name>mekong_drought_hi_vi</Name>
+          <Title>precipitation</Title>
+          <Abstract>average precipitation hazard index</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=prec_ano_hi"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:rivers_15st</Name>
+        <Title>rivers_15st</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>features</Keyword>
+          <Keyword>Rivers_15st</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="3.31585190503684" miny="47.975069534126824" maxx="3.3160586091281687" maxy="47.97529070694331"/>
+        <BoundingBox SRS="EPSG:4326" minx="93.89374999999941" miny="9.56458333333299" maxx="108.68124999999918" maxy="33.7895833333326"/>
+        <BoundingBox SRS="EPSG:28992" minx="7457458.434048624" miny="1396363.307243126" maxx="1.2476567547208108E7" maxy="5225630.922989514"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.0452204438670864E7" miny="1069704.3532532945" maxx="1.2098341408776373E7" maxy="4000583.081622972"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.0452204438670864E7" miny="1069704.3532532945" maxx="1.2098341408776373E7" maxy="4000583.081622972"/>
+        <Style>
+          <Name>line</Name>
+          <Title>Default Line</Title>
+          <Abstract>A sample style that draws a line</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=rivers_15st"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:stream_stations</Name>
+        <Title>stream_stations</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>features</Keyword>
+          <Keyword>Stream_stations</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="106.01299812242469" miny="10.721798909490813" maxx="107.71730684247561" maxy="13.280895385206408"/>
+        <BoundingBox SRS="EPSG:4326" minx="106.01299812242469" miny="10.721798909490813" maxx="107.71730684247561" maxy="13.280895385206408"/>
+        <BoundingBox SRS="EPSG:28992" minx="1.1533044953744384E7" miny="3655432.309493411" maxx="1.2164911769233286E7" maxy="4177951.266725514"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.1801312968456583E7" miny="1200572.7120324203" maxx="1.1991035747327186E7" maxy="1491842.2135218007"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.1801312968456583E7" miny="1200572.7120324203" maxx="1.1991035747327186E7" maxy="1491842.2135218007"/>
+        <Style>
+          <Name>triangle</Name>
+          <Title>Default Point</Title>
+          <Abstract>A sample style that draws a point</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=stream_stations"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:sub_basin_1</Name>
+        <Title>sub_basin_1</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>features</Keyword>
+          <Keyword>Sub1</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="105.42083333333255" miny="10.37083333333311" maxx="106.04473700302242" maxy="11.022776000000022"/>
+        <BoundingBox SRS="EPSG:4326" minx="105.42083333333255" miny="10.37083333333311" maxx="106.04473700302242" maxy="11.022776000000022"/>
+        <BoundingBox SRS="EPSG:28992" minx="1.1926907669465406E7" miny="3511328.4433890996" maxx="1.2105270581415968E7" maxy="3685644.4840784986"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.1735393485669142E7" miny="1160832.008631721" maxx="1.1804846124483071E7" maxy="1234689.769026949"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.1735393485669142E7" miny="1160832.008631721" maxx="1.1804846124483071E7" maxy="1234689.769026949"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=sub_basin_1"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:sub_basin_2</Name>
+        <Title>sub_basin_2</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>features</Keyword>
+          <Keyword>Sub2</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="107.714793706156" miny="12.93735655747463" maxx="108.27546609452992" maxy="13.465048217120568"/>
+        <BoundingBox SRS="EPSG:4326" minx="107.714793706156" miny="12.93735655747463" maxx="108.27546609452992" maxy="13.465048217120568"/>
+        <BoundingBox SRS="EPSG:28992" minx="1.1614196799729522E7" miny="4153816.2185174637" maxx="1.1756666215528548E7" maxy="4299131.254748624"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.1990755986271795E7" miny="1452576.3074183578" maxx="1.2053169751047427E7" maxy="1512913.3651436155"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.1990755986271795E7" miny="1452576.3074183578" maxx="1.2053169751047427E7" maxy="1512913.3651436155"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=sub_basin_2"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>mekong_case_december:vietnam</Name>
+        <Title>vietnam</Title>
+        <Abstract/>
+        <KeywordList>
+          <Keyword>features</Keyword>
+          <Keyword>vietnam</Keyword>
+        </KeywordList>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="102.140747" miny="8.558609" maxx="109.466377" maxy="23.334721"/>
+        <BoundingBox SRS="EPSG:4326" minx="102.140747" miny="8.558609" maxx="109.466377" maxy="23.334721"/>
+        <BoundingBox SRS="EPSG:28992" minx="9485035.685757887" miny="2722756.6807891135" maxx="1.2749908256621197E7" maxy="5030132.60866858"/>
+        <BoundingBox SRS="EPSG:900913" minx="1.1370255945284586E7" miny="956302.9961551096" maxx="1.2185741346624512E7" maxy="2672547.9837082555"/>
+        <BoundingBox SRS="EPSG:3857" minx="1.1370255945284586E7" miny="956302.9961551096" maxx="1.2185741346624512E7" maxy="2672547.9837082555"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://test-geoserver1.lizard.net:80/geoserver/mekong_case_december/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=vietnam"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+    </Layer>
+  </Capability>
+</WMT_MS_Capabilities>
