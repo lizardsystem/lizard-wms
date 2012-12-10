@@ -116,7 +116,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
 
 class SourceInline(admin.TabularInline):
     model = models.WMSSource
-    fields = ('display_name', 'layer_name', '_params', 'options', 'category',
+    fields = ('display_name', 'layer_name', 'options', 'category',
               'index')
     extra = 0
     formfield_overrides = {

@@ -102,7 +102,7 @@ class WMSConnection(models.Model):
             u"because owslib can only handle 1.1.1."))
 
     params = models.TextField(
-        default='{"height": "256", "width": "256", "layers": "%s", '
+        default='{"height": "256", "width": "256", '
         '"styles": "", "format": "image/png", "tiled": "true", '
         '"transparent": "true"}')
     options = models.TextField(
@@ -159,7 +159,7 @@ overwrites.""")
                 layer_instance.url = self.url
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
-                layer_instance._params = self.params % layer.name
+                layer_instance._params = self.params
                 layer_instance.import_bounding_box(layer)
             except:
                 logger.exception("Something went wrong. We skip this layer")
@@ -193,7 +193,7 @@ class WMSSource(models.Model):
     Definition of a wms source.
     """
 
-    layer_name = models.CharField(max_length=100)
+    layer_name = models.TextField()
     display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(verify_exists=False)
     _params = JSONField(null=True, blank=True)

@@ -9,11 +9,12 @@ from django.utils import simplejson as json
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.alter_column('lizard_wms_wmssource', 'layer_name', self.gf('django.db.models.fields.CharField')(max_length=100))
+        db.alter_column('lizard_wms_wmssource', 'layer_name', self.gf('django.db.models.fields.TextField')())
 
         for wmssource in orm.WMSSource.objects.all():
             params = json.loads(wmssource.params)
             layer_name = params['layers']
+            del params['layers']
             wmssource.new_params = params
             wmssource.layer_name = layer_name
             wmssource.save()
