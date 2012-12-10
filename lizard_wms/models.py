@@ -120,7 +120,7 @@ overwrites.""")
         return self.title or self.slug
 
     @transaction.commit_on_success
-    def fetch(self, import_bounding_box=True):
+    def fetch(self):
         """Fetches layers belonging to this WMS connection and stored
         them in the database, including all the metadata we can easily
         get at.
@@ -160,10 +160,7 @@ overwrites.""")
                 layer_instance.options = self.options
                 layer_instance.category = self.category.all()
                 layer_instance.params = self.params % layer.name
-                if import_bounding_box:
-                    # ^^^ Hack for now to make it testable. 
-                    # import_bounding_box does an http request for layers.
-                    layer_instance.import_bounding_box(layer)
+                layer_instance.import_bounding_box(layer)
             except:
                 logger.exception("Something went wrong. We skip this layer")
 
@@ -199,8 +196,8 @@ class WMSSource(models.Model):
     layer_name = models.CharField(max_length=80)
     display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(verify_exists=False)
-    params = models.TextField(null=True, blank=True)  # {layers: 'basic'}
-    options = models.TextField(null=True, blank=True)  # {buffer: 0}
+    params = models.TextField(null=True, blank=True, db_column='params')
+    options = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     metadata = JSONField(
         help_text=_('''Key/value metadata for for instance copyright.
@@ -227,8 +224,10 @@ like {"key": "value", "key2": "value2"}.
         help_text=_(
             "Uncheck it if you don't want a click on the map to search us."),
         default=True)
-    index = models.IntegerField(verbose_name=_('index'), default=1000,
-        help_text=_("Number used for ordering categories relative to each other."))
+    index = models.IntegerField(
+        verbose_name=_('index'), default=1000,
+        help_text=_("Number used for ordering categories relative to each "
+                    "other."))
 
     class Meta:
         ordering = ('index', 'display_name')
