@@ -22,10 +22,9 @@ class WMSConnectionFactory(factory.Factory):
 
 class Geoserver(TestCase):
 
-    @mock.patch('lizard_wms.models.WMSSource.import_bounding_box')
+    @mock.patch('lizard_wms.models.WMSSource.import_bounding_box',
+                return_value=None)
     def test_fetch(self, import_bounding_box):
-        import_bounding_box.return_value = None
-
         wmsconnection = WMSConnectionFactory.create()
         result = wmsconnection.fetch()
         self.assertEqual(models.WMSSource.objects.count(), 40)
