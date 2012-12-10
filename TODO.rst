@@ -30,3 +30,8 @@ so hopefully they can also be found in the data returned by
 GetFeature.
 
 There is an output format called "zipped shapefiles". Go figure.
+
+Tests
+-----
+
+Add more tests for Connections and Sources, including the bounding box update.

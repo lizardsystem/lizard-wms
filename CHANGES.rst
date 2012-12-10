@@ -5,7 +5,9 @@ Changelog of lizard-wms
 1.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added test for WMSSource creation from a WMSConnection.
+
+- Added travis integration.
 
 
 1.8 (2012-11-27)
