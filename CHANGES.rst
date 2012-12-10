@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.11 (unreleased)
+1.11 (2012-12-10)
 -----------------
 
 - Added test for WMSSource creation from a WMSConnection.
