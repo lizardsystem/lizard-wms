@@ -4,14 +4,15 @@ from __future__ import absolute_import, division
 import os
 import factory
 
+import mock
+
 from django.test import TestCase
 
-
-from lizard_wms.models import WMSConnection, WMSSource
+from lizard_wms import models
 
 
 class WMSConnectionFactory(factory.Factory):
-    FACTORY_FOR = WMSConnection
+    FACTORY_FOR = models.WMSConnection
     title = "WMS title"
     slug = "wmsslug"
     url = "http://test.com/wms"
@@ -21,11 +22,11 @@ class WMSConnectionFactory(factory.Factory):
 
 class Geoserver(TestCase):
 
-    def test_fetch(self):
+    @mock.patch('lizard_wms.models.WMSSource.import_bounding_box')
+    def test_fetch(self, import_bounding_box):
+        import_bounding_box.return_value = None
 
-        from lizard_wms import models
-        models.WMSSource.import_bounding_box = lambda x, y: None
         wmsconnection = WMSConnectionFactory.create()
-        result = wmsconnection.fetch(import_bounding_box=True)
-        self.assertEqual(WMSSource.objects.count(), 40)
+        result = wmsconnection.fetch()
+        self.assertEqual(models.WMSSource.objects.count(), 40)
         self.assertEqual(len(result), 40)
