@@ -25,7 +25,7 @@ class WMSSourceFactory(factory.Factory):
     @classmethod
     def _prepare(cls, create, **kwargs):
         wms_source = super(WMSSourceFactory, cls)._prepare(create, **kwargs)
-        wms_source._params = cls._params
+        wms_source._params = kwargs.get('_params', cls._params)
         if create:
                 wms_source.save()
         return wms_source
@@ -37,4 +37,10 @@ class WMSSourceTest(TestCase):
         wms_source = WMSSourceFactory.build()
         factory_params = json.loads(WMSSourceFactory._params)
         factory_params['layers'] = WMSSourceFactory.attributes()['layer_name']
-        self.assertEquals(wms_source.params, factory_params)
+        params = json.loads(wms_source.params)
+        self.assertEquals(params, factory_params)
+
+    def test_empty_input_params(self):
+        wms_source = WMSSourceFactory.build(_params="")
+        params = json.loads(wms_source.params)
+        self.assertEquals(params, {'layers': wms_source.layer_name})

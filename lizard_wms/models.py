@@ -237,9 +237,11 @@ like {"key": "value", "key2": "value2"}.
 
     @property
     def params(self):
-        params = self._params.copy()
+        params = {}
+        if self._params is not None:
+            params = self._params.copy()
         params['layers'] = self.layer_name
-        return params
+        return json.dumps(params)
 
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
