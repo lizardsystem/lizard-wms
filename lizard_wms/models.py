@@ -339,10 +339,9 @@ like {"key": "value", "key2": "value2"}.
         if not bbox:
             return set()
 
+        version = '1.1.1'
         if self.connection and self.connection.version:
             version = self.connection.version
-        else:
-            version = '1.1.1'
 
         params = json.loads(self.params)
         values = dict()
@@ -374,10 +373,8 @@ like {"key": "value", "key2": "value2"}.
             }
 
             r = requests.get(self.url, params=payload)
-            #logger.info("GetFeatureInfo says: " + r.text)
 
             # XXX Check result code etc
-
             if 'no features were found' in r.text:
                 continue
 

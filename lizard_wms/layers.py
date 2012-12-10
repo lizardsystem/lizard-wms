@@ -32,9 +32,8 @@ class AdapterWMS(WorkspaceItemAdapter):
     def edit_link(self):
         if not self.wms_source:
             return
-        url = reverse('admin:lizard_wms_wmssource_change',
+        return reverse('admin:lizard_wms_wmssource_change',
                        args=(self.wms_source.id,))
-        return url
 
     def layer(self, layer_ids=None, request=None):
         return [], {}

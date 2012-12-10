@@ -166,8 +166,8 @@ class WMSConnectionAdmin(admin.ModelAdmin):
                     msg % (wms_connection.url, e))
 
         self.message_user(
-                request,
-                "Loaded/updated %s WMS sources, deleted %s." % (
+            request,
+            "Loaded/updated %s WMS sources, deleted %s." % (
                 num_fetched_updated, num_deleted))
 
     reload.short_description = (
