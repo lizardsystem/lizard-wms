@@ -27,7 +27,7 @@ class WMSConnectionTest(TestCase):
 
     @mock.patch('lizard_wms.models.WMSSource.import_bounding_box',
         return_value=None)
-    def test_fetch_after_options_change(self, import_bounding_box):
+    def test_options_change_are_kept_between_fetch(self, import_bounding_box):
         """tests bug fix, for fix see revision f649465
 
         WMSSource.options were overwritten after sources reload from admin.
