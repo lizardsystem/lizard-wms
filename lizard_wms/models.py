@@ -135,42 +135,35 @@ overwrites.""")
 
         fetched = set()
         for name, layer in wms.contents.iteritems():
-            try:
-                logger.debug("Fetching layer name %s" % (name,))
-                if layer.layers:
-                    # Meta layer, don't use
-                    continue
-                name = name.split(':', 1)[-1]
-                # ^^^ owslib prepends with 'workspace:'.
-                layer_instance, created = WMSSource.objects.get_or_create(
-                    connection=self, layer_name=name)
-                if created:
-                    layer_instance.display_name = layer.title
+            logger.debug("Fetching layer name %s" % (name,))
+            if layer.layers:
+                # Meta layer, don't use
+                continue
 
-                layer_style = layer.styles.values()
-                # Not all layers have a description/legend.
-                if len(layer_style):
-                    layer_instance.description = layer_style[0]['title']
-                    layer_instance.legend_url = layer_style[0]['legend']
-                else:
-                    layer_instance.description = None
-                    layer_instance.legend_url = None
+            defaults = {
+                'url': self.url,
+                'options': self.options,
+                '_params': self.params,
+                'display_name': layer.title,
+                'description': None,
+                'legend_url': None
+            }
+            layer_style = layer.styles.values()
+            if len(layer_style):
+                defaults['description'] = layer_style[0]['title']
+                defaults['legend_url'] = layer_style[0]['legend']
 
-                layer_instance.url = self.url
-                layer_instance.options = self.options
+            layer_instance, created = WMSSource.objects.get_or_create(
+                connection=self, layer_name=name, defaults=defaults)
+            if created:
                 layer_instance.category = self.category.all()
-                layer_instance._params = self.params
-                layer_instance.import_bounding_box(layer)
-            except:
-                logger.exception("Something went wrong. We skip this layer")
+            layer_instance.import_bounding_box(layer)
+            layer_instance.save()
 
-            else:
-                layer_instance.save()
+            if layer_instance.bbox:
+                layer_instance.get_feature_info()
 
-                if layer_instance.bbox:
-                    layer_instance.get_feature_info()
-
-                fetched.add(name)
+            fetched.add(name)
 
         return fetched
 
