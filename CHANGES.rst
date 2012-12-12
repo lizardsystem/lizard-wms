@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.13 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Fix a bug that resets options and categories from wms sources when reloading 
+their wms connection from admin. 
 
 
 1.12 (2012-12-10)
