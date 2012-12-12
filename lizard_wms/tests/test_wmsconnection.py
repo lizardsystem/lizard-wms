@@ -30,8 +30,9 @@ class WMSConnectionTest(TestCase):
     def test_fetch_after_options_change(self, import_bounding_box):
         """tests bug fix, for fix see revision f649465
 
-        WMSSource.options were overwritten after sources reload from admin
-        
+        WMSSource.options were overwritten after sources reload from admin.
+        This test checks that fix.
+
         """
         wmsconnection = factories.WMSConnectionFactory.create()
         result = wmsconnection.fetch()
