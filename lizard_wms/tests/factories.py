@@ -11,7 +11,7 @@ class WMSConnectionFactory(factory.Factory):
     slug = "wmsslug"
     url = "http://test.com/wms"
     xml = open(os.path.join(os.path.dirname(__file__),
-        'getCapabilities.xml')).read()
+                            'getCapabilities.xml')).read()
 
 
 class WMSSourceFactory(factory.Factory):
