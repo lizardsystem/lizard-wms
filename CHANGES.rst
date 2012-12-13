@@ -2,10 +2,11 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.14 (unreleased)
+1.14 (2012-12-13)
 -----------------
 
-- Nothing changed yet.
+- Refactored the popup table head. Deltaportaal needs a popup without a 
+  table head.
 
 
 1.13 (2012-12-12)
