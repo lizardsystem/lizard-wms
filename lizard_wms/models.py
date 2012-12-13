@@ -227,7 +227,7 @@ like {"key": "value", "key2": "value2"}.
         ordering = ('index', 'display_name')
 
     def __unicode__(self):
-        return 'WMS Layer {}'.format(self.layer_name)
+        return 'WMS Layer {0}'.format(self.layer_name)
 
     @property
     def params(self):
