@@ -2,11 +2,8 @@
 {% load utility %}
 {% if feature_info %}
 <table class="table table-bordered">
-  <thead>
-    <th>Attribuut</th>
-    <th>Waarde</th>
-  </thead>
   <tbody>
+	{% include "lizard_wms/popup-thead.html" %}
     {% for info in feature_info %}
       <tr>
         {% if info.show_label == 'false' %}
