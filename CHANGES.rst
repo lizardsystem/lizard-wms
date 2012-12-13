@@ -2,10 +2,25 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.12 (unreleased)
+1.14 (unreleased)
 -----------------
 
 - Nothing changed yet.
+
+
+1.13 (2012-12-12)
+-----------------
+
+- Fix a bug that resets options and categories from wms sources when reloading 
+their wms connection from admin. 
+
+
+1.12 (2012-12-10)
+-----------------
+
+- Rerelease due to missing migrations.
+
+- Better mocking thanks to Remco.
 
 
 1.11 (2012-12-10)
