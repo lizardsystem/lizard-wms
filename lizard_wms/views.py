@@ -34,13 +34,6 @@ class DataSourceView(APIView):
         """
         return pkginfo.installed.Installed(package).version
 
-    # @property
-    # def metadata(self):
-    #     """Return metadata, in this case just wms/maptree versions."""
-    #     return {'generator': 'Lizard-wms {} (and lizard-maptree {})'.format(
-    #             self._version_of_package(lizard_wms),
-    #             self._version_of_package(lizard_maptree))}
-
     @property
     def projects(self):
         """Return maptree categories.
@@ -51,9 +44,16 @@ class DataSourceView(APIView):
         # TODO: also return 'root' object.
         return CategorySerializer(categories).data
 
+    @property
+    def data(self):
+        """Return metadata about ourselves."""
+        return {'generator': 'Lizard-wms {} (and lizard-maptree {})'.format(
+                self._version_of_package(lizard_wms),
+                self._version_of_package(lizard_maptree))}
+
     def get(self, response, format=None):
         result = {}
-        # result['metadata'] = self.metadata
+        result['data'] = self.data
         result['projects'] = self.projects
         return Response(result)
 
