@@ -3,7 +3,7 @@ import pkginfo
 import lizard_maptree
 # from rest_framework.generics import SingleObjectAPIView
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 # from rest_framework.decorators import api_view
 # from rest_framework.reverse import reverse
@@ -19,7 +19,7 @@ import lizard_wms
 # Features: none, at the moment.
 
 
-class DataSourceView(APIView):
+class DataSourceView(GenericAPIView):
     """WMS layers configured in lizard-wms/lizard-maptree.
 
     Info on ourselves. Django app, version, etc.
@@ -42,7 +42,8 @@ class DataSourceView(APIView):
         """
         categories = Category.objects.all()
         # TODO: also return 'root' object.
-        return CategorySerializer(categories).data
+        return CategorySerializer(categories,
+                                  context=self.get_serializer_context()).data
 
     @property
     def data(self):
