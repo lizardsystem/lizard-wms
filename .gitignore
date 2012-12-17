@@ -40,3 +40,4 @@ etc/*.apache.conf
 *.swp
 .#*
 *~
+.codeintel/
