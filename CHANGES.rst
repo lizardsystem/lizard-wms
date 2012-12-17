@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.15 (unreleased)
+1.15 (2012-12-17)
 -----------------
 
 - Set some link styling in popup.
