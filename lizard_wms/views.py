@@ -1,14 +1,15 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
-import pkginfo
-import lizard_maptree
-# from rest_framework.generics import SingleObjectAPIView
-from rest_framework.generics import RetrieveAPIView
-from rest_framework.generics import GenericAPIView
-from rest_framework.views import APIView
-# from rest_framework.decorators import api_view
+import json
+
 # from rest_framework.reverse import reverse
-from rest_framework.response import Response
+# from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 from lizard_maptree.models import Category
+from rest_framework.generics import GenericAPIView
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
+import lizard_maptree
+import pkginfo
 
 from lizard_wms.serializers import CategorySerializer
 import lizard_wms
@@ -17,6 +18,8 @@ import lizard_wms
 # Project: categories
 # Layer: wms sources/urls
 # Features: none, at the moment.
+
+DEFAULT_HEADING_LEVEL = 1
 
 
 class DataSourceView(GenericAPIView):
@@ -54,16 +57,136 @@ class DataSourceView(GenericAPIView):
 
     def get(self, response, format=None):
         result = {}
-        result['data'] = self.data
+        result['about_ourselves'] = self.data
         result['projects'] = self.projects
         return Response(result)
 
 
-# class DataSourceView(ListAPIView):
-#     model = Category
-#     serializer_class = CategorySerializer
+class Heading(object):
+    """Wrapper/interface for heading objects in a Project/menu."""
+    # TODO: move elsewhere.
+    menu_type = 'heading'
+
+    def __init__(self,
+                 name=None,
+                 description=None,
+                 # edit_link=None,
+                 heading_level=None,
+                 extra_data=None,
+                 klass=None):
+        self.name = name
+        self.description = description
+        self.heading_level = heading_level or DEFAULT_HEADING_LEVEL
+        # self.edit_link = edit_link
+        self.extra_data = extra_data
+        self.klass = klass
+
+    def to_api(self):
+        result = {}
+        for attr in ['name',
+                     'description',
+                     'heading_level',
+                     'extra_data',
+                     'klass',
+                     'menu_type']:
+            value = getattr(self, attr)
+            if value is None:
+                continue
+            result[attr] = value
+        return result
 
 
-class ProjectView(RetrieveAPIView):
-    model = Category
-    serializer_class = CategorySerializer
+class WorkspaceAcceptable(object):
+    """Wrapper/interface for layer/acceptable objects in a Project/menu."""
+    # TODO: move elsewhere.
+    menu_type = 'workspace_acceptable'
+
+    def __init__(self,
+                 name=None,
+                 description=None,
+                 # edit_link=None,
+                 wms_url=None,
+                 wms_params=None,
+                 wms_options=None,
+                 ):
+        self.name = name
+        self.description = description
+        self.wms_url = wms_url
+        self.wms_params = wms_params
+        self.wms_options = wms_options
+
+    def to_api(self):
+        result = {}
+        for attr in ['name',
+                     'description',
+                     'wms_url',
+                     'wms_params',
+                     'wms_options',
+                     ]:
+            value = getattr(self, attr)
+            if value is None:
+                continue
+            result[attr] = value
+        return result
+
+
+class ProjectView(GenericAPIView):
+    """Structure of a lizard-wms category with its layers.
+
+    Lizard-wms (actually, lizard-maptree) provides categories into which WMS
+    layers are grouped. Categories can be nested.
+
+    """
+    ROOT_SLUG = 'root'
+
+    def _get_tree(self,
+                  parent=None,
+                  heading_level=DEFAULT_HEADING_LEVEL,
+                  result=None):
+        """
+        Make tree for homepage using categories and WMS sources.
+        """
+        if result is None:
+            result = []
+        sub_categories = Category.objects.filter(parent=parent)
+        for category in sub_categories:
+            # Append sub categories as headings
+            row = Heading(name=category.name,
+                          heading_level=heading_level,
+                          description=category.description)
+            result.append(row.to_api())
+            # Continue deeper into the tree.
+            self._get_tree(parent=category,
+                           heading_level=heading_level + 1,
+                           result=result)
+        # Append workspace-acceptables.
+        if parent is not None:
+            result += [self._wms_source_to_api(wms_source)
+                       for wms_source in parent.wmssource_set.all()]
+        return result
+
+    def _wms_source_to_api(self, wms_source):
+        return WorkspaceAcceptable(
+            name=wms_source.name,
+            description=wms_source.name,
+            wms_url=wms_source.url,
+            wms_params=wms_source._params,  # Real jsonfield.
+            # ^^^ Misses layers.
+            wms_options=wms_source.options,  # TODO: turn into dict.
+            ).to_api()
+
+    @property
+    def tree(self):
+        if self.slug == self.ROOT_SLUG:
+            start_category = get_object_or_404(Category, slug=None)
+        else:
+            start_category = get_object_or_404(Category, slug=self.slug)
+
+        return self._get_tree(
+            get_object_or_404(start_category, slug=self.slug))
+
+    def get(self, response, slug=None, format=None):
+        self.slug = slug
+        result = {}
+        result['menu'] = self.tree
+        return Response(result)
