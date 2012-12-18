@@ -29,6 +29,7 @@ class DataSourceView(GenericAPIView):
 
     List of categories as projects.
     """
+    # Potentially rename this as "Projects".
 
     def _version_of_package(self, package):
         """Return version number of package.
@@ -49,7 +50,7 @@ class DataSourceView(GenericAPIView):
                                   context=self.get_serializer_context()).data
 
     @property
-    def data(self):
+    def about_ourselves(self):
         """Return metadata about ourselves."""
         return {'generator': 'Lizard-wms {} (and lizard-maptree {})'.format(
                 self._version_of_package(lizard_wms),
@@ -57,7 +58,7 @@ class DataSourceView(GenericAPIView):
 
     def get(self, response, format=None):
         result = {}
-        result['about_ourselves'] = self.data
+        result['about_ourselves'] = self.about_ourselves
         result['projects'] = self.projects
         return Response(result)
 
@@ -139,10 +140,10 @@ class ProjectView(GenericAPIView):
     """
     ROOT_SLUG = 'root'
 
-    def _get_tree(self,
-                  parent=None,
-                  heading_level=DEFAULT_HEADING_LEVEL,
-                  result=None):
+    def tree(self,
+             parent=None,
+             heading_level=DEFAULT_HEADING_LEVEL,
+             result=None):
         """
         Make tree for homepage using categories and WMS sources.
         """
@@ -156,7 +157,7 @@ class ProjectView(GenericAPIView):
                           description=category.description)
             result.append(row.to_api())
             # Continue deeper into the tree.
-            self._get_tree(parent=category,
+            self.tree(parent=category,
                            heading_level=heading_level + 1,
                            result=result)
         # Append workspace-acceptables.
@@ -176,17 +177,16 @@ class ProjectView(GenericAPIView):
             ).to_api()
 
     @property
-    def tree(self):
-        if self.slug == self.ROOT_SLUG:
-            start_category = get_object_or_404(Category, slug=None)
-        else:
-            start_category = get_object_or_404(Category, slug=self.slug)
-
-        return self._get_tree(
-            get_object_or_404(start_category, slug=self.slug))
+    def about_ourselves(self):
+        """Return metadata about ourselves."""
+        return CategorySerializer(self.category,
+                                  context=self.get_serializer_context()).data
 
     def get(self, response, slug=None, format=None):
         self.slug = slug
+        self.category = get_object_or_404(Category, slug=self.slug)
+        # ^^^ This doesn't work with the non-existing root category.
         result = {}
-        result['menu'] = self.tree
+        result['about_ourselves'] = self.about_ourselves
+        result['menu'] = self.tree(parent=self.category)
         return Response(result)
