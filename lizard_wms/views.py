@@ -1,18 +1,14 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
-import json
 
 # from rest_framework.reverse import reverse
 # from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from lizard_maptree.models import Category
 from rest_framework.generics import GenericAPIView
-from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
-import lizard_maptree
-import pkginfo
+import lizard_structure.views
 
 from lizard_wms.serializers import CategorySerializer
-import lizard_wms
 
 # Data source: bare-bones pointer at categories
 # Project: categories
@@ -22,21 +18,8 @@ import lizard_wms
 DEFAULT_HEADING_LEVEL = 1
 
 
-class DataSourceView(GenericAPIView):
-    """WMS layers configured in lizard-wms/lizard-maptree.
-
-    Info on ourselves. Django app, version, etc.
-
-    List of categories as projects.
-    """
+class DataSourceView(lizard_structure.views.DataSourceView):
     # Potentially rename this as "Projects".
-
-    def _version_of_package(self, package):
-        """Return version number of package.
-
-        Package should be a real imported package, not a string.
-        """
-        return pkginfo.installed.Installed(package).version
 
     @property
     def projects(self):
@@ -48,19 +31,6 @@ class DataSourceView(GenericAPIView):
         # TODO: also return 'root' object.
         return CategorySerializer(categories,
                                   context=self.get_serializer_context()).data
-
-    @property
-    def about_ourselves(self):
-        """Return metadata about ourselves."""
-        return {'generator': 'Lizard-wms {} (and lizard-maptree {})'.format(
-                self._version_of_package(lizard_wms),
-                self._version_of_package(lizard_maptree))}
-
-    def get(self, response, format=None):
-        result = {}
-        result['about_ourselves'] = self.about_ourselves
-        result['projects'] = self.projects
-        return Response(result)
 
 
 class Heading(object):
