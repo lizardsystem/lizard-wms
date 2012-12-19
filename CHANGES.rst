@@ -5,7 +5,15 @@ Changelog of lizard-wms
 1.16 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Fixed collage item naming on multiselect.
+
+- Fixed urls.py, so it won't recusively include other lizard-* URLs when
+  running as part of a site.
+
+- Pass styles in GetFeatureInfo query.
+
+- Add vendor option 'buffer' to WMS GetFeatureInfo query so the search
+  radius is slightly larger on a map click.
 
 
 1.15 (2012-12-17)

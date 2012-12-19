@@ -6,8 +6,6 @@ from django.contrib import admin
 
 from lizard_maptree.views import MaptreeHomepageView
 
-admin.autodiscover()
-
 ITEM_MODELS = ['wmssource', ]  # for maptree items.
 
 urlpatterns = patterns(
@@ -20,14 +18,13 @@ urlpatterns = patterns(
         MaptreeHomepageView.as_view(),  # pylint: disable=E1120
         {'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
-    (r'^map/', include('lizard_map.urls')),
     )
 
-
-if settings.DEBUG:
-    # Add this also to the projects that use this application
+if getattr(settings, 'LIZARD_WMS_STANDALONE', False):
+    admin.autodiscover()
     urlpatterns += patterns(
         '',
+        (r'^map/', include('lizard_map.urls')),
         (r'^admin/', include(admin.site.urls)),
         (r'', include('staticfiles.urls')),
     )
