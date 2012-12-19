@@ -1,22 +1,24 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 
-# from rest_framework.reverse import reverse
 # from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from lizard_maptree.models import Category
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-import lizard_structure.views
+from rest_framework.reverse import reverse
 import lizard_structure.items
-
-from lizard_wms.serializers import CategorySerializer
-
-# Data source: bare-bones pointer at categories
-# Project: categories
-# Layer: wms sources/urls
-# Features: none, at the moment.
+import lizard_structure.views
 
 DEFAULT_HEADING_LEVEL = 1
+
+
+def _category_as_project(category, request):
+    return lizard_structure.items.ProjectItem(
+        name=category.name,
+        description=category.description,
+        url=reverse('wms_api_project',
+                    kwargs={'slug': category.slug},
+                    request=request))
 
 
 class DataSourceView(lizard_structure.views.DataSourceView):
@@ -27,10 +29,8 @@ class DataSourceView(lizard_structure.views.DataSourceView):
 
         Maptree categories are usable as root objects of lizard pages.
         """
-        categories = Category.objects.all()
-        # TODO: also return 'root' object.
-        return CategorySerializer(categories,
-                                  context=self.get_serializer_context()).data
+        return [_category_as_project(category, self.request)
+                for category in Category.objects.all()]
 
 
 class ProjectView(GenericAPIView):
@@ -81,14 +81,13 @@ class ProjectView(GenericAPIView):
 
     def about_ourselves(self):
         """Return metadata about ourselves."""
-        return CategorySerializer(self.category,
-                                  context=self.get_serializer_context()).data
+        return _category_as_project(self.category, self.request)
 
     def get(self, response, slug=None, format=None):
         self.slug = slug
         self.category = get_object_or_404(Category, slug=self.slug)
         # ^^^ This doesn't work with the non-existing root category.
         result = {}
-        result['about_ourselves'] = self.about_ourselves()
+        result['about_ourselves'] = self.about_ourselves().to_api()
         result['menu'] = self.tree(parent=self.category)
         return Response(result)
