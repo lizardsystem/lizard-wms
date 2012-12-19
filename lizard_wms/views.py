@@ -7,6 +7,7 @@ from lizard_maptree.models import Category
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 import lizard_structure.views
+import lizard_structure.items
 
 from lizard_wms.serializers import CategorySerializer
 
@@ -21,7 +22,6 @@ DEFAULT_HEADING_LEVEL = 1
 class DataSourceView(lizard_structure.views.DataSourceView):
     # Potentially rename this as "Projects".
 
-    @property
     def projects(self):
         """Return maptree categories.
 
@@ -31,74 +31,6 @@ class DataSourceView(lizard_structure.views.DataSourceView):
         # TODO: also return 'root' object.
         return CategorySerializer(categories,
                                   context=self.get_serializer_context()).data
-
-
-class Heading(object):
-    """Wrapper/interface for heading objects in a Project/menu."""
-    # TODO: move elsewhere.
-    menu_type = 'heading'
-
-    def __init__(self,
-                 name=None,
-                 description=None,
-                 # edit_link=None,
-                 heading_level=None,
-                 extra_data=None,
-                 klass=None):
-        self.name = name
-        self.description = description
-        self.heading_level = heading_level or DEFAULT_HEADING_LEVEL
-        # self.edit_link = edit_link
-        self.extra_data = extra_data
-        self.klass = klass
-
-    def to_api(self):
-        result = {}
-        for attr in ['name',
-                     'description',
-                     'heading_level',
-                     'extra_data',
-                     'klass',
-                     'menu_type']:
-            value = getattr(self, attr)
-            if value is None:
-                continue
-            result[attr] = value
-        return result
-
-
-class WorkspaceAcceptable(object):
-    """Wrapper/interface for layer/acceptable objects in a Project/menu."""
-    # TODO: move elsewhere.
-    menu_type = 'workspace_acceptable'
-
-    def __init__(self,
-                 name=None,
-                 description=None,
-                 # edit_link=None,
-                 wms_url=None,
-                 wms_params=None,
-                 wms_options=None,
-                 ):
-        self.name = name
-        self.description = description
-        self.wms_url = wms_url
-        self.wms_params = wms_params
-        self.wms_options = wms_options
-
-    def to_api(self):
-        result = {}
-        for attr in ['name',
-                     'description',
-                     'wms_url',
-                     'wms_params',
-                     'wms_options',
-                     ]:
-            value = getattr(self, attr)
-            if value is None:
-                continue
-            result[attr] = value
-        return result
 
 
 class ProjectView(GenericAPIView):
@@ -122,9 +54,10 @@ class ProjectView(GenericAPIView):
         sub_categories = Category.objects.filter(parent=parent)
         for category in sub_categories:
             # Append sub categories as headings
-            row = Heading(name=category.name,
-                          heading_level=heading_level,
-                          description=category.description)
+            row = lizard_structure.items.HeadingItem(
+                name=category.name,
+                heading_level=heading_level,
+                description=category.description)
             result.append(row.to_api())
             # Continue deeper into the tree.
             self.tree(parent=category,
@@ -137,7 +70,7 @@ class ProjectView(GenericAPIView):
         return result
 
     def _wms_source_to_api(self, wms_source):
-        return WorkspaceAcceptable(
+        return lizard_structure.items.LayerItem(
             name=wms_source.name,
             description=wms_source.name,
             wms_url=wms_source.url,
@@ -146,7 +79,6 @@ class ProjectView(GenericAPIView):
             wms_options=wms_source.options,  # TODO: turn into dict.
             ).to_api()
 
-    @property
     def about_ourselves(self):
         """Return metadata about ourselves."""
         return CategorySerializer(self.category,
@@ -157,6 +89,6 @@ class ProjectView(GenericAPIView):
         self.category = get_object_or_404(Category, slug=self.slug)
         # ^^^ This doesn't work with the non-existing root category.
         result = {}
-        result['about_ourselves'] = self.about_ourselves
+        result['about_ourselves'] = self.about_ourselves()
         result['menu'] = self.tree(parent=self.category)
         return Response(result)
