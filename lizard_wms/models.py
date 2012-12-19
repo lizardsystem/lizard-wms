@@ -363,9 +363,19 @@ like {"key": "value", "key2": "value2"}.
 
                 # Version from parameter
                 'VERSION': version,
+
+                # Non-standard WMS parameter to slightly increase search radius.
+                # Shouldn't hurt as most WMS server software ignore unknown
+                # parameters.
+                # see http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
+                'BUFFER': 16,
             }
 
-            r = requests.get(self.url, params=payload)
+            # Add styles to request when defined
+            if 'styles' in params and params['styles']:
+                payload['STYLES'] = params['styles']
+
+            r = requests.get(self.url, params=payload, timeout=10)
 
             # XXX Check result code etc
             if 'no features were found' in r.text:
