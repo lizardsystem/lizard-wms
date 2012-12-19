@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.16 (unreleased)
+1.16 (2012-12-19)
 -----------------
 
 - Fixed collage item naming on multiselect.
