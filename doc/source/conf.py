@@ -4,25 +4,21 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import datetime
 import os
-import sys
+os.environ['DJANGO_SETTINGS_MODULE'] = 'lizard_wms.testsettings'
+# ^^^ First things first.
 
-from pkg_resources import parse_version
+import datetime
 import pkginfo
 
+import lizard_wms
 
-def _egg_info(path_to_egg='../../'):
-    path_to_egg = os.path.join(
-        os.path.dirname(__file__), path_to_egg)
-    egg_info = pkginfo.Develop(path_to_egg)
-    release = egg_info.version
-    parsed_version = parse_version(release)
-    version = '%s.%s' % tuple([int(x) for x in parsed_version[0:2]])
-    return egg_info.name, egg_info.author, version, release
+metadata = pkginfo.utils.get_metadata(lizard_wms)
 
-
-project, author, version, release = _egg_info()
+project = metadata.name
+author = metadata.author
+version = metadata.version
+release = metadata.version
 this_year = datetime.date.today().year
 copyright = '%s, %s' % (this_year, author)
 # Comment out one of these if we're a django project.

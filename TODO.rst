@@ -6,10 +6,15 @@ primarily used for map images (visible layers in Lizard), while WFS is
 directly about the underlying data (popups, mouseovers etc in Lizard).
 
 We want a workflow like:
+
 - Configure a server in Lizard admin
+
 - Automatically, whenever the configuration changes or at specific moments (say every hour),
+
   - Available map layers are retrieved from the server
+
   - For each map layer, available features are imported
+
   - These features have configuration themselves (visible or not, order of showing)
     so they should continue to exist and not be deleted whenever.
 
