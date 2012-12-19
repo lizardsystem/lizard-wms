@@ -60,6 +60,11 @@ class AdapterWMS(WorkspaceItemAdapter):
         feature_info = self.wms_source.get_feature_info(x, y, radius)
         name = self.wms_source.get_feature_name(feature_info)
 
+        # Make up a name anyway if we can't find one.
+        if not name:
+            # also see popup.html
+            name = 'Item uit {}'.format(self.workspace_item.name)
+
         if feature_info:
             return [{
                     'name': name,
