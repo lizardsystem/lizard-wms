@@ -61,8 +61,8 @@ class ProjectView(GenericAPIView):
             result.append(row.to_api())
             # Continue deeper into the tree.
             self.tree(parent=category,
-                           heading_level=heading_level + 1,
-                           result=result)
+                      heading_level=heading_level + 1,
+                      result=result)
         # Append workspace-acceptables.
         if parent is not None:
             result += [self._wms_source_to_api(wms_source)
