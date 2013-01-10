@@ -43,5 +43,5 @@ Google Column chart
 
 To show a google column the attribute must have JSON in the following format::
 
-  [[{"primary": "true"},{"units": "m/3", "sort":"desc", "color": "993366"},
+  [[{"primary": "true"},{"units": "m/3", "sort":"desc", "color": "993366"}],
   ["'87", 35], ["'90", 40]]
