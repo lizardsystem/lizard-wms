@@ -320,11 +320,11 @@ like {"key": "value", "key2": "value2"}.
                 ur = coordinates.wgs84_to_google(geod_bbox[0][1],
                                                  geod_bbox[1][1])
                 # Format should be: minX, minY, maxX, maxY.
-                bbox = '{},{},{},{}'.format(ll[0], ll[1], ur[0], ur[1])
+                bbox = '{0},{1},{2},{3}'.format(ll[0], ll[1], ur[0], ur[1])
             else:
                 # Use the old method.
                 fixed_radius = 10
-                bbox = '{},{},{},{}'.format(x - fixed_radius, y - fixed_radius,
+                bbox = '{0},{1},{2},{3}'.format(x - fixed_radius, y - fixed_radius,
                                             x + fixed_radius, y + fixed_radius)
         else:
             bbox = self.bbox
