@@ -480,6 +480,12 @@ like {"key": "value", "key2": "value2"}.
             if feature_line.name in values:
                 if feature_line.render_as == RENDER_GC_COLUMN:
                     data = json.loads(values[feature_line.name])
+                    if data is None:
+                        # See https://github.com/nens/deltaportaal/issues/4
+                        logger.warn(
+                            "https://github.com/nens/deltaportaal/issues/4 "
+                            "hits again")
+                        return
                     url = google_column_chart_url(data)
                     values[feature_line.name] = url
                     if url == '':

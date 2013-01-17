@@ -5,7 +5,10 @@ Changelog of lizard-wms
 1.17 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Fixed issue in chart.py/models.py. If the json returned by the database
+  doesn't contain any data, the google column chart url method would
+  fail. There's now a check that simply returns nothing if this error
+  condition occurs.
 
 
 1.16 (2012-12-19)
@@ -31,15 +34,15 @@ Changelog of lizard-wms
 1.14 (2012-12-13)
 -----------------
 
-- Refactored the popup table head. Deltaportaal needs a popup without a 
+- Refactored the popup table head. Deltaportaal needs a popup without a
   table head.
 
 
 1.13 (2012-12-12)
 -----------------
 
-- Fix a bug that resets options and categories from wms sources when reloading 
-their wms connection from admin. 
+- Fix a bug that resets options and categories from wms sources when reloading
+their wms connection from admin.
 
 
 1.12 (2012-12-10)
