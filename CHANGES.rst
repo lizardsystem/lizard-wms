@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.17 (unreleased)
+1.17 (2013-01-17)
 -----------------
 
 - Fixed issue in chart.py/models.py. If the json returned by the database
