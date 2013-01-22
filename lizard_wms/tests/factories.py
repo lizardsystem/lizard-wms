@@ -24,7 +24,7 @@ class WMSSourceFactory(factory.Factory):
                '"transparent": true,'
                '"layers": "%s" }' % layer_name)
 
-    options = {"buffer": 0, "isBaseLayer": False, "opacity": 1}
+    options = '{"buffer": 0, "isBaseLayer": false, "opacity": 1}'
 
     @classmethod
     def _prepare(cls, create, **kwargs):
