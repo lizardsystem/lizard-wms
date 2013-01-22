@@ -1,8 +1,6 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 
-import factory
-
 from django.test import TestCase
 from django.utils import simplejson as json
 
