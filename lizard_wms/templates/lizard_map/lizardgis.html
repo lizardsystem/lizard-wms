@@ -1,0 +1,15 @@
+{# lizardgis with support for animated wms servers. this file is used by wms.html #}
+{% extends "lizard_ui/lizardbase.html" %}
+{% load workspaces %}
+
+{% block javascript %}
+  {{ block.super }}
+  <script type="text/javascript"
+          src="{{ STATIC_URL }}lizard_map/lizard_map.js"></script>
+  <script type="text/javascript"
+          src="{{ STATIC_URL }}lizard_wms/animations.js"></script>
+{% endblock javascript %}
+
+{% block content %}
+<div id="map"></div>
+{% endblock content %}
