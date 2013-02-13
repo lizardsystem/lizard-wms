@@ -13,7 +13,88 @@ current_timestep = 0;
 
 // For each .workspace-wms-layer that is an animation,
 // associative using 'id'
-wms_ani_layers = [];  
+wms_ani_layers = {};  
+
+
+/* TODO: make Backbone object for control panel */
+
+/*
+Animated layer: keep track of an animated wms.
+
+We use a Backbone model because of its more object-oriented nature and the
+possibility to sync all kinds of info with the server later on.
+*/
+var AnimatedLayer = Backbone.Model.extend({
+  defaults: {
+    current_timestep: 0,  // to be altered from outside
+    current_in_map: {},  // indices if layers that are in OL.map
+    current_visible: 0
+  },
+  constructor: function(options) {
+    Backbone.Model.prototype.constructor.call(this, options);
+    this.params = options.params;
+    this.url = options.url;
+    this.name = options.name;
+    this.options = options.options;
+    this.max_timesteps = 143;
+    this.current_timestep = 0;  // to be altered from outside
+    this.current_in_map = {};  // indices if layers that are in OL.map
+    this.current_visible = null;
+
+    var layers = [];
+    for (var i=0; i < 143; i++) {
+      this.params.time = i;           
+      layers[i] = new OpenLayers.Layer.WMS(this.name, this.url, this.params, this.options);
+    }
+    this.layers = layers;
+  },
+  initialize: function() {  
+  },
+  updateMap: function() {
+    // update visible layer
+    // add/remove layers
+    console.log('updating map');
+  },
+  setTimestep: function(timestep) {
+      this.current_timestep = timestep;
+      console.log('timestep is now ', this.current_timestep);
+      var to_delete_from_map = {};
+      for (ts in this.current_in_map) {to_delete_from_map[ts] = ts};  // start with all layers
+      // console.log('initial to delete ', to_delete_from_map);
+      for (var ts=timestep; ts<this.max_timesteps && ts<timestep+3; ts++) {
+        //console.log('we want timestep ', ts);
+        if (this.current_in_map[ts] !== undefined) {
+          //console.log('already in current map', ts);
+          // is already in current_in_map
+          delete to_delete_from_map[ts];
+        } else {
+          // new
+          //console.log('adding to current ', ts);
+          this.current_in_map[ts] = ts;
+          // actually add to openlayers
+          map.addLayer(this.layers[ts]);
+        }
+     }
+     // now delete all layers from to_delete_from_map
+     for (var ts in to_delete_from_map) {
+       //console.log('removing from map... ts ', ts);
+       map.removeLayer(this.layers[ts]);
+       delete this.current_in_map[ts];
+     }
+     // change current_visible
+     if (this.current_visible !== this.current_timestep) {
+         var old_visible = this.current_visible;
+         //first make new layer visible
+         this.current_visible = this.current_timestep;
+         this.layers[this.current_visible].setOpacity(1);  // TODO: make opacity configurable
+         if (old_visible !== null) {
+             this.layers[old_visible].setOpacity(0);
+         }
+     }
+  }
+});
+
+
 single_layer = null;  // for testing
 base_name = 'name';
 base_url = 'http://localhost:5000/wms'; // for testing
@@ -63,17 +144,28 @@ function update_frame(timestep) {
     params.time = current_timestep;
     
     single_layer = new OpenLayers.Layer.WMS(base_name, base_url, params, base_options);
-    map.addLayer(single_layer);
-    console.log(single_layer);
+    //map.addLayer(single_layer);
+    //console.log(single_layer);
     setTimeout(remove_layer, 500);
+}
+
+
+
+function updateLayers() {
+  // Update AnimationLayer objects so openlayers gets updated
+  $(".workspace-wms-layer").each(function () {
+        var id = $(this).attr("data-workspace-wms-id");
+        wms_ani_layers[id].setTimestep(current_timestep);
+  });
 }
 
 
 // Slider
 function slide(ui, slider){
   current_timestep = slider.value;
-  update_frame(current_timestep);
+  //update_frame(current_timestep);
   updateTime(slider.value);
+  updateLayers();
 }
 
 
@@ -85,15 +177,16 @@ function animation_loop() {
     updateTime(current_timestep);
     // set slider position
     $("#slider").slider("value", current_timestep);
+    updateLayers();
     // most important part: interact with OpenLayers.
 
     //testing: single frame
-    update_frame(current_timestep);
+    //update_frame(current_timestep);
   } else {
     return;  // Not setting next animation step
   }
     
-  setTimeout(animation_loop, 500); // every second
+  setTimeout(animation_loop, 300); // animation speed in ms
 }
 
 
@@ -114,29 +207,37 @@ function init_animation() {
         params['tilesorigin'] = [map.maxExtent.left, map.maxExtent.bottom];
         options = $(this).attr("data-workspace-wms-options");
         options = $.parseJSON(options);
-        // HACK: force reproject = false for layers which still have this defined (in the database no less)
-        // reprojection is deprecated
-        if (options.reproject) {
-            delete options['reproject'];
-        }
+        options.opacity = 0;
         index = parseInt($(this).attr("data-workspace-wms-index"));
         if (wms_ani_layers[id] === undefined) {
-            // Create it. Assume 143 timesteps
-            for (var i=0; i < 10; i++) {
-              // replace time=xx in params with time=i
-              //console.log(name, url, params, options);
-              //console.log(OpenLayers);
-              //animation_layer[i] = new OpenLayers.Layer.WMS(name, url, params, options);
-              //map.addLayer(animation_layer[i]);
-            }
-            //wms_ani_layers[id] = animation_layer;
-            //layer.setZIndex(1000 - index); // looks like passing this via options won't work properly
-        } else {
-            // Update it.
-            //var layer = wms_ani_layers[id];
-            //layer.setZIndex(1000 - index);
+          wms_ani_layers[id] = new AnimatedLayer({
+            name: name, 
+            url: url, 
+            params: params, 
+            options: options
+            });
         }
+                                                 
 
+        // if (wms_ani_layers[id] === undefined) {
+        //     // Create it. Assume 143 timesteps
+        //     var animation_layer = [];
+        //     for (var i=0; i < 143; i++) {
+        //       // replace time=xx in params with time=i
+        //       //console.log(OpenLayers);
+        //       params.time = i;
+        //       //console.log(name, url, params, options);
+        //       animation_layer[i] = new OpenLayers.Layer.WMS(name, url, params, options);
+        //       //map.addLayer(animation_layer[i]);
+        //       //animation_layer[i].setZIndex(1000 - index); // looks like
+        //       // passing this via options won't work proper            
+        //     }
+        //     wms_ani_layers[id] = new AnimatedLayer(animation_layer); //animation_layer;
+        // } else {
+        //     // Update it.
+        //     //var layer = wms_ani_layers[id];
+        //     //layer.setZIndex(1000 - index);
+        // }
   });
 }
 
@@ -170,7 +271,15 @@ $(document).ready(function() {
       opacity = 1-opacity;
       console.log('test opacity=', opacity);
       //single_layer.mergeNewParams(opacity);
-      single_layer.setOpacity(opacity);
+      //single_layer.setOpacity(opacity);
+
+      $(".workspace-wms-layer").each(function () {
+        id = $(this).attr("data-workspace-wms-id");
+    //wms_ani_layers[id][100];
+    //wms_ani_layers[id][101];
+//        wms_ani_layers[id][current_timestep].setOpacity(opacity);
+      });
+
     }
   });
   init_animation();
