@@ -14,6 +14,21 @@ current_timestep = 0;
 // For each .workspace-wms-layer that is an animation,
 // associative using 'id'
 wms_ani_layers = [];  
+single_frame = null;  // for testing
+base_name = 'name';
+base_url = 'http://localhost:5000/wms'; // for testing
+base_params = {
+  "styles": "",
+  "format": "image/png",
+  "height": "256",
+  "width": "256",
+  "tiled": "true",
+  "time": 0,
+  "dataset": "/home/user/git/nens/threedi-server/threedi_server/../var/data/subgrid_map.nc",
+  "transparent": "true"
+};
+base_options = {"buffer": 0, "isBaseLayer": false, "opacity": 0.45};
+
 
 function updateTime(time){
   $("#time").text(time);
@@ -39,6 +54,18 @@ function animation_loop() {
     // set slider position
     $("#slider").slider("value", current_timestep);
     // most important part: interact with OpenLayers.
+
+    //testing: single frame
+    if (single_frame !== null) {
+      map.removeLayer(single_frame);
+    }
+
+    var params = base_params;
+    params.time = current_timestep;
+    
+    single_frame = new OpenLayers.Layer.WMS(base_name, base_url, params, base_options);
+    map.addLayer(single_frame);
+
   } else {
     return;  // Not setting next animation step
   }
@@ -74,17 +101,17 @@ function init_animation() {
             // Create it. Assume 143 timesteps
             for (var i=0; i < 10; i++) {
               // replace time=xx in params with time=i
-              console.log(name, url, params, options);
-              console.log(OpenLayers);
-              animation_layer[i] = new OpenLayers.Layer.WMS(name, url, params, options);
-              map.addLayer(animation_layer[i]);
+              //console.log(name, url, params, options);
+              //console.log(OpenLayers);
+              //animation_layer[i] = new OpenLayers.Layer.WMS(name, url, params, options);
+              //map.addLayer(animation_layer[i]);
             }
-            wms_ani_layers[id] = animation_layer;
-            layer.setZIndex(1000 - index); // looks like passing this via options won't work properly
+            //wms_ani_layers[id] = animation_layer;
+            //layer.setZIndex(1000 - index); // looks like passing this via options won't work properly
         } else {
             // Update it.
-            var layer = wms_ani_layers[id];
-            layer.setZIndex(1000 - index);
+            //var layer = wms_ani_layers[id];
+            //layer.setZIndex(1000 - index);
         }
 
   });
