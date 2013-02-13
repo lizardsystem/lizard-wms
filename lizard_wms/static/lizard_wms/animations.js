@@ -14,7 +14,7 @@ current_timestep = 0;
 // For each .workspace-wms-layer that is an animation,
 // associative using 'id'
 wms_ani_layers = [];  
-single_frame = null;  // for testing
+single_layer = null;  // for testing
 base_name = 'name';
 base_url = 'http://localhost:5000/wms'; // for testing
 base_params = {
@@ -27,7 +27,9 @@ base_params = {
   "dataset": "/home/user/git/nens/threedi-server/threedi_server/../var/data/subgrid_map.nc",
   "transparent": "true"
 };
-base_options = {"buffer": 0, "isBaseLayer": false, "opacity": 0.45};
+opacity = 1;
+base_options = {"buffer": 0, "isBaseLayer": false, "opacity": 0};
+to_be_removed_layer = null;  // TODO: make list
 
 
 function updateTime(time){
@@ -38,9 +40,39 @@ function updateTime(time){
   //depth.redraw()
 }
 
+
+function remove_layer() {
+  if (single_layer !== null) {
+    single_layer.setOpacity(1);
+  }
+  if (to_be_removed_layer !== null) {
+    map.removeLayer(to_be_removed_layer);
+    to_be_removed_layer = null;
+  }
+
+}
+
+
+function update_frame(timestep) {
+  // testing
+    if (single_layer !== null) {
+      to_be_removed_layer = single_layer;
+    }
+
+    var params = base_params;
+    params.time = current_timestep;
+    
+    single_layer = new OpenLayers.Layer.WMS(base_name, base_url, params, base_options);
+    map.addLayer(single_layer);
+    console.log(single_layer);
+    setTimeout(remove_layer, 500);
+}
+
+
 // Slider
 function slide(ui, slider){
   current_timestep = slider.value;
+  update_frame(current_timestep);
   updateTime(slider.value);
 }
 
@@ -56,21 +88,12 @@ function animation_loop() {
     // most important part: interact with OpenLayers.
 
     //testing: single frame
-    if (single_frame !== null) {
-      map.removeLayer(single_frame);
-    }
-
-    var params = base_params;
-    params.time = current_timestep;
-    
-    single_frame = new OpenLayers.Layer.WMS(base_name, base_url, params, base_options);
-    map.addLayer(single_frame);
-
+    update_frame(current_timestep);
   } else {
     return;  // Not setting next animation step
   }
     
-  setTimeout(animation_loop, 1000); // every second
+  setTimeout(animation_loop, 500); // every second
 }
 
 
@@ -139,6 +162,15 @@ $(document).ready(function() {
       $("a.btn-start-stop i").removeClass("icon-pause");
       $("#html-start-stop").html("Start");
       controller_status = STATUS_STOP;
+    }
+  });
+  $(".btn-test").click(function() {
+    // switch layer visible on/off
+    if (single_layer !== null) {
+      opacity = 1-opacity;
+      console.log('test opacity=', opacity);
+      //single_layer.mergeNewParams(opacity);
+      single_layer.setOpacity(opacity);
     }
   });
   init_animation();
