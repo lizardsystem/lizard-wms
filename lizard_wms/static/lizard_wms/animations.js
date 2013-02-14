@@ -57,11 +57,11 @@ var AnimatedLayer = Backbone.Model.extend({
   },
   setTimestep: function(timestep) {
       this.current_timestep = timestep;
-      console.log('timestep is now ', this.current_timestep);
+      //console.log('timestep is now ', this.current_timestep);
       var to_delete_from_map = {};
       for (ts in this.current_in_map) {to_delete_from_map[ts] = ts};  // start with all layers
       // console.log('initial to delete ', to_delete_from_map);
-      for (var ts=timestep; ts<this.max_timesteps && ts<timestep+3; ts++) {
+      for (var ts=timestep; ts<this.max_timesteps && ts<timestep+10; ts++) {
         //console.log('we want timestep ', ts);
         if (this.current_in_map[ts] !== undefined) {
           //console.log('already in current map', ts);
@@ -95,30 +95,8 @@ var AnimatedLayer = Backbone.Model.extend({
 });
 
 
-single_layer = null;  // for testing
-base_name = 'name';
-base_url = 'http://localhost:5000/wms'; // for testing
-base_params = {
-  "styles": "",
-  "format": "image/png",
-  "height": "256",
-  "width": "256",
-  "tiled": "true",
-  "time": 0,
-  "dataset": "/home/user/git/nens/threedi-server/threedi_server/../var/data/subgrid_map.nc",
-  "transparent": "true"
-};
-opacity = 1;
-base_options = {"buffer": 0, "isBaseLayer": false, "opacity": 0};
-to_be_removed_layer = null;  // TODO: make list
-
-
 function updateTime(time){
   $("#time").text(time);
-  // TODO: change, manage openlayers layer
-  //var dataset = $('select#dataset option:selected').val()
-  //depth.setUrl("/wms?dataset=" + dataset + "&time=" + time);
-  //depth.redraw()
 }
 
 
@@ -132,23 +110,6 @@ function remove_layer() {
   }
 
 }
-
-
-function update_frame(timestep) {
-  // testing
-    if (single_layer !== null) {
-      to_be_removed_layer = single_layer;
-    }
-
-    var params = base_params;
-    params.time = current_timestep;
-    
-    single_layer = new OpenLayers.Layer.WMS(base_name, base_url, params, base_options);
-    //map.addLayer(single_layer);
-    //console.log(single_layer);
-    setTimeout(remove_layer, 500);
-}
-
 
 
 function updateLayers() {
@@ -177,11 +138,9 @@ function animation_loop() {
     updateTime(current_timestep);
     // set slider position
     $("#slider").slider("value", current_timestep);
-    updateLayers();
-    // most important part: interact with OpenLayers.
 
-    //testing: single frame
-    //update_frame(current_timestep);
+    // most important part: interact with OpenLayers.
+    updateLayers();
   } else {
     return;  // Not setting next animation step
   }
@@ -216,28 +175,8 @@ function init_animation() {
             params: params, 
             options: options
             });
-        }
-                                                 
-
-        // if (wms_ani_layers[id] === undefined) {
-        //     // Create it. Assume 143 timesteps
-        //     var animation_layer = [];
-        //     for (var i=0; i < 143; i++) {
-        //       // replace time=xx in params with time=i
-        //       //console.log(OpenLayers);
-        //       params.time = i;
-        //       //console.log(name, url, params, options);
-        //       animation_layer[i] = new OpenLayers.Layer.WMS(name, url, params, options);
-        //       //map.addLayer(animation_layer[i]);
-        //       //animation_layer[i].setZIndex(1000 - index); // looks like
-        //       // passing this via options won't work proper            
-        //     }
-        //     wms_ani_layers[id] = new AnimatedLayer(animation_layer); //animation_layer;
-        // } else {
-        //     // Update it.
-        //     //var layer = wms_ani_layers[id];
-        //     //layer.setZIndex(1000 - index);
-        // }
+          wms_ani_layers[id].setTimestep(0);
+        }                                                 
   });
 }
 
@@ -263,23 +202,6 @@ $(document).ready(function() {
       $("a.btn-start-stop i").removeClass("icon-pause");
       $("#html-start-stop").html("Start");
       controller_status = STATUS_STOP;
-    }
-  });
-  $(".btn-test").click(function() {
-    // switch layer visible on/off
-    if (single_layer !== null) {
-      opacity = 1-opacity;
-      console.log('test opacity=', opacity);
-      //single_layer.mergeNewParams(opacity);
-      //single_layer.setOpacity(opacity);
-
-      $(".workspace-wms-layer").each(function () {
-        id = $(this).attr("data-workspace-wms-id");
-    //wms_ani_layers[id][100];
-    //wms_ani_layers[id][101];
-//        wms_ani_layers[id][current_timestep].setOpacity(opacity);
-      });
-
     }
   });
   init_animation();
