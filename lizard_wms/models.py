@@ -567,11 +567,9 @@ class FilterPage(models.Model):
     Page with filters for a single WMS source.
     """
 
-    wms_source = models.ForeignKey(
-        WMSSource,
-        verbose_name=_('WMS source'),
-        help_text=_("WMS source for which we show filters."),
-        blank=False)
+    slug = models.SlugField(
+        verbose_name=_('slug'),
+        help_text=_("Set automatically from the name."))
     name = models.CharField(
         verbose_name=_('name'),
         help_text=_(
@@ -579,6 +577,11 @@ class FilterPage(models.Model):
         max_length=100,
         null=True,
         blank=True)
+    wms_source = models.ForeignKey(
+        WMSSource,
+        verbose_name=_('WMS source'),
+        help_text=_("WMS source for which we show filters."),
+        blank=False)
 
     class Meta:
         ordering = ('wms_source',)

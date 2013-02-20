@@ -174,5 +174,12 @@ class WMSConnectionAdmin(admin.ModelAdmin):
         "Reload WMS connections and update their WMS sources.")
 
 
+class FilterPageAdmin(admin.ModelAdmin):
+    list_display = ('slug', 'name', 'wms_source')
+    list_editable = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+
+
 admin.site.register(models.WMSSource, WMSSourceAdmin)
 admin.site.register(models.WMSConnection, WMSConnectionAdmin)
+admin.site.register(models.FilterPage, FilterPageAdmin)
