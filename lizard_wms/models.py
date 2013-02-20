@@ -10,6 +10,7 @@ import logging
 import owslib.wms
 import requests
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
 from django.template.defaultfilters import urlizetrunc
@@ -599,3 +600,6 @@ class FilterPage(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('lizard_wms.filter_page', kwargs={'slug': self.slug})
