@@ -225,6 +225,8 @@ like {"key": "value", "key2": "value2"}.
 
     class Meta:
         ordering = ('index', 'display_name')
+        verbose_name = _("WMS source")
+        verbose_name_plural = _("WMS sources")
 
     def __unicode__(self):
         return 'WMS Layer {0}'.format(self.layer_name)
@@ -558,3 +560,39 @@ class FeatureLine(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class FilterPage(models.Model):
+    """
+    Page with filters for a single WMS source.
+    """
+
+    wms_source = models.ForeignKey(
+        WMSSource,
+        verbose_name=_('WMS source'),
+        help_text=_("WMS source for which we show filters."),
+        blank=False)
+    name = models.CharField(
+        verbose_name=_('name'),
+        help_text=_(
+            "Title of the page. If empty, the WMS source's name is used."),
+        max_length=100,
+        null=True,
+        blank=True)
+
+    class Meta:
+        ordering = ('wms_source',)
+        verbose_name = _("WMS filter page")
+        verbose_name_plural = _("WMS filter pages")
+
+    @property
+    def title(self):
+        """Return title for use on the page.
+
+        We can fill in our own name attribute, but we don't have to if we
+        think the WMS source's name is good enough.
+        """
+        return self.name or self.wms_source.name
+
+    def __unicode__(self):
+        return self.title
