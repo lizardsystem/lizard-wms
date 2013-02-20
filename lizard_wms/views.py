@@ -14,7 +14,7 @@ from lizard_wms import models
 
 class FilterPageView(MapView):
     """Simple view with a map."""
-    # template_name = 'lizard_wms/filterpage.html'
+    template_name = 'lizard_wms/filter_page.html'
     # page_title = 'sdfsdf'
 
     @property
@@ -22,3 +22,8 @@ class FilterPageView(MapView):
         """Return our FilterPage object."""
         slug = self.kwargs['slug']
         return get_object_or_404(models.FilterPage, slug=slug)
+
+    @property
+    def edit_link(self):
+        """Return our admin url."""
+        return "/admin/lizard_wms/filterpage/%s/" % self.filter_page.id

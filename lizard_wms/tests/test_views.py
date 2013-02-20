@@ -25,6 +25,9 @@ class FilterPageViewTest(TestCase):
     def test_filter_page(self):
         self.assertEquals(self.view.filter_page.id, self.filter_page.id)
 
+    def test_edit_link(self):
+        self.assertTrue('admin' in self.view.edit_link)
+
     def test_url(self):
         client = Client()
         url = reverse('lizard_wms.filter_page',
