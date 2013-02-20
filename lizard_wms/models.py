@@ -324,8 +324,9 @@ like {"key": "value", "key2": "value2"}.
             else:
                 # Use the old method.
                 fixed_radius = 10
-                bbox = '{0},{1},{2},{3}'.format(x - fixed_radius, y - fixed_radius,
-                                            x + fixed_radius, y + fixed_radius)
+                bbox = '{0},{1},{2},{3}'.format(
+                    x - fixed_radius, y - fixed_radius,
+                    x + fixed_radius, y + fixed_radius)
         else:
             bbox = self.bbox
 
@@ -364,10 +365,10 @@ like {"key": "value", "key2": "value2"}.
                 # Version from parameter
                 'VERSION': version,
 
-                # Non-standard WMS parameter to slightly increase search radius.
-                # Shouldn't hurt as most WMS server software ignore unknown
-                # parameters.
-                # see http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
+                # Non-standard WMS parameter to slightly increase search
+                # radius.  Shouldn't hurt as most WMS server software ignore
+                # unknown parameters.  see
+                # http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
                 'BUFFER': 16,
             }
 
