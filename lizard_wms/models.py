@@ -335,8 +335,8 @@ like {"key": "value", "key2": "value2"}.
     def search_one_item(self, x=None, y=None, radius=None):
         """Return getfeatureinfo values found for a single item."""
         values = {}
-        bbox = self._bbox_for_feature_info(x=None, y=None, radius=None)
-        results = self.get_feature_info(bbox)
+        bbox = self._bbox_for_feature_info(x=x, y=y, radius=radius)
+        results = self.get_feature_info(bbox=bbox)
         if results:
             for result in results:
                 values.update(result)
@@ -350,7 +350,8 @@ like {"key": "value", "key2": "value2"}.
         """
         if not bbox:
             return
-
+        logger.debug("Getting feature info for %s item(s) in bbox %s",
+                     feature_count, bbox)
         version = '1.1.1'
         if self.connection and self.connection.version:
             version = self.connection.version
@@ -399,7 +400,6 @@ like {"key": "value", "key2": "value2"}.
 
             if not r.text.startswith("Results for FeatureType"):
                 continue
-            print(r.text)
             # "Parse"
             one_result = {}
             for line in r.text.split("\n"):
@@ -423,7 +423,7 @@ like {"key": "value", "key2": "value2"}.
             # Store the last result, too, if applicable.
             if one_result:
                 result.append(one_result)
-
+        logger.debug("Found %s GetFeatureInfo results.", len(result))
         return result
 
     def _store_features(self, values):
