@@ -1,1 +1,22 @@
 {% extends "lizard_map/wms.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+<h2>{% trans "Available filters" %}</h2>
+<form method="get"
+      class="form-vertical">
+  <fieldset>
+
+    {% for dropdown in view.dropdowns %}
+      <label>{{ dropdown.label }}</label>
+      <select class="input-block-level">
+        {% for option in dropdown.options %}
+          <option>{{ option }}</option>
+        {% endfor %}
+      </select>
+    {% endfor %}
+
+  </fieldset>
+</form>
+
+{% endblock sidebar %}
