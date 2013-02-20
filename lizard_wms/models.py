@@ -162,7 +162,7 @@ overwrites.""")
             layer_instance.save()
 
             if layer_instance.bbox:
-                layer_instance.get_feature_info()
+                layer_instance.search_one_item()
 
             fetched.add(name)
 
@@ -293,14 +293,12 @@ like {"key": "value", "key2": "value2"}.
     def capabilities_url(self):
         return capabilities_url(self.url)
 
-    def get_feature_info(self, x=None, y=None, radius=None):
-        """Gets feature info from the server, at point (x,y) in Google
-        coordinates.
+    def _bbox_for_feature_info(self, x=None, y=None, radius=None):
+        """Return bbox at point (x,y) in Google coordinates.
 
         If x, y aren't given, use this layer's bbox, if any. Useful to
         get available features immediately after fetching the layer.
         """
-
         if x is not None:
             # Construct the "bounding box", a tiny area around (x,y) We use a
             # tiny custom radius, because otherwise we don't have enough
@@ -332,16 +330,33 @@ like {"key": "value", "key2": "value2"}.
                     x + fixed_radius, y + fixed_radius)
         else:
             bbox = self.bbox
+        return bbox
 
+    def search_one_item(self, x=None, y=None, radius=None):
+        """Return getfeatureinfo values found for a single item."""
+        values = {}
+        bbox = self._bbox_for_feature_info(x=None, y=None, radius=None)
+        results = self.get_feature_info(bbox)
+        if results:
+            for result in results:
+                values.update(result)
+        self._store_features(values)
+        return values
+
+    def get_feature_info(self, bbox=None, feature_count=1):
+        """Gets feature info from the server inside the bbox.
+
+        Normally the bbox is constructed with ``.bbox_for_feature_info()``.
+        """
         if not bbox:
-            return set()
+            return
 
         version = '1.1.1'
         if self.connection and self.connection.version:
             version = self.connection.version
 
         params = json.loads(self.params)
-        values = dict()
+        result = []
         for layer in params['layers'].split(","):
             payload = {
                 'REQUEST': 'GetFeatureInfo',
@@ -349,10 +364,7 @@ like {"key": "value", "key2": "value2"}.
                 'INFO_FORMAT': 'text/plain',
                 'SERVICE': 'WMS',
                 'SRS': 'EPSG:3857',  # Always Google (web mercator)
-
-                # Get a single feature
-                'FEATURE_COUNT': 1,
-
+                'FEATURE_COUNT': feature_count,
                 # Set the layer we want
                 'LAYERS': layer,
                 'QUERY_LAYERS': layer,
@@ -387,10 +399,17 @@ like {"key": "value", "key2": "value2"}.
 
             if not r.text.startswith("Results for FeatureType"):
                 continue
-
+            print(r.text)
             # "Parse"
+            one_result = {}
             for line in r.text.split("\n"):
                 line = line.strip()
+                if '----------' in line:
+                    # Store the result, start a new one.
+                    if one_result:
+                        result.append(one_result)
+                    one_result = {}
+                    continue
                 parts = line.split(" = ")
                 if len(parts) != 2:
                     continue
@@ -400,10 +419,12 @@ like {"key": "value", "key2": "value2"}.
                     # I think these are always uninteresting
                     continue
 
-                values[feature] = value
+                one_result[feature] = value
+            # Store the last result, too, if applicable.
+            if one_result:
+                result.append(one_result)
 
-        self._store_features(values)
-        return values
+        return result
 
     def _store_features(self, values):
         """Make sure the features in the 'values' dict are stored as
@@ -561,6 +582,14 @@ class FeatureLine(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def title(self):
+        """Return description or else the name.
+
+        This gives us the most user-friendly name possible.
+        """
+        return self.description or self.name
 
 
 class FilterPage(models.Model):
