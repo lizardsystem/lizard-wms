@@ -47,5 +47,5 @@ class FilterPageViewFunctionalTest(TestCase):
                            kwargs={'slug': self.filter_page.slug})
 
     def test_url(self):
-        response = self.client.get(url)
+        response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
