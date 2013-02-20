@@ -2,11 +2,13 @@ from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 import logging
 
+# import mock
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
-# import mock
+from django.test.utils import override_settings
 
+import lizard_ui
 # from lizard_wms.models import FilterPage
 from lizard_wms.tests import factories
 from lizard_wms.views import FilterPageView
@@ -28,9 +30,22 @@ class FilterPageViewTest(TestCase):
     def test_edit_link(self):
         self.assertTrue('admin' in self.view.edit_link)
 
+    def test_page_title(self):
+        self.filter_page.name = 'Atilla'
+        self.filter_page.save()
+        self.assertEquals(self.view.page_title, 'Atilla')
+
+
+class FilterPageViewFunctionalTest(TestCase):
+
+    def setUp(self):
+        self.filter_page = factories.FilterPageFactory.create()
+        home = lizard_ui.models.ApplicationScreen(slug='home')
+        home.save()  # We need a home screen, otherwise the breadcrumb barfs.
+        self.client = Client()
+        self.url = reverse('lizard_wms.filter_page',
+                           kwargs={'slug': self.filter_page.slug})
+
     def test_url(self):
-        client = Client()
-        url = reverse('lizard_wms.filter_page',
-                      kwargs={'slug': self.filter_page.slug})
-        response = client.get(url)
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 200)

@@ -38,3 +38,4 @@ class WMSSourceFactory(factory.Factory):
 class FilterPageFactory(factory.Factory):
     FACTORY_FOR = FilterPage
     wms_source = factory.SubFactory(WMSSourceFactory)
+    slug = factory.Sequence(lambda n: 'page{0}'.format(n))
