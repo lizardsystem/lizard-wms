@@ -13,6 +13,8 @@ from lizard_map.views import MapView
 
 from lizard_wms import models
 
+EMPTY_OPTION = '---'
+
 logger = logging.getLogger(__name__)
 
 
@@ -59,16 +61,21 @@ class FilterPageView(MapView):
 
     @property
     def bbox(self):
-        return '%(left)s,%(bottom)s,%(right)s,%(top)s' % self.start_extent()
+        extent = self.start_extent()
+        x_size = float(extent['right']) - float(extent['left'])
+        y_size = float(extent['top']) - float(extent['bottom'])
+        logger.debug("Got a bbox %s wide and %s high.", x_size, y_size)
+        return '%(left)s,%(bottom)s,%(right)s,%(top)s' % extent
 
     @property
     def dropdowns(self):
         """Return list of dropdowns."""
         result = []
         values_per_dropdown = self.values_per_dropdown
-        for feature_line in self.wms_source.featureline_set.all():
+        for feature_line in self.wms_source.featureline_set.filter(visible=True):
             dropdown = {
                 'label': feature_line.title,
-                'options': values_per_dropdown.get(feature_line.name, [])}
+                'options': ([EMPTY_OPTION] +
+                            values_per_dropdown.get(feature_line.name, []))}
             result.append(dropdown)
         return result
