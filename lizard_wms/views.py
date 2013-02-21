@@ -7,6 +7,7 @@ import logging
 from collections import defaultdict
 
 from django.utils.translation import ugettext as _
+from django.utils.html import escapejs
 from django.shortcuts import get_object_or_404
 # from django.core.urlresolvers import reverse
 from lizard_map.views import MapView
@@ -118,11 +119,12 @@ class FilterPageView(MapView):
             if not (self.wms_source.name == layer['name'] and
                     self.wms_source.url == layer['url']):
                 continue
-            # allowed_cql_filters = layer.get('allowed_cql_filters')
-            # if not allowed_cql_filters:
-            #     continue
             filter_parts = ["%s='%s'" % (k, v) for (k, v) in self.filters.items()]
             filter_string = ' AND '.join(filter_parts)
-            layer['cql_filter'] = filter_string
-            logger.debug("Added filter string: %r", filter_string)
+            filter_string = escapejs(filter_string)
+            unpacked = json.loads(layer['params'])
+            # layer['cql_filter'] = filter_string
+            unpacked['cql_filter'] = filter_string
+            layer['params'] = json.dumps(unpacked)
+            logger.debug("Added filter string to params: %r", layer['params'])
         return layers
