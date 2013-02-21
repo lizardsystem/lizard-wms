@@ -262,7 +262,7 @@ like {"key": "value", "key2": "value2"}.
         return False
 
     def workspace_acceptable(self):
-        django_cql_filters = self.featureline_set.filter(
+        allowed_cql_filters = self.featureline_set.filter(
             visible=True).values_list('name', flat=True)
         # A ValuesListQuerySet is not serializable to JSON,
         # A list is.
@@ -274,7 +274,6 @@ like {"key": "value", "key2": "value2"}.
                 description += '<dt>%s</dt><dd>%s</dd>' % (
                     key, urlizetrunc(value, 35))
             description += '</dl>'
-        cql_filters = list(django_cql_filters)
         result = WorkspaceAcceptable(
             name=self.display_name,
             description=description,
@@ -285,7 +284,7 @@ like {"key": "value", "key2": "value2"}.
                  'params': self.params,
                  'legend_url': self.legend_url,
                  'options': self.options,
-                 'cql_filters': cql_filters,
+                 'cql_filters': allowed_cql_filters,
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
         return result
