@@ -4,19 +4,25 @@
 {% block sidebar %}
 <h2>{% trans "Available filters" %}</h2>
 <form method="get"
-      class="form-vertical">
+      class="form-vertical"
+      autocomplete="off"
+      id="filter-page-form"
+      action=".">
   <fieldset>
 
     {% for dropdown in view.dropdowns %}
       <label>{{ dropdown.label }}</label>
-      <select class="input-block-level">
+      <select class="input-block-level"
+              name="{{ dropdown.field_name }}">
         {% for option in dropdown.options %}
-          <option>{{ option }}</option>
+          <option {% if option == dropdown.selected %}selected="selected"{% endif %}
+                  >{{ option }}</option>
         {% endfor %}
       </select>
     {% endfor %}
-
+    <button type="submit"
+            id="filter-page-submit"
+            class="btn">Submit</button>
   </fieldset>
 </form>
-
 {% endblock sidebar %}

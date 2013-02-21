@@ -13,7 +13,7 @@ from lizard_map.views import MapView
 
 from lizard_wms import models
 
-EMPTY_OPTION = '---'
+EMPTY_OPTION = ''
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +49,21 @@ class FilterPageView(MapView):
                                                 feature_count=100)
 
     @property
+    def filters(self):
+        """Return filters from GET parameters."""
+        result = {}
+        allowed_keys = [name for (name, title) in self.available_filters]
+        logger.debug("Allowed keys: %s", allowed_keys)
+        for k, v in self.request.GET.items():
+            if k not in allowed_keys:
+                logger.warn("Unknown filter (%s=%s) in GET parameters.", k, v)
+                continue
+            if not v:
+                continue
+            result[k] = v
+        return result
+
+    @property
     def values_per_dropdown(self):
         intermediate_result = defaultdict(set)
         for feature in self.features:
@@ -68,14 +83,27 @@ class FilterPageView(MapView):
         return '%(left)s,%(bottom)s,%(right)s,%(top)s' % extent
 
     @property
+    def available_filters(self):
+        """Return available filters.
+
+        For now: the visible featurelines. Later: our own list.
+        """
+        return [(featureline.name, featureline.title) for featureline in
+                self.wms_source.featureline_set.filter(visible=True)]
+
+    @property
     def dropdowns(self):
         """Return list of dropdowns."""
         result = []
+        choiced_made = self.filters
         values_per_dropdown = self.values_per_dropdown
-        for feature_line in self.wms_source.featureline_set.filter(visible=True):
+        for select_name, select_label in self.available_filters:
             dropdown = {
-                'label': feature_line.title,
+                'label': select_label,
+                'field_name': select_name,
                 'options': ([EMPTY_OPTION] +
-                            values_per_dropdown.get(feature_line.name, []))}
+                            values_per_dropdown.get(select_name, [])),
+                'selected': choiced_made.get(select_name, EMPTY_OPTION),
+                }
             result.append(dropdown)
         return result
