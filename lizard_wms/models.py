@@ -336,14 +336,15 @@ like {"key": "value", "key2": "value2"}.
         """Return getfeatureinfo values found for a single item."""
         values = {}
         bbox = self._bbox_for_feature_info(x=x, y=y, radius=radius)
-        results = self.get_feature_info(bbox=bbox)
+        results = self.get_feature_info(bbox=bbox, buffer=16)
+        # ^^^ Note Reinout: I wonder about that buffer.
         if results:
             for result in results:
                 values.update(result)
         self._store_features(values)
         return values
 
-    def get_feature_info(self, bbox=None, feature_count=1):
+    def get_feature_info(self, bbox=None, feature_count=1, buffer=1):
         """Gets feature info from the server inside the bbox.
 
         Normally the bbox is constructed with ``.bbox_for_feature_info()``.
@@ -385,7 +386,8 @@ like {"key": "value", "key2": "value2"}.
                 # radius.  Shouldn't hurt as most WMS server software ignore
                 # unknown parameters.  see
                 # http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
-                'BUFFER': 16,
+                'BUFFER': buffer,
+                # ^^^ Note Reinout: it seems to *greatly* increase search radius.
             }
 
             # Add styles to request when defined
@@ -579,6 +581,9 @@ class FeatureLine(models.Model):
             (RENDER_GC_COLUMN, "Google column chart")), default=RENDER_TEXT)
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
+
+    class Meta:
+        ordering = ('order_using', 'description', 'name',)
 
     def __unicode__(self):
         return self.name
