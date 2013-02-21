@@ -262,8 +262,8 @@ like {"key": "value", "key2": "value2"}.
         return False
 
     def workspace_acceptable(self):
-        django_cql_filters = self.featureline_set.all().values_list('name',
-                                                                    flat=True)
+        django_cql_filters = self.featureline_set.filter(
+            visible=True).values_list('name', flat=True)
         # A ValuesListQuerySet is not serializable to JSON,
         # A list is.
         description = self.description or ''
