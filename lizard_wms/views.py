@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from __future__ import print_function
+import json
 import logging
 from collections import defaultdict
 
@@ -61,6 +62,7 @@ class FilterPageView(MapView):
             if not v:
                 continue
             result[k] = v
+        logger.debug("Found filters: %s", result)
         return result
 
     @property
@@ -107,3 +109,20 @@ class FilterPageView(MapView):
                 }
             result.append(dropdown)
         return result
+
+    def wms_layers(self):
+        layers = super(FilterPageView, self).wms_layers()
+        if not self.filters:
+            return layers
+        for layer in layers:
+            if not (self.wms_source.name == layer['name'] and
+                    self.wms_source.url == layer['url']):
+                continue
+            # allowed_cql_filters = layer.get('allowed_cql_filters')
+            # if not allowed_cql_filters:
+            #     continue
+            filter_parts = ["%s='%s'" % (k, v) for (k, v) in self.filters.items()]
+            filter_string = ' AND '.join(filter_parts)
+            layer['cql_filter'] = filter_string
+            logger.debug("Added filter string: %r", filter_string)
+        return layers
