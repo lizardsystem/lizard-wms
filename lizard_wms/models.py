@@ -284,7 +284,7 @@ like {"key": "value", "key2": "value2"}.
                  'params': self.params,
                  'legend_url': self.legend_url,
                  'options': self.options,
-                 'cql_filters': allowed_cql_filters,
+                 'cql_filters': list(allowed_cql_filters),
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
         return result
