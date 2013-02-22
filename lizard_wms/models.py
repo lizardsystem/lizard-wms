@@ -343,7 +343,8 @@ like {"key": "value", "key2": "value2"}.
         self._store_features(values)
         return values
 
-    def get_feature_info(self, bbox=None, feature_count=1, buffer=1):
+    def get_feature_info(self, bbox=None, feature_count=1,
+                         buffer=1, cql_filter_string=None):
         """Gets feature info from the server inside the bbox.
 
         Normally the bbox is constructed with ``.bbox_for_feature_info()``.
@@ -392,6 +393,8 @@ like {"key": "value", "key2": "value2"}.
             # Add styles to request when defined
             if 'styles' in params and params['styles']:
                 payload['STYLES'] = params['styles']
+            if cql_filter_string:
+                payload['CQL_FILTER'] = cql_filter_string
 
             r = requests.get(self.url, params=payload, timeout=10)
 

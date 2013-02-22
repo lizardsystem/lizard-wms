@@ -71,7 +71,8 @@ class FilterPageViewTest(TestCase):
              'inhabitant': 'Arjan'},
             {'city': 'Arnhem',
              'inhabitant': 'Remco'}]
-        with mock.patch('lizard_wms.views.FilterPageView.features', features):
+        with mock.patch('lizard_wms.views.FilterPageView.features',
+                        lambda x: features):
             self.assertEquals(
                 self.view.values_per_dropdown,
                 {'city': ['Arnhem', 'Nieuwegein'],

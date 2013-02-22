@@ -59,10 +59,11 @@ class FilterPageView(MapView):
     def page_title(self):
         return self.filter_page.title
 
-    @property
-    def features(self):
-        return self.wms_source.get_feature_info(bbox=self.bbox,
-                                                feature_count=100)
+    def features(self, cql_filter_string=None):
+        return self.wms_source.get_feature_info(
+            bbox=self.bbox,
+            feature_count=100,
+            cql_filter_string=cql_filter_string)
 
     @property
     def filters(self):
@@ -83,7 +84,7 @@ class FilterPageView(MapView):
     @property
     def values_per_dropdown(self):
         intermediate_result = defaultdict(set)
-        for feature in self.features:
+        for feature in self.features():
             for k, v in feature.items():
                 intermediate_result[k].add(v)
         result = {}
@@ -125,6 +126,12 @@ class FilterPageView(MapView):
             result.append(dropdown)
         return result
 
+    @property
+    def cql_filter_string(self):
+        filter_parts = ["%s='%s'" % (k, v) for (k, v) in self.filters.items()]
+        filter_string = ' AND '.join(filter_parts)
+        return filter_string
+
     def wms_layers(self):
         layers = super(FilterPageView, self).wms_layers()
         if not self.filters:
@@ -133,9 +140,7 @@ class FilterPageView(MapView):
             if not (self.wms_source.name == layer['name'] and
                     self.wms_source.url == layer['url']):
                 continue
-            filter_parts = ["%s='%s'" % (k, v) for (k, v) in self.filters.items()]
-            filter_string = ' AND '.join(filter_parts)
-            filter_string = escapejs(filter_string)
+            filter_string = escapejs(self.cql_filter_string)
             unpacked = json.loads(layer['params'])
             # layer['cql_filter'] = filter_string
             unpacked['cql_filter'] = filter_string
@@ -145,7 +150,10 @@ class FilterPageView(MapView):
 
     def csv_download_link(self):
         url = reverse('lizard_wms.filter_page_export', kwargs=self.kwargs)
-        # Add filter.
+        if self.filters:
+            url += '?'
+            query_parts = ['='.join([k, v]) for k, v in self.filters.items()]
+            url += '&'.join(query_parts)
         return url
 
 
@@ -161,9 +169,11 @@ class FilterPageDownload(FilterPageView):
         headers = {}
         for name, title, in self.available_filters:
             headers[name] = title
-        writer = csv.DictWriter(response, field_names, extrasaction='ignore')
+        writer = csv.DictWriter(response, field_names, dialect='excel',
+                                extrasaction='ignore')
         writer.writerow(headers)
-        for feature in self.features:
+        for feature in self.features(
+            cql_filter_string=self.cql_filter_string):
             writer.writerow(feature)
 
         return response
