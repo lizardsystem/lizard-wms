@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from urllib import urlencode
 import cgi
+import datetime
 import json
 import logging
 
@@ -32,6 +33,7 @@ RENDER_IMAGE = 'I'
 RENDER_URL = 'U'
 RENDER_URL_LIKE = 'W'
 RENDER_GC_COLUMN = 'C'
+RENDER_XLS_DATE = 'X'
 
 
 logger = logging.getLogger(__name__)
@@ -63,6 +65,12 @@ def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
         raise TimeoutException("Timeout of %s s expired calling %s " %
                                (timeout_duration, func.__name__))
     return it.result
+
+
+def xls_date_to_string(xldate):
+    # Adapted from http://stackoverflow.com/a/1112664/27401
+    dt = datetime.datetime(1899, 12, 30) + datetime.timedelta(days=xldate)
+    return dt.isoformat()[:10]  # Yes, this can be formatted more nicely.
 
 
 def capabilities_url(url):
@@ -522,6 +530,17 @@ like {"key": "value", "key2": "value2"}.
                     else:
                         feature_line.render_as = RENDER_IMAGE
                     feature_line.show_label = 'false'
+                elif feature_line.render_as == RENDER_XLS_DATE:
+                    data = json.loads(values[feature_line.name])
+                    if data is None:
+                        # See https://github.com/nens/deltaportaal/issues/4
+                        logger.warn(
+                            "https://github.com/nens/deltaportaal/issues/4 "
+                            "hits again")
+                        return
+                    values[feature_line.name] = xls_date_to_string(data)
+                    feature_line.render_as = RENDER_TEXT
+                    feature_line.show_label = 'true'
                 else:
                     feature_line.show_label = 'true'
                 info.append(
@@ -578,6 +597,7 @@ class FeatureLine(models.Model):
         max_length=1, choices=(
             (RENDER_TEXT, "Tekst"),
             (RENDER_IMAGE, "Link naar een image"),
+            (RENDER_XLS_DATE, _("Excel date format")),
             (RENDER_URL, "URL"),
             (RENDER_URL_LIKE, "URL-achtige tekst"),
             (RENDER_GC_COLUMN, "Google column chart")), default=RENDER_TEXT)
