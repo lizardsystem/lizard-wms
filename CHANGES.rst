@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.19 (unreleased)
+1.19 (2013-02-22)
 -----------------
 
 - Using https://github.com/jdunck/python-unicodecsv instead of python's
