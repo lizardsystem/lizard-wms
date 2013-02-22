@@ -8,6 +8,7 @@ from django.contrib import admin
 
 from lizard_maptree.views import MaptreeHomepageView
 from lizard_wms.views import FilterPageView
+from lizard_wms.views import FilterPageDownload
 
 
 ITEM_MODELS = ['wmssource', ]  # for maptree items.
@@ -25,6 +26,9 @@ urlpatterns = patterns(
     url(r'^page/(?P<slug>.*)/$',
         FilterPageView.as_view(),
         name='lizard_wms.filter_page'),
+    url(r'^page/(?P<slug>.*).csv$',
+        FilterPageDownload.as_view(),
+        name='lizard_wms.filter_page_export'),
     )
 
 if getattr(settings, 'LIZARD_WMS_STANDALONE', False):

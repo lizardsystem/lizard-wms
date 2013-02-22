@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from __future__ import print_function
+import csv
 import json
 import logging
 from collections import defaultdict
 
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.html import escapejs
 from django.utils.translation import ugettext as _
@@ -139,3 +142,28 @@ class FilterPageView(MapView):
             layer['params'] = json.dumps(unpacked)
             logger.debug("Added filter string to params: %r", layer['params'])
         return layers
+
+    def csv_download_link(self):
+        url = reverse('lizard_wms.filter_page_export', kwargs=self.kwargs)
+        # Add filter.
+        return url
+
+
+class FilterPageDownload(FilterPageView):
+
+    def get(self, *args, **kwargs):
+        """Return a csv file."""
+        filename = '%s.csv' % self.kwargs['slug']
+        response = HttpResponse(mimetype='text/csv')
+        response['Content-Disposition'] = ('attachment; filename="%s"' % filename)
+
+        field_names = [name for (name, title) in self.available_filters]
+        headers = {}
+        for name, title, in self.available_filters:
+            headers[name] = title
+        writer = csv.DictWriter(response, field_names, extrasaction='ignore')
+        writer.writerow(headers)
+        for feature in self.features:
+            writer.writerow(feature)
+
+        return response
