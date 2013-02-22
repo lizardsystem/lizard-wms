@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.18 (unreleased)
+1.18 (2013-02-22)
 -----------------
 
 - Added FilterPage class which links to a WMS source. The WMS source's
