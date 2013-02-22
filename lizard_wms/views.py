@@ -107,7 +107,7 @@ class FilterPageView(MapView):
         For now: the visible featurelines. Later: our own list.
         """
         return [(featureline.name, featureline.title) for featureline in
-                self.wms_source.featureline_set.filter(visible=True)]
+                self.filter_page.available_filters.all()]
 
     @property
     def dropdowns(self):

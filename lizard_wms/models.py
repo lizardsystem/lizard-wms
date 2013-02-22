@@ -619,6 +619,12 @@ class FilterPage(models.Model):
         verbose_name=_('WMS source'),
         help_text=_("WMS source for which we show filters."),
         blank=False)
+    available_filters = models.ManyToManyField(
+        FeatureLine,
+        verbose_name=_('available filters'),
+        help_text=_(
+            "Feature lines of our WMS source that we use as filters."),
+        blank=True)
 
     class Meta:
         ordering = ('wms_source',)
