@@ -8,15 +8,18 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'WMSSource.params'
-        db.delete_column('lizard_wms_wmssource', 'params')
+        # Adding M2M table for field available_filters on 'FilterPage'
+        db.create_table('lizard_wms_filterpage_available_filters', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('filterpage', models.ForeignKey(orm['lizard_wms.filterpage'], null=False)),
+            ('featureline', models.ForeignKey(orm['lizard_wms.featureline'], null=False))
+        ))
+        db.create_unique('lizard_wms_filterpage_available_filters', ['filterpage_id', 'featureline_id'])
 
 
     def backwards(self, orm):
-        # Adding field 'WMSSource.params'
-        db.add_column('lizard_wms_wmssource', 'params',
-                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
-                      keep_default=False)
+        # Removing M2M table for field available_filters on 'FilterPage'
+        db.delete_table('lizard_wms_filterpage_available_filters')
 
 
     models = {
@@ -30,7 +33,7 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '20'})
         },
         'lizard_wms.featureline': {
-            'Meta': {'object_name': 'FeatureLine'},
+            'Meta': {'ordering': "(u'order_using', u'description', u'name')", 'object_name': 'FeatureLine'},
             'description': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_hover': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -41,12 +44,20 @@ class Migration(SchemaMigration):
             'visible': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'wms_layer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSSource']"})
         },
+        'lizard_wms.filterpage': {
+            'Meta': {'ordering': "(u'wms_source',)", 'object_name': 'FilterPage'},
+            'available_filters': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['lizard_wms.FeatureLine']", 'symmetrical': 'False', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
+            'wms_source': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSSource']"})
+        },
         'lizard_wms.wmsconnection': {
             'Meta': {'object_name': 'WMSConnection'},
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'options': ('django.db.models.fields.TextField', [], {'default': 'u\'{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}\''}),
-            'params': ('django.db.models.fields.TextField', [], {'default': 'u\'{"height": "256", "width": "256", "layers": "%s", "styles": "", "format": "image/png", "tiled": "true", "transparent": "true"}\''}),
+            'params': ('django.db.models.fields.TextField', [], {'default': 'u\'{"height": "256", "width": "256", "styles": "", "format": "image/png", "tiled": "true", "transparent": "true"}\''}),
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
@@ -55,6 +66,7 @@ class Migration(SchemaMigration):
         },
         'lizard_wms.wmssource': {
             'Meta': {'ordering': "(u'index', u'display_name')", 'object_name': 'WMSSource'},
+            '_params': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'bbox': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'connection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSConnection']", 'null': 'True', 'blank': 'True'}),
@@ -66,7 +78,6 @@ class Migration(SchemaMigration):
             'layer_name': ('django.db.models.fields.TextField', [], {}),
             'legend_url': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'null': 'True', 'blank': 'True'}),
             'metadata': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
-            'new_params': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'options': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'show_legend': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})

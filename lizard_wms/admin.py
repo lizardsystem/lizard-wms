@@ -174,5 +174,27 @@ class WMSConnectionAdmin(admin.ModelAdmin):
         "Reload WMS connections and update their WMS sources.")
 
 
+class FilterPageAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = models.FilterPage
+
+    def __init__(self, *args, **kwargs):
+        super(FilterPageAdminForm, self).__init__(*args, **kwargs)
+        self.fields['available_filters'].queryset = \
+            models.FeatureLine.objects.filter(
+            wms_layer=self.instance.wms_source)
+
+
+class FilterPageAdmin(admin.ModelAdmin):
+    form = FilterPageAdminForm
+    list_display = ('slug', 'name', 'wms_source')
+    list_editable = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+    filter_horizontal = ('available_filters',)
+
+
+
 admin.site.register(models.WMSSource, WMSSourceAdmin)
 admin.site.register(models.WMSConnection, WMSConnectionAdmin)
+admin.site.register(models.FilterPage, FilterPageAdmin)

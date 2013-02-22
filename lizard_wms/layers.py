@@ -57,7 +57,7 @@ class AdapterWMS(WorkspaceItemAdapter):
         """
         if not self.wms_source.enable_search:
             return []
-        feature_info = self.wms_source.get_feature_info(x, y, radius)
+        feature_info = self.wms_source.search_one_item(x, y, radius)
         name = self.wms_source.get_feature_name(feature_info)
 
         # Make up a name anyway if we can't find one.
@@ -81,9 +81,9 @@ class AdapterWMS(WorkspaceItemAdapter):
              template="lizard_wms/popup.html"):
         identifier = identifiers[0]
 
-        feature_info = self.wms_source.get_feature_info(identifier['x'],
-                                                        identifier['y'],
-                                                        identifier['radius'])
+        feature_info = self.wms_source.search_one_item(identifier['x'],
+                                                       identifier['y'],
+                                                       identifier['radius'])
 
         return self.html_default(
             identifiers=identifiers,

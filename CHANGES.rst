@@ -5,7 +5,17 @@ Changelog of lizard-wms
 1.18 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Added FilterPage class which links to a WMS source. The WMS source's
+  featurelines can be configured on the FilterPage as available filters.
+
+- There's a view for the FilterPage that shows the available filters as
+  dropdowns. The dropdown values depend on the values that can be found in the
+  bounding box. Submitting the form filters on that value. TODO: make the
+  interaction more dynamic (read: javascript).
+
+- A CSV export of the filtered data is available.
+
+- Current limitation: max 100 items on the filterpage.
 
 
 1.17 (2013-01-17)

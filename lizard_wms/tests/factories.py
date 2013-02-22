@@ -2,7 +2,7 @@ import os
 
 import factory
 
-from lizard_wms.models import WMSConnection, WMSSource
+from lizard_wms.models import WMSConnection, WMSSource, FilterPage
 
 
 class WMSConnectionFactory(factory.Factory):
@@ -33,3 +33,9 @@ class WMSSourceFactory(factory.Factory):
         if create:
             wms_source.save()
         return wms_source
+
+
+class FilterPageFactory(factory.Factory):
+    FACTORY_FOR = FilterPage
+    wms_source = factory.SubFactory(WMSSourceFactory)
+    slug = factory.Sequence(lambda n: 'page{0}'.format(n))

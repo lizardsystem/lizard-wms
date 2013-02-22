@@ -60,7 +60,7 @@ class Migration(SchemaMigration):
             'enable_search': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.IntegerField', [], {'default': '1000'}),
-            'layer_name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
+            'layer_name': ('django.db.models.fields.TextField', [], {}),
             'legend_url': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'null': 'True', 'blank': 'True'}),
             'metadata': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'options': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),

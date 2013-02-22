@@ -8,15 +8,18 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'WMSSource.params'
-        db.delete_column('lizard_wms_wmssource', 'params')
+        # Adding model 'FilterPage'
+        db.create_table('lizard_wms_filterpage', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('wms_source', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['lizard_wms.WMSSource'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+        ))
+        db.send_create_signal('lizard_wms', ['FilterPage'])
 
 
     def backwards(self, orm):
-        # Adding field 'WMSSource.params'
-        db.add_column('lizard_wms_wmssource', 'params',
-                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
-                      keep_default=False)
+        # Deleting model 'FilterPage'
+        db.delete_table('lizard_wms_filterpage')
 
 
     models = {
@@ -41,12 +44,18 @@ class Migration(SchemaMigration):
             'visible': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'wms_layer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSSource']"})
         },
+        'lizard_wms.filterpage': {
+            'Meta': {'ordering': "(u'wms_source',)", 'object_name': 'FilterPage'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'wms_source': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSSource']"})
+        },
         'lizard_wms.wmsconnection': {
             'Meta': {'object_name': 'WMSConnection'},
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'options': ('django.db.models.fields.TextField', [], {'default': 'u\'{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}\''}),
-            'params': ('django.db.models.fields.TextField', [], {'default': 'u\'{"height": "256", "width": "256", "layers": "%s", "styles": "", "format": "image/png", "tiled": "true", "transparent": "true"}\''}),
+            'params': ('django.db.models.fields.TextField', [], {'default': 'u\'{"height": "256", "width": "256", "styles": "", "format": "image/png", "tiled": "true", "transparent": "true"}\''}),
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
@@ -55,6 +64,7 @@ class Migration(SchemaMigration):
         },
         'lizard_wms.wmssource': {
             'Meta': {'ordering': "(u'index', u'display_name')", 'object_name': 'WMSSource'},
+            '_params': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'bbox': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'connection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSConnection']", 'null': 'True', 'blank': 'True'}),
@@ -66,7 +76,6 @@ class Migration(SchemaMigration):
             'layer_name': ('django.db.models.fields.TextField', [], {}),
             'legend_url': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'null': 'True', 'blank': 'True'}),
             'metadata': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
-            'new_params': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'options': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'show_legend': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})

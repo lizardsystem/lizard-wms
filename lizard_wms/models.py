@@ -10,6 +10,7 @@ import logging
 import owslib.wms
 import requests
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
 from django.template.defaultfilters import urlizetrunc
@@ -161,7 +162,7 @@ overwrites.""")
             layer_instance.save()
 
             if layer_instance.bbox:
-                layer_instance.get_feature_info()
+                layer_instance.search_one_item()
 
             fetched.add(name)
 
@@ -225,6 +226,8 @@ like {"key": "value", "key2": "value2"}.
 
     class Meta:
         ordering = ('index', 'display_name')
+        verbose_name = _("WMS source")
+        verbose_name_plural = _("WMS sources")
 
     def __unicode__(self):
         return 'WMS Layer {0}'.format(self.layer_name)
@@ -259,8 +262,8 @@ like {"key": "value", "key2": "value2"}.
         return False
 
     def workspace_acceptable(self):
-        django_cql_filters = self.featureline_set.all().values_list('name',
-                                                                    flat=True)
+        allowed_cql_filters = self.featureline_set.filter(
+            visible=True).values_list('name', flat=True)
         # A ValuesListQuerySet is not serializable to JSON,
         # A list is.
         description = self.description or ''
@@ -271,7 +274,6 @@ like {"key": "value", "key2": "value2"}.
                 description += '<dt>%s</dt><dd>%s</dd>' % (
                     key, urlizetrunc(value, 35))
             description += '</dl>'
-        cql_filters = list(django_cql_filters)
         result = WorkspaceAcceptable(
             name=self.display_name,
             description=description,
@@ -282,7 +284,7 @@ like {"key": "value", "key2": "value2"}.
                  'params': self.params,
                  'legend_url': self.legend_url,
                  'options': self.options,
-                 'cql_filters': cql_filters,
+                 'cql_filters': list(allowed_cql_filters),
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
         return result
@@ -290,14 +292,12 @@ like {"key": "value", "key2": "value2"}.
     def capabilities_url(self):
         return capabilities_url(self.url)
 
-    def get_feature_info(self, x=None, y=None, radius=None):
-        """Gets feature info from the server, at point (x,y) in Google
-        coordinates.
+    def _bbox_for_feature_info(self, x=None, y=None, radius=None):
+        """Return bbox at point (x,y) in Google coordinates.
 
         If x, y aren't given, use this layer's bbox, if any. Useful to
         get available features immediately after fetching the layer.
         """
-
         if x is not None:
             # Construct the "bounding box", a tiny area around (x,y) We use a
             # tiny custom radius, because otherwise we don't have enough
@@ -324,20 +324,41 @@ like {"key": "value", "key2": "value2"}.
             else:
                 # Use the old method.
                 fixed_radius = 10
-                bbox = '{0},{1},{2},{3}'.format(x - fixed_radius, y - fixed_radius,
-                                            x + fixed_radius, y + fixed_radius)
+                bbox = '{0},{1},{2},{3}'.format(
+                    x - fixed_radius, y - fixed_radius,
+                    x + fixed_radius, y + fixed_radius)
         else:
             bbox = self.bbox
+        return bbox
 
+    def search_one_item(self, x=None, y=None, radius=None):
+        """Return getfeatureinfo values found for a single item."""
+        values = {}
+        bbox = self._bbox_for_feature_info(x=x, y=y, radius=radius)
+        results = self.get_feature_info(bbox=bbox, buffer=16)
+        # ^^^ Note Reinout: I wonder about that buffer.
+        if results:
+            for result in results:
+                values.update(result)
+        self._store_features(values)
+        return values
+
+    def get_feature_info(self, bbox=None, feature_count=1,
+                         buffer=1, cql_filter_string=None):
+        """Gets feature info from the server inside the bbox.
+
+        Normally the bbox is constructed with ``.bbox_for_feature_info()``.
+        """
         if not bbox:
-            return set()
-
+            return
+        logger.debug("Getting feature info for %s item(s) in bbox %s",
+                     feature_count, bbox)
         version = '1.1.1'
         if self.connection and self.connection.version:
             version = self.connection.version
 
         params = json.loads(self.params)
-        values = dict()
+        result = []
         for layer in params['layers'].split(","):
             payload = {
                 'REQUEST': 'GetFeatureInfo',
@@ -345,10 +366,7 @@ like {"key": "value", "key2": "value2"}.
                 'INFO_FORMAT': 'text/plain',
                 'SERVICE': 'WMS',
                 'SRS': 'EPSG:3857',  # Always Google (web mercator)
-
-                # Get a single feature
-                'FEATURE_COUNT': 1,
-
+                'FEATURE_COUNT': feature_count,
                 # Set the layer we want
                 'LAYERS': layer,
                 'QUERY_LAYERS': layer,
@@ -364,16 +382,19 @@ like {"key": "value", "key2": "value2"}.
                 # Version from parameter
                 'VERSION': version,
 
-                # Non-standard WMS parameter to slightly increase search radius.
-                # Shouldn't hurt as most WMS server software ignore unknown
-                # parameters.
-                # see http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
-                'BUFFER': 16,
+                # Non-standard WMS parameter to slightly increase search
+                # radius.  Shouldn't hurt as most WMS server software ignore
+                # unknown parameters.  see
+                # http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
+                'BUFFER': buffer,
+                # ^^^ Note Reinout: it seems to *greatly* increase search radius.
             }
 
             # Add styles to request when defined
             if 'styles' in params and params['styles']:
                 payload['STYLES'] = params['styles']
+            if cql_filter_string:
+                payload['CQL_FILTER'] = cql_filter_string
 
             r = requests.get(self.url, params=payload, timeout=10)
 
@@ -383,10 +404,16 @@ like {"key": "value", "key2": "value2"}.
 
             if not r.text.startswith("Results for FeatureType"):
                 continue
-
             # "Parse"
+            one_result = {}
             for line in r.text.split("\n"):
                 line = line.strip()
+                if '----------' in line:
+                    # Store the result, start a new one.
+                    if one_result:
+                        result.append(one_result)
+                    one_result = {}
+                    continue
                 parts = line.split(" = ")
                 if len(parts) != 2:
                     continue
@@ -396,10 +423,12 @@ like {"key": "value", "key2": "value2"}.
                     # I think these are always uninteresting
                     continue
 
-                values[feature] = value
-
-        self._store_features(values)
-        return values
+                one_result[feature] = value
+            # Store the last result, too, if applicable.
+            if one_result:
+                result.append(one_result)
+        logger.debug("Found %s GetFeatureInfo results.", len(result))
+        return result
 
     def _store_features(self, values):
         """Make sure the features in the 'values' dict are stored as
@@ -555,5 +584,64 @@ class FeatureLine(models.Model):
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
 
+    class Meta:
+        ordering = ('order_using', 'description', 'name',)
+
     def __unicode__(self):
         return self.name
+
+    @property
+    def title(self):
+        """Return description or else the name.
+
+        This gives us the most user-friendly name possible.
+        """
+        return self.description or self.name
+
+
+class FilterPage(models.Model):
+    """
+    Page with filters for a single WMS source.
+    """
+
+    slug = models.SlugField(
+        verbose_name=_('slug'),
+        help_text=_("Set automatically from the name."))
+    name = models.CharField(
+        verbose_name=_('name'),
+        help_text=_(
+            "Title of the page. If empty, the WMS source's name is used."),
+        max_length=100,
+        null=True,
+        blank=True)
+    wms_source = models.ForeignKey(
+        WMSSource,
+        verbose_name=_('WMS source'),
+        help_text=_("WMS source for which we show filters."),
+        blank=False)
+    available_filters = models.ManyToManyField(
+        FeatureLine,
+        verbose_name=_('available filters'),
+        help_text=_(
+            "Feature lines of our WMS source that we use as filters."),
+        blank=True)
+
+    class Meta:
+        ordering = ('wms_source',)
+        verbose_name = _("WMS filter page")
+        verbose_name_plural = _("WMS filter pages")
+
+    @property
+    def title(self):
+        """Return title for use on the page.
+
+        We can fill in our own name attribute, but we don't have to if we
+        think the WMS source's name is good enough.
+        """
+        return self.name or self.wms_source.name
+
+    def __unicode__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('lizard_wms.filter_page', kwargs={'slug': self.slug})

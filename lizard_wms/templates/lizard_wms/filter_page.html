@@ -1,0 +1,34 @@
+{% extends "lizard_map/wms.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+<h2>{% trans "Available filters" %}</h2>
+<form method="get"
+      class="form-vertical"
+      autocomplete="off"
+      id="filter-page-form"
+      action=".">
+  <fieldset>
+
+    {% for dropdown in view.dropdowns %}
+      <label>{{ dropdown.label }}</label>
+      <select class="input-block-level"
+              name="{{ dropdown.field_name }}">
+        {% for option in dropdown.options %}
+          <option {% if option == dropdown.selected %}selected="selected"{% endif %}
+                  >{{ option }}</option>
+        {% endfor %}
+      </select>
+    {% endfor %}
+    <button type="submit"
+            id="filter-page-submit"
+            class="btn">Submit</button>
+  </fieldset>
+</form>
+
+<hr />
+<p>
+  <a href="{{ view.csv_download_link }}"
+     class="btn">{% trans "Download spreadsheet" %}</a>
+</p>
+{% endblock sidebar %}
