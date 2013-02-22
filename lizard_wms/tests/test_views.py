@@ -2,11 +2,11 @@ from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 import logging
 
-# import mock
+# from django.test.utils import override_settings
+import mock
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
-from django.test.utils import override_settings
 
 import lizard_ui
 # from lizard_wms.models import FilterPage
@@ -35,6 +35,33 @@ class FilterPageViewTest(TestCase):
         self.filter_page.save()
         self.assertEquals(self.view.page_title, 'Atilla')
 
+    def test_filters1(self):
+        # Test without any GET params.
+        self.view.request = mock.Mock()
+        self.view.request.GET = {}
+        self.assertEquals(self.view.filters, {})
+
+    def test_filters2(self):
+        # Test with GET params that are unknown.
+        self.view.request = mock.Mock()
+        self.view.request.GET = {'tower_4': 'Dora'}
+        self.assertEquals(self.view.filters, {})
+
+    def test_filters3(self):
+        # Test with good GET params.
+        self.view.request = mock.Mock()
+        with mock.patch('lizard_wms.views.FilterPageView.available_filters',
+                        [('CITY', 'City'),]):
+            self.view.request.GET = {'CITY': 'Nieuwegein'}
+            self.assertEquals(self.view.filters, {'CITY': 'Nieuwegein'})
+
+    def test_filters4(self):
+        # Test with good, but empty GET params.
+        self.view.request = mock.Mock()
+        with mock.patch('lizard_wms.views.FilterPageView.available_filters',
+                        [('CITY', 'City'),]):
+            self.view.request.GET = {'CITY': ''}
+            self.assertEquals(self.view.filters, {})
 
 class FilterPageViewFunctionalTest(TestCase):
 
