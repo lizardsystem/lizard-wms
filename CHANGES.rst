@@ -11,6 +11,9 @@ Changelog of lizard-wms
 - Added parsing of excel-like dates (``40909.0``) in popups to
   ``2012-01-01``.
 
+- If you haven't properly configured a feature line for use in the hover, we
+  won't show a more-or-less debug string anymore.
+
 
 1.18 (2013-02-22)
 -----------------
