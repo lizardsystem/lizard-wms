@@ -181,9 +181,12 @@ class FilterPageAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FilterPageAdminForm, self).__init__(*args, **kwargs)
-        self.fields['available_filters'].queryset = \
-            models.FeatureLine.objects.filter(
-            wms_layer=self.instance.wms_source)
+        try:
+            self.fields['available_filters'].queryset = \
+                models.FeatureLine.objects.filter(
+                wms_layer=self.instance.wms_source)
+        except models.WMSSource.DoesNotExist:
+            pass
 
 
 class FilterPageAdmin(admin.ModelAdmin):
