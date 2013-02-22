@@ -8,6 +8,9 @@ Changelog of lizard-wms
 - Using https://github.com/jdunck/python-unicodecsv instead of python's
   build-in csv module to prevent unicodedecodeerrors.
 
+- Added parsing of excel-like dates (``40909.0``) in popups to
+  ``2012-01-01``.
+
 
 1.18 (2013-02-22)
 -----------------
