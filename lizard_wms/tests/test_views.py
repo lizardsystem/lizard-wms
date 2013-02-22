@@ -63,6 +63,22 @@ class FilterPageViewTest(TestCase):
             self.view.request.GET = {'CITY': ''}
             self.assertEquals(self.view.filters, {})
 
+    def test_values_per_dropdown(self):
+        features = [
+            {'city': 'Nieuwegein',
+             'inhabitant': 'Reinout'},
+            {'city': 'Nieuwegein',
+             'inhabitant': 'Arjan'},
+            {'city': 'Arnhem',
+             'inhabitant': 'Remco'}]
+        with mock.patch('lizard_wms.views.FilterPageView.features', features):
+            self.assertEquals(
+                self.view.values_per_dropdown,
+                {'city': ['Arnhem', 'Nieuwegein'],
+                 'inhabitant': ['Arjan', 'Reinout', 'Remco']})
+
+
+
 class FilterPageViewFunctionalTest(TestCase):
 
     def setUp(self):
