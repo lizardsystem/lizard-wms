@@ -60,10 +60,11 @@ class AdapterWMS(WorkspaceItemAdapter):
         feature_info = self.wms_source.search_one_item(x, y, radius)
         name = self.wms_source.get_feature_name(feature_info)
 
-        # Make up a name anyway if we can't find one.
         if not name:
-            # also see popup.html
-            name = 'Item uit {}'.format(self.workspace_item.name)
+            # We're not making up a name if we can't find one.
+            # A debug string isn't handy for the customers.
+            # You should simply configure a proper name!
+            return []
 
         if feature_info:
             return [{
