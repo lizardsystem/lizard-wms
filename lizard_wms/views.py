@@ -6,12 +6,10 @@ import json
 import logging
 from collections import defaultdict
 
-from django.utils.translation import ugettext as _
-from django.utils.html import escapejs
 from django.shortcuts import get_object_or_404
-# from django.core.urlresolvers import reverse
+from django.utils.html import escapejs
+from django.utils.translation import ugettext as _
 from lizard_map.views import MapView
-# from lizard_ui.views import UiView
 
 from lizard_wms import models
 
@@ -24,6 +22,19 @@ class FilterPageView(MapView):
     """Simple view with a map."""
     template_name = 'lizard_wms/filter_page.html'
     # page_title = 'sdfsdf'
+
+    @property
+    def workspace(self):
+        """Return workspace, but ensure our wms source is included."""
+        ws = super(FilterPageView, self).workspace
+        ws_acceptable = self.wms_source.workspace_acceptable()
+        ws.add_workspace_item(ws_acceptable.name,
+                              ws_acceptable.adapter_name,
+                              ws_acceptable.adapter_layer_json)
+        # ^^^ Note: add_workspace_item() first looks whether the item is
+        # already available before adding. So it is a good way of ensuring it
+        # is present, without the risk of duplication.
+        return ws
 
     @property
     def filter_page(self):
