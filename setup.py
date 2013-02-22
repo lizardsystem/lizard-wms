@@ -22,6 +22,7 @@ install_requires = [
     'pkginfo',
     'GChartWrapper',
     'requests',
+    'unicodecsv',
     ],
 
 tests_require = [

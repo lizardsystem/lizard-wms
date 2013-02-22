@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.19 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Using https://github.com/jdunck/python-unicodecsv instead of python's
+  build-in csv module to prevent unicodedecodeerrors.
 
 
 1.18 (2013-02-22)

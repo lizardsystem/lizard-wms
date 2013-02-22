@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from __future__ import print_function
-import csv
 import json
 import logging
 from collections import defaultdict
 
+import unicodecsv
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -171,8 +171,8 @@ class FilterPageDownload(FilterPageView):
         headers = {}
         for name, title, in names_titles:
             headers[name] = title
-        writer = csv.DictWriter(response, field_names, dialect='excel',
-                                extrasaction='ignore')
+        writer = unicodecsv.DictWriter(response, field_names, dialect='excel',
+                                       extrasaction='ignore')
         writer.writerow(headers)
         for feature in self.features(
             cql_filter_string=self.cql_filter_string):
