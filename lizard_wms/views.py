@@ -165,9 +165,11 @@ class FilterPageDownload(FilterPageView):
         response = HttpResponse(mimetype='text/csv')
         response['Content-Disposition'] = ('attachment; filename="%s"' % filename)
 
-        field_names = [name for (name, title) in self.available_filters]
+        names_titles = self.wms_source.featureline_set.filter(
+            visible=True).values_list('name', 'description')
+        field_names = [name for (name, title) in names_titles]
         headers = {}
-        for name, title, in self.available_filters:
+        for name, title, in names_titles:
             headers[name] = title
         writer = csv.DictWriter(response, field_names, dialect='excel',
                                 extrasaction='ignore')
