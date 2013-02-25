@@ -18,10 +18,10 @@ from django.template.defaultfilters import urlizetrunc
 from django.utils.translation import ugettext_lazy as _
 from jsonfield.fields import JSONField
 from lizard_map import coordinates
-from lizard_map.lizard_widgets import WorkspaceAcceptable
 from lizard_map.models import ADAPTER_CLASS_WMS
 from lizard_maptree.models import Category
 
+from lizard_wms.widgets import WmsWorkspaceAcceptable
 from lizard_wms.chart import google_column_chart_url
 
 FIXED_WMS_API_VERSION = '1.1.1'
@@ -241,6 +241,18 @@ like {"key": "value", "key2": "value2"}.
         return 'WMS Layer {0}'.format(self.layer_name)
 
     @property
+    def filter_page_url(self):
+        """Return url of a filter page that links to us.
+
+        Note that, if multiple, we just grab the first one.
+        """
+        try:
+            return self.filter_pages.all()[0].get_absolute_url()
+        except IndexError:
+            # Grmbl, this won't be good for performance.
+            return
+
+    @property
     def params(self):
         params = {}
         if self._params is not None:
@@ -282,9 +294,10 @@ like {"key": "value", "key2": "value2"}.
                 description += '<dt>%s</dt><dd>%s</dd>' % (
                     key, urlizetrunc(value, 35))
             description += '</dl>'
-        result = WorkspaceAcceptable(
+        result = WmsWorkspaceAcceptable(
             name=self.display_name,
             description=description,
+            filter_page_url=self.filter_page_url,
             adapter_layer_json=json.dumps(
                 {'wms_source_id': self.id,
                  'name': self.layer_name,
@@ -638,6 +651,7 @@ class FilterPage(models.Model):
         WMSSource,
         verbose_name=_('WMS source'),
         help_text=_("WMS source for which we show filters."),
+        related_name='filter_pages',
         blank=False)
     available_filters = models.ManyToManyField(
         FeatureLine,

@@ -5,7 +5,11 @@ Changelog of lizard-wms
 1.20 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Added filter icon to the workspace acceptable that links to the
+  filterpage. The solution is not optimal, as it means more database
+  queries. For a good solution, the lizard-ui/lizard-map css and sidebar
+  handling needs an overhaul. And perhaps the relation filterpage-to-wmssource
+  should be switched around.
 
 
 1.19 (2013-02-22)

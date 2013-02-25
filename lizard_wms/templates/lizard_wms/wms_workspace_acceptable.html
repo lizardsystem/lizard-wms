@@ -1,0 +1,30 @@
+{# Copied mostly from lizard-map/workspace_acceptable.html #}
+{# Addition: optional filter_page_url icon #}
+{# This is a template that needs to be kept in sync with the base one. #}
+{# Or we need to make the base acceptable template extensible... :-) #}
+
+{# Start of addition #}
+{% if acceptable.filter_page_url %}
+  <a class="icon-filter"
+     style="display: block; float:right; text-decoration: none;"
+     href="{{ acceptable.filter_page_url }}">&nbsp;</a>
+{% endif %}
+{# End of addition #}
+
+<{{ acceptable.html_tag }} class="{{ classes }}"
+   href="#"
+  {% if acceptable.description %}
+    data-content="{{ acceptable.description }}"
+    title="{{ acceptable.name }}"
+  {% endif %}
+    data-adapter-layer-json="{{ acceptable.adapter_layer_json }}"
+    data-adapter-class="{{ acceptable.adapter_name }}"
+    data-name="{{ acceptable.name }}">
+  {% if acceptable.enabled %}
+    <i class="icon-ok workspace-selected-icon"></i>
+  {% endif %}
+  {% if acceptable.is_animatable %}
+    <i class="icon-film"></i>
+  {% endif %}
+  {{ acceptable.name }}
+</{{ acceptable.html_tag }}>
