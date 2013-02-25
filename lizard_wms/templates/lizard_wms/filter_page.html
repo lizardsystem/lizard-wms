@@ -20,10 +20,10 @@
         {% endfor %}
       </select>
     {% endfor %}
-    <button type="submit"
-            id="filter-page-submit"
-            class="btn">Submit</button>
   </fieldset>
+  <button type="submit"
+          id="filter-page-submit"
+          class="btn">Submit</button>
 </form>
 
 <hr />
@@ -32,3 +32,7 @@
      class="btn">{% trans "Download spreadsheet" %}</a>
 </p>
 {% endblock sidebar %}
+
+{% block bottom-extras %}
+  <script src="{{ STATIC_URL }}lizard_wms/filter_page.js"></script>
+{% endblock bottom-extras %}
