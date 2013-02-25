@@ -12,6 +12,8 @@ function setUpFilterPageForm() {
           refreshWmsLayers();
           $("#filter-page-form fieldset").html($(data).find(
             "#filter-page-form fieldset").html());
+          $("#filter-page-download-button").html($(data).find(
+            "#filter-page-download-button").html());
           $(".workspace-wms-layer").each(function () {
             var id = $(this).attr("data-workspace-wms-id");
             var params = $(this).attr("data-workspace-wms-params");
