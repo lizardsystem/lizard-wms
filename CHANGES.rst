@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.21 (unreleased)
+1.21 (2013-02-25)
 -----------------
 
 - Added dynamic refreshing of the sidebar's form. Quicker.
