@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.20 (unreleased)
+1.20 (2013-02-25)
 -----------------
 
 - Added filter icon to the workspace acceptable that links to the
