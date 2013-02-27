@@ -5,7 +5,12 @@ Changelog of lizard-wms
 1.22 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- UI fixes for filterpage: form submits itself on change automatically.
+
+- URLs in the popup are now opened in a new window. Customers keep asking
+  about this...
+
+- Improved FilterPage's breadcrumbs. We need lizard-maptree >= 1.9 for this.
 
 
 1.21 (2013-02-25)

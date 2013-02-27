@@ -1,5 +1,6 @@
 {% extends "lizard_map/wms.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block sidebar %}
 <h2>{% trans "Available filters" %}</h2>
@@ -21,11 +22,12 @@
       </select>
     {% endfor %}
   </fieldset>
-  <button type="submit"
-          id="filter-page-submit"
-          class="btn">Submit</button>
+  <div id="filter-page-spinner"
+       style="width: 34px; height: 34px;">
+    <img src="{% static 'lizard_ui/ajax-loader.gif' %}"
+         style="display: none;" />
+  </div>
 </form>
-
 <hr />
 <p id="filter-page-download-button">
   <a href="{{ view.csv_download_link }}"
