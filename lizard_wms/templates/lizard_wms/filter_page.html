@@ -1,5 +1,6 @@
 {% extends "lizard_map/wms.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block sidebar %}
 <h2>{% trans "Available filters" %}</h2>
@@ -23,7 +24,7 @@
   </fieldset>
   <div id="filter-page-spinner"
        style="width: 34px; height: 34px;">
-    <img src="/static_media/lizard_ui/ajax-loader.gif"
+    <img src="{% static 'lizard_ui/ajax-loader.gif' %}"
          style="display: none;" />
   </div>
 </form>
