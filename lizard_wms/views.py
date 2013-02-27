@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 class FilterPageView(MapView):
     """Simple view with a map."""
     template_name = 'lizard_wms/filter_page.html'
-    # page_title = 'sdfsdf'
 
     @property
     def workspace(self):
@@ -58,6 +57,15 @@ class FilterPageView(MapView):
     @property
     def page_title(self):
         return self.filter_page.title
+
+    @property
+    def breadcrumbs(self):
+        breadcrumbs_according_to_ui = super(FilterPageView, self).breadcrumbs
+        our_url = self.filter_page.get_absolute_url()
+        if our_url == self.best_matching_application_icon:
+            return breadcrumbs_according_to_ui
+        # We need to append ourselves.
+        return breadcrumbs_according_to_ui + [self.our_own_breadcrumb_element]
 
     def features(self, cql_filter_string=None):
         return self.wms_source.get_feature_info(

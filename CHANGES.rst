@@ -10,6 +10,8 @@ Changelog of lizard-wms
 - URLs in the popup are now opened in a new window. Customers keep asking
   about this...
 
+- Improved FilterPage's breadcrumbs.
+
 
 1.21 (2013-02-25)
 -----------------
