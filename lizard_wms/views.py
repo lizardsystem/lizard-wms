@@ -6,13 +6,14 @@ import json
 import logging
 from collections import defaultdict
 
-import unicodecsv
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.html import escapejs
 from django.utils.translation import ugettext as _
 from lizard_map.views import MapView
+from lizard_ui.layout import Action
+import unicodecsv
 
 from lizard_wms import models
 
@@ -60,12 +61,21 @@ class FilterPageView(MapView):
 
     @property
     def breadcrumbs(self):
-        breadcrumbs_according_to_ui = super(FilterPageView, self).breadcrumbs
+        result = super(FilterPageView, self).breadcrumbs
         our_url = self.filter_page.get_absolute_url()
         if our_url == self.best_matching_application_icon:
-            return breadcrumbs_according_to_ui
+            return result
+        # Look for a wms category to append. URL-wise we're below the root
+        # /webmap, not inside a category, which is really what we normally
+        # want.
+        categories = self.wms_source.category.all()
+        if categories:
+            category = categories[0]
+            result.append(Action(name=category.name,
+                                 url=category.get_absolute_url()))
         # We need to append ourselves.
-        return breadcrumbs_according_to_ui + [self.our_own_breadcrumb_element]
+        result.append(self.our_own_breadcrumb_element)
+        return result
 
     def features(self, cql_filter_string=None):
         return self.wms_source.get_feature_info(
