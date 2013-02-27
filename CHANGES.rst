@@ -5,7 +5,7 @@ Changelog of lizard-wms
 1.22 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- UI fixes for filterpage: form submits itself on change automatically.
 
 
 1.21 (2013-02-25)
