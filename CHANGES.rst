@@ -7,6 +7,9 @@ Changelog of lizard-wms
 
 - UI fixes for filterpage: form submits itself on change automatically.
 
+- URLs in the popup are now opened in a new window. Customers keep asking
+  about this...
+
 
 1.21 (2013-02-25)
 -----------------

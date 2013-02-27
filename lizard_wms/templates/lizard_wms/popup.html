@@ -8,17 +8,29 @@
       <tr>
         {% if info.show_label == 'false' %}
           <td colspan="2">{% if info.name %}<strong>{{ info.name }}<strong>{% endif %}</td>
-	      </tr>
-	      <tr>
-		  <td colspan="2">
+        </tr>
+	<tr>
+	  <td colspan="2">
         {% else %}
-           <td>{{info.name}}</td>
-           <td>
+          <td>{{info.name}}</td>
+          <td>
         {% endif %}
         {% if info.render_as == 'T' %}{{ info.value }}{% endif %}
         {% if info.render_as == 'I' %}<img src="{{ info.value }}" />{% endif %}
-        {% if info.render_as == 'U' %}<a href="{{ info.value }}" style="text-decoration:underline; color:blue;">{{ info.value }}</a>{% endif %}
-        {% if info.render_as == 'W' %}<a href="http://{{ info.value }}" style="text-decoration:underline; color:blue;">{{ info.value }}</a>{% endif %}
+        {% if info.render_as == 'U' %}
+          <a href="{{ info.value }}"
+             target="_blank"
+             style="text-decoration:underline; color:blue;">
+            {{ info.value }}
+          </a>
+        {% endif %}
+        {% if info.render_as == 'W' %}
+          <a href="http://{{ info.value }}"
+             target="_blank"
+             style="text-decoration:underline; color:blue;">
+            {{ info.value }}
+          </a>
+        {% endif %}
         </td>
       </tr>
     {% endfor %}
