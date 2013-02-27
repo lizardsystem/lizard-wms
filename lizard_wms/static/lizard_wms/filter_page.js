@@ -1,5 +1,6 @@
 function refreshFormAndLayers() {
-  return $.ajax({
+  $("#filter-page-spinner img").show();
+  $.ajax({
     url: $("#filter-page-form").attr('action'),
     type: "GET",
     data: $("#filter-page-form").serialize(),
@@ -16,6 +17,7 @@ function refreshFormAndLayers() {
         var params = $(this).attr("data-workspace-wms-params");
         params = $.parseJSON(params);
         wms_layers[id].mergeNewParams(params);
+      $("#filter-page-spinner img").fadeOut(100);
       });
     }
   });
@@ -25,8 +27,14 @@ function refreshFormAndLayers() {
 function setUpFilterPageForm() {
   $("#filter-page-form").submit(function(e) {
     e.preventDefault();
-    return refreshFormAndLayers();
-  })
+    refreshFormAndLayers();
+  });
+  $("#filter-page-form input").live('change', function(e) {
+    refreshFormAndLayers();
+  });
+  $("#filter-page-form select").live('change', function(e) {
+    refreshFormAndLayers();
+  });
 }
 
 

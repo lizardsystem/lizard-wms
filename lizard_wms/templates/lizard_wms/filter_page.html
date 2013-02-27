@@ -21,11 +21,12 @@
       </select>
     {% endfor %}
   </fieldset>
-  <button type="submit"
-          id="filter-page-submit"
-          class="btn btn-primary">Submit</button>
+  <div id="filter-page-spinner"
+       style="width: 34px; height: 34px;">
+    <img src="/static_media/lizard_ui/ajax-loader.gif"
+         style="display: none;" />
+  </div>
 </form>
-
 <hr />
 <p id="filter-page-download-button">
   <a href="{{ view.csv_download_link }}"
