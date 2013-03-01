@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.23 (unreleased)
+1.23 (2013-03-01)
 -----------------
 
 - Wrapping the filterpage javascript in a compress tag to ensure it is fresh
