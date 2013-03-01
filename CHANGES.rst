@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.23 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Wrapping the filterpage javascript in a compress tag to ensure it is fresh
+  in the client's browser.
 
 
 1.22 (2013-02-27)
