@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.utils import simplejson as json
 
 from lizard_wms.tests import factories
+from lizard_wms import models
 
 
 class FeatureLineTest(TestCase):
@@ -14,3 +15,13 @@ class FeatureLineTest(TestCase):
 
     def test_smoke(self):
         self.assertTrue(self.feature_line)
+
+    def test_render_url(self):
+        self.feature_line.render_as = models.RENDER_URL
+        result = self.feature_line.as_popup_info('http://reinout.vanrees.org')
+        self.assertEquals(result['value'], 'http://reinout.vanrees.org')
+
+    def test_render_url_like(self):
+        self.feature_line.render_as = models.RENDER_URL_LIKE
+        result = self.feature_line.as_popup_info('reinout.vanrees.org')
+        self.assertEquals(result['value'], 'http://reinout.vanrees.org')

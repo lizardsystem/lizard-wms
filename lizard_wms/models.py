@@ -601,6 +601,8 @@ class FeatureLine(models.Model):
 
     def as_popup_info(self, value):
         """Return ourselves as dict for in WMSSource's popup."""
+        show_label = 'true'
+        link_name = ''
         if self.render_as == RENDER_GC_COLUMN:
             json_data = json.loads(value)
             if json_data is None:
@@ -615,7 +617,7 @@ class FeatureLine(models.Model):
                 self.render_as = RENDER_NONE
             else:
                 self.render_as = RENDER_IMAGE
-            self.show_label = 'false'
+            show_label = 'false'
         elif self.render_as == RENDER_XLS_DATE:
             try:
                 date_value = float(value)
@@ -624,14 +626,17 @@ class FeatureLine(models.Model):
                 return
             value = xls_date_to_string(date_value)
             self.render_as = RENDER_TEXT
-            self.show_label = 'true'
-        else:
-            self.show_label = 'true'
+        elif self.render_as == RENDER_URL_LIKE:
+            link_name = value
+            value = 'http://' + value
+            # Quite brittle, but equal to the code from the template that it
+            # replaces.
         return {
             'name': (self.description or self.name),
             'value': value,
+            'link_name': link_name,
             'render_as': self.render_as,
-            'show_label': self.show_label,
+            'show_label': show_label,
             }
 
 
