@@ -31,6 +31,7 @@ RENDER_NONE = ''
 RENDER_TEXT = 'T'
 RENDER_IMAGE = 'I'
 RENDER_URL = 'U'
+RENDER_URL_MORE_LINK = 'M'
 RENDER_URL_LIKE = 'W'
 RENDER_GC_COLUMN = 'C'
 RENDER_XLS_DATE = 'X'
@@ -581,6 +582,7 @@ class FeatureLine(models.Model):
             (RENDER_XLS_DATE, _("Excel date format")),
             (RENDER_URL, "URL"),
             (RENDER_URL_LIKE, "URL-achtige tekst"),
+            (RENDER_URL_MORE_LINK, _("URL shown as 'click here' link")),
             (RENDER_GC_COLUMN, "Google column chart")), default=RENDER_TEXT)
     in_hover = models.BooleanField(default=False)
     order_using = models.IntegerField(default=1000)
@@ -631,6 +633,12 @@ class FeatureLine(models.Model):
             value = 'http://' + value
             # Quite brittle, but equal to the code from the template that it
             # replaces.
+        elif self.render_as == RENDER_URL_MORE_LINK:
+            link_name = _("Click here for more information")
+            if not 'http://' in value:
+                value = 'http://' + value
+                # Yes, this means we could do the same for RENDER_URL_LIKE
+                # options, but I'm leaving that one alone for the moment.
         return {
             'name': (self.description or self.name),
             'value': value,

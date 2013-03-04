@@ -25,3 +25,10 @@ class FeatureLineTest(TestCase):
         self.feature_line.render_as = models.RENDER_URL_LIKE
         result = self.feature_line.as_popup_info('reinout.vanrees.org')
         self.assertEquals(result['value'], 'http://reinout.vanrees.org')
+        self.assertEquals(result['link_name'], 'reinout.vanrees.org')
+
+    def test_render_url_more(self):
+        self.feature_line.render_as = models.RENDER_URL_MORE_LINK
+        result = self.feature_line.as_popup_info('reinout.vanrees.org')
+        self.assertEquals(result['value'], 'http://reinout.vanrees.org')
+        self.assertTrue('click here' in result['link_name'].lower())
