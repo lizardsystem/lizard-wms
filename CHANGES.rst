@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.24 (unreleased)
+1.24 (2013-03-04)
 -----------------
 
 - Removed URLField's verify_exist attribute. Deprecated in Django
