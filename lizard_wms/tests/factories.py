@@ -2,7 +2,10 @@ import os
 
 import factory
 
-from lizard_wms.models import WMSConnection, WMSSource, FilterPage
+from lizard_wms.models import FeatureLine
+from lizard_wms.models import FilterPage
+from lizard_wms.models import WMSConnection
+from lizard_wms.models import WMSSource
 
 
 class WMSConnectionFactory(factory.Factory):
@@ -33,6 +36,12 @@ class WMSSourceFactory(factory.Factory):
         if create:
             wms_source.save()
         return wms_source
+
+
+class FeatureLineFactory(factory.Factory):
+    FACTORY_FOR = FeatureLine
+    wms_layer = factory.SubFactory(WMSSourceFactory)
+    # slug = factory.Sequence(lambda n: 'page{0}'.format(n))
 
 
 class FilterPageFactory(factory.Factory):
