@@ -522,46 +522,14 @@ like {"key": "value", "key2": "value2"}.
     def get_popup_info(self, values):
         if not values:
             return
-
         info = []
-
         for feature_line in (self.featureline_set.filter(visible=True).
                              order_by('order_using')):
             if feature_line.name in values:
-                if feature_line.render_as == RENDER_GC_COLUMN:
-                    data = json.loads(values[feature_line.name])
-                    if data is None:
-                        # See https://github.com/nens/deltaportaal/issues/4
-                        logger.warn(
-                            "https://github.com/nens/deltaportaal/issues/4 "
-                            "hits again")
-                        return
-                    url = google_column_chart_url(data)
-                    values[feature_line.name] = url
-                    if url == '':
-                        feature_line.render_as = RENDER_NONE
-                    else:
-                        feature_line.render_as = RENDER_IMAGE
-                    feature_line.show_label = 'false'
-                elif feature_line.render_as == RENDER_XLS_DATE:
-                    data = json.loads(values[feature_line.name])
-                    if data is None:
-                        # See https://github.com/nens/deltaportaal/issues/4
-                        logger.warn(
-                            "https://github.com/nens/deltaportaal/issues/4 "
-                            "hits again")
-                        return
-                    values[feature_line.name] = xls_date_to_string(data)
-                    feature_line.render_as = RENDER_TEXT
-                    feature_line.show_label = 'true'
-                else:
-                    feature_line.show_label = 'true'
-                info.append(
-                    {'name': (feature_line.description or feature_line.name),
-                     'value': values[feature_line.name],
-                     'render_as': feature_line.render_as,
-                     'show_label': feature_line.show_label,
-                     })
+                popup_info = feature_line.as_popup_info(
+                    values[feature_line.name])
+                if popup_info:
+                    info.append(popup_info)
         return info
 
     @property
@@ -630,6 +598,41 @@ class FeatureLine(models.Model):
         This gives us the most user-friendly name possible.
         """
         return self.description or self.name
+
+    def as_popup_info(self, value):
+        """Return ourselves as dict for in WMSSource's popup."""
+        if self.render_as == RENDER_GC_COLUMN:
+            json_data = json.loads(value)
+            if json_data is None:
+                # See https://github.com/nens/deltaportaal/issues/4
+                logger.warn(
+                    "https://github.com/nens/deltaportaal/issues/4 "
+                    "hits again")
+                return
+            url = google_column_chart_url(json_data)
+            value = url
+            if url == '':
+                self.render_as = RENDER_NONE
+            else:
+                self.render_as = RENDER_IMAGE
+            self.show_label = 'false'
+        elif self.render_as == RENDER_XLS_DATE:
+            try:
+                date_value = float(value)
+            except ValueError:
+                logger.warn("Not a float-like value for XLS date: %r", value)
+                return
+            value = xls_date_to_string(date_value)
+            self.render_as = RENDER_TEXT
+            self.show_label = 'true'
+        else:
+            self.show_label = 'true'
+        return {
+            'name': (self.description or self.name),
+            'value': value,
+            'render_as': self.render_as,
+            'show_label': self.show_label,
+            }
 
 
 class FilterPage(models.Model):
