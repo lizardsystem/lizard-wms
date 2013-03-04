@@ -102,7 +102,7 @@ class WMSConnection(models.Model):
 
     title = models.CharField(max_length=100)
     slug = models.CharField(max_length=100)
-    url = models.URLField(verify_exists=False)
+    url = models.URLField()
     version = models.CharField(
         max_length=20,
         default='1.3.0',
@@ -197,7 +197,7 @@ class WMSSource(models.Model):
 
     layer_name = models.TextField()
     display_name = models.CharField(max_length=255, null=True, blank=True)
-    url = models.URLField(verify_exists=False)
+    url = models.URLField()
     _params = JSONField(null=True, blank=True)
     # ^^^ special db_column name
     options = models.TextField(null=True, blank=True)
