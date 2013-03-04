@@ -2,11 +2,18 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.23 (unreleased)
+1.24 (unreleased)
 -----------------
 
 - Removed URLField's verify_exist attribute. Deprecated in Django
   1.3.1, removed in 1.5.
+
+1.23 (2013-03-01)
+-----------------
+
+- Wrapping the filterpage javascript in a compress tag to ensure it is fresh
+  in the client's browser.
+
 
 1.22 (2013-02-27)
 -----------------

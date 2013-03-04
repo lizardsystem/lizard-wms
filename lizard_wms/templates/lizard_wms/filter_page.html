@@ -1,6 +1,7 @@
 {% extends "lizard_map/wms.html" %}
 {% load i18n %}
 {% load staticfiles %}
+{% load compress %}
 
 {% block sidebar %}
 <h2>{% trans "Available filters" %}</h2>
@@ -36,5 +37,7 @@
 {% endblock sidebar %}
 
 {% block bottom-extras %}
-  <script src="{{ STATIC_URL }}lizard_wms/filter_page.js"></script>
+  {% compress js %}
+    <script src="{{ STATIC_URL }}lizard_wms/filter_page.js"></script>
+  {% endcompress %}
 {% endblock bottom-extras %}
