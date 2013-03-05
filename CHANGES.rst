@@ -5,6 +5,10 @@ Changelog of lizard-wms
 1.25 (unreleased)
 -----------------
 
+- Added Dutch translations. We're now translated on
+  https://translations.lizard.net/projects/p/lizardsystem/resource/lizard-wms/
+  .
+
 - Added render option to featureline: show a link as 'click here for more
   info' text instead of a long URL. Both with-and-without-http URLs are
   supported.
