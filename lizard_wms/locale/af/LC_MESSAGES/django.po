@@ -1,0 +1,115 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: lizardsystem\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-05 06:47-0600\n"
+"PO-Revision-Date: 2013-03-05 12:48+0000\n"
+"Last-Translator: admin <admin@example.com>\n"
+"Language-Team: Afrikaans (http://translations.lizard.net/projects/p/"
+"lizardsystem/team/af/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: af\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: models.py:207
+msgid ""
+"Key/value metadata for for instance copyright.\n"
+"It should be a dictionary, so surround it with braces and use double "
+"quotes,\n"
+"like {\"key\": \"value\", \"key2\": \"value2\"}.\n"
+msgstr ""
+
+#: models.py:223
+msgid "show legend"
+msgstr ""
+
+#: models.py:224
+msgid "Uncheck it if you want to hide the legend."
+msgstr ""
+
+#: models.py:227
+msgid "enable search"
+msgstr ""
+
+#: models.py:229
+msgid "Uncheck it if you don't want a click on the map to search us."
+msgstr ""
+
+#: models.py:232
+msgid "index"
+msgstr ""
+
+#: models.py:233
+msgid "Number used for ordering categories relative to each other."
+msgstr ""
+
+#: models.py:238 models.py:668
+msgid "WMS source"
+msgstr ""
+
+#: models.py:239
+msgid "WMS sources"
+msgstr ""
+
+#: models.py:582
+msgid "Excel date format"
+msgstr ""
+
+#: models.py:585
+msgid "URL shown as 'click here' link"
+msgstr ""
+
+#: models.py:637
+msgid "Click here for more information"
+msgstr ""
+
+#: models.py:657
+msgid "slug"
+msgstr ""
+
+#: models.py:658
+msgid "Set automatically from the name."
+msgstr ""
+
+#: models.py:660
+msgid "name"
+msgstr ""
+
+#: models.py:662
+msgid "Title of the page. If empty, the WMS source's name is used."
+msgstr ""
+
+#: models.py:669
+msgid "WMS source for which we show filters."
+msgstr ""
+
+#: models.py:674
+msgid "available filters"
+msgstr ""
+
+#: models.py:676
+msgid "Feature lines of our WMS source that we use as filters."
+msgstr ""
+
+#: models.py:681
+msgid "WMS filter page"
+msgstr ""
+
+#: models.py:682
+msgid "WMS filter pages"
+msgstr ""
+
+#: templates/lizard_wms/filter_page.html:7
+msgid "Available filters"
+msgstr ""
+
+#: templates/lizard_wms/filter_page.html:35
+msgid "Download spreadsheet"
+msgstr ""
