@@ -182,9 +182,9 @@ class FilterPageAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FilterPageAdminForm, self).__init__(*args, **kwargs)
         try:
-            self.fields['available_filters'].queryset = \
+            self.fields['available_filters'].queryset = (
                 models.FeatureLine.objects.filter(
-                wms_layer=self.instance.wms_source)
+                    wms_layer=self.instance.wms_source))
         except models.WMSSource.DoesNotExist:
             pass
 
@@ -195,7 +195,6 @@ class FilterPageAdmin(admin.ModelAdmin):
     list_editable = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('available_filters',)
-
 
 
 admin.site.register(models.WMSSource, WMSSourceAdmin)
