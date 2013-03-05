@@ -2,14 +2,11 @@ import os
 
 import factory
 
-from lizard_wms.models import FeatureLine
-from lizard_wms.models import FilterPage
-from lizard_wms.models import WMSConnection
-from lizard_wms.models import WMSSource
+from lizard_wms import models
 
 
 class WMSConnectionFactory(factory.Factory):
-    FACTORY_FOR = WMSConnection
+    FACTORY_FOR = models.WMSConnection
     title = "WMS title"
     slug = "wmsslug"
     url = "http://test.com/wms"
@@ -18,7 +15,7 @@ class WMSConnectionFactory(factory.Factory):
 
 
 class WMSSourceFactory(factory.Factory):
-    FACTORY_FOR = WMSSource
+    FACTORY_FOR = models.WMSSource
     layer_name = 'layer_name'
     display_name = 'Display Name'
     url = 'http://test.com'
@@ -39,12 +36,12 @@ class WMSSourceFactory(factory.Factory):
 
 
 class FeatureLineFactory(factory.Factory):
-    FACTORY_FOR = FeatureLine
+    FACTORY_FOR = models.FeatureLine
     wms_layer = factory.SubFactory(WMSSourceFactory)
     # slug = factory.Sequence(lambda n: 'page{0}'.format(n))
 
 
 class FilterPageFactory(factory.Factory):
-    FACTORY_FOR = FilterPage
+    FACTORY_FOR = models.FilterPage
     wms_source = factory.SubFactory(WMSSourceFactory)
     slug = factory.Sequence(lambda n: 'page{0}'.format(n))
