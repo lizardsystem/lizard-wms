@@ -100,15 +100,20 @@ def capabilities_url(url):
 class WMSConnection(models.Model):
     """Definition of a WMS Connection."""
 
-    title = models.CharField(max_length=100)
-    slug = models.CharField(max_length=100)
-    url = models.URLField()
+    title = models.CharField(
+        verbose_name=_("title"),
+        max_length=100)
+    slug = models.CharField(
+        verbose_name=_("slug"),
+        max_length=100)
+    url = models.URLField(verbose_name=_("URL"))
     version = models.CharField(
+        verbose_name=_("version"),
         max_length=20,
         default='1.3.0',
-        help_text=(
-            u"Version number for WMS service. Not used. 1.1.1 is used " +
-            u"because owslib can only handle 1.1.1."))
+        help_text=_(
+            "Version number for WMS service. Not used. 1.1.1 is used "
+            "because owslib can only handle 1.1.1."))
 
     params = models.TextField(
         default='{"height": "256", "width": "256", '
@@ -127,6 +132,10 @@ overwrites.""")
 
     def __unicode__(self):
         return self.title or self.slug
+
+    class Meta:
+        verbose_name = _("WMS connection")
+        verbose_name_plural = _("WMS connections")
 
     @transaction.commit_on_success
     def fetch(self):
@@ -195,14 +204,16 @@ class WMSSource(models.Model):
     Definition of a wms source.
     """
 
-    layer_name = models.TextField()
-    display_name = models.CharField(max_length=255, null=True, blank=True)
-    url = models.URLField()
+    layer_name = models.TextField(verbose_name=_("layer name"))
+    display_name = models.CharField(
+        verbose_name=_("display name"), max_length=255, null=True, blank=True)
+    url = models.URLField(verbose_name=_("URL"))
     _params = JSONField(null=True, blank=True)
     # ^^^ special db_column name
     options = models.TextField(null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(verbose_name=_("description"), null=True, blank=True)
     metadata = JSONField(
+        verbose_name=_("metadata"),
         help_text=_('''Key/value metadata for for instance copyright.
 It should be a dictionary, so surround it with braces and use double quotes,
 like {"key": "value", "key2": "value2"}.
@@ -210,7 +221,8 @@ like {"key": "value", "key2": "value2"}.
         null=True,
         blank=True)
 
-    legend_url = models.CharField(null=True, blank=True, max_length=2048)
+    legend_url = models.CharField(
+        verbose_name=_("legend URL"), null=True, blank=True, max_length=2048)
     category = models.ManyToManyField(Category, null=True, blank=True)
 
     # bbox: minx, miny, maxx, maxy in Google coordinates, separated by commas
@@ -568,27 +580,41 @@ class FeatureLine(models.Model):
     """
 
     wms_layer = models.ForeignKey(WMSSource, null=False, blank=False)
-    name = models.CharField(max_length=100, null=False, blank=False)
+    name = models.CharField(
+        verbose_name=_("name"), max_length=100, null=False, blank=False)
 
     # If description is given, it is used in popups instead of name
-    description = models.CharField(max_length=200, null=True, blank=True)
+    description = models.CharField(
+        verbose_name=_("description"), max_length=200, null=True, blank=True)
 
-    visible = models.BooleanField(default=True)
-    use_as_id = models.BooleanField(default=False)
+    visible = models.BooleanField(
+        verbose_name=_("visible"),
+        default=True)
+    use_as_id = models.BooleanField(
+        verbose_name=_("use as id"),
+        default=False)
     render_as = models.CharField(
+        verbose_name=_("render as"),
         max_length=1, choices=(
-            (RENDER_TEXT, "Tekst"),
-            (RENDER_IMAGE, "Link naar een image"),
+            (RENDER_TEXT, _("Text")),
+            (RENDER_IMAGE, _("Link to an image")),
             (RENDER_XLS_DATE, _("Excel date format")),
-            (RENDER_URL, "URL"),
-            (RENDER_URL_LIKE, "URL-achtige tekst"),
+            (RENDER_URL, _("URL")),
+            (RENDER_URL_LIKE, _("URL-like text")),
             (RENDER_URL_MORE_LINK, _("URL shown as 'click here' link")),
-            (RENDER_GC_COLUMN, "Google column chart")), default=RENDER_TEXT)
-    in_hover = models.BooleanField(default=False)
-    order_using = models.IntegerField(default=1000)
+            (RENDER_GC_COLUMN, _("Google column chart")),
+            ),
+        default=RENDER_TEXT)
+    in_hover = models.BooleanField(verbose_name=_("in hover"), default=False)
+    order_using = models.IntegerField(
+        verbose_name=_("index"),
+        # ^^^ Note reinout: we *always* call this one 'index'.
+        default=1000)
 
     class Meta:
         ordering = ('order_using', 'description', 'name',)
+        verbose_name = _("feature line")
+        verbose_name_plural = _("feature lines")
 
     def __unicode__(self):
         return self.name
