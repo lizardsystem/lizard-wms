@@ -13,14 +13,17 @@
   <fieldset>
 
     {% for dropdown in view.dropdowns %}
-      <label>{{ dropdown.label }}</label>
-      <select class="input-block-level"
-              name="{{ dropdown.field_name }}">
-        {% for option in dropdown.options %}
-          <option {% if option == dropdown.selected %}selected="selected"{% endif %}
-                  >{{ option }}</option>
-        {% endfor %}
-      </select>
+      <h3>{{ dropdown.label }}</h3>
+      {% for option in dropdown.options %}
+        <label class="checkbox">
+          <input type="checkbox"
+                 name="{{ dropdown.field_name }}"
+                 value="{{ option }}"
+                 {% if option in dropdown.selected %}checked{% endif %}
+                 />
+          {{ option }}
+        </label>
+      {% endfor %}
     {% endfor %}
   </fieldset>
   <div id="filter-page-spinner"

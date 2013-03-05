@@ -89,10 +89,12 @@ class FilterPageView(MapView):
         result = {}
         allowed_keys = [name for (name, title) in self.available_filters]
         logger.debug("Allowed keys: %s", allowed_keys)
-        for k, v in self.request.GET.items():
+        for k in self.request.GET:
             if k not in allowed_keys:
-                logger.warn("Unknown filter (%s=%s) in GET parameters.", k, v)
+                logger.warn("Unknown filter (%s) in GET parameters.", k)
                 continue
+            v = self.request.GET.getlist(k)
+            v = [item for item in v if item]  # Weed out an empty string.
             if not v:
                 continue
             result[k] = v
@@ -137,8 +139,7 @@ class FilterPageView(MapView):
             dropdown = {
                 'label': select_label,
                 'field_name': select_name,
-                'options': ([EMPTY_OPTION] +
-                            values_per_dropdown.get(select_name, [])),
+                'options': values_per_dropdown.get(select_name, []),
                 'selected': choiced_made.get(select_name, EMPTY_OPTION),
                 }
             result.append(dropdown)
@@ -146,7 +147,11 @@ class FilterPageView(MapView):
 
     @property
     def cql_filter_string(self):
-        filter_parts = ["%s='%s'" % (k, v) for (k, v) in self.filters.items()]
+        filter_parts = []
+        for key, values in self.filters.items():
+            values = ["'%s'" % value for value in values]
+            values = ', '.join(values)
+            filter_parts.append("%s in (%s)" % (key, values))
         filter_string = ' AND '.join(filter_parts)
         return filter_string
 
