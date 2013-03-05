@@ -35,6 +35,11 @@ RENDER_URL_LIKE = 'W'
 RENDER_GC_COLUMN = 'C'
 RENDER_XLS_DATE = 'X'
 
+WMS_PARAMS_DEFAULT = ('{"height": "256", "width": "256", '
+                      '"styles": "", "format": "image/png", "tiled": "true", '
+                      '"transparent": "true"}')
+WMS_OPTIONS_DEFAULT = '''{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}'''
+
 
 logger = logging.getLogger(__name__)
 
@@ -110,13 +115,8 @@ class WMSConnection(models.Model):
             u"Version number for WMS service. Not used. 1.1.1 is used " +
             u"because owslib can only handle 1.1.1."))
 
-    params = models.TextField(
-        default='{"height": "256", "width": "256", '
-        '"styles": "", "format": "image/png", "tiled": "true", '
-        '"transparent": "true"}')
-    options = models.TextField(
-        default='{"buffer": 0, "isBaseLayer": false, '
-        '"opacity": 0.5}')
+    params = models.TextField(default=WMS_PARAMS_DEFAULT)
+    options = models.TextField(default=WMS_OPTIONS_DEFAULT)
     category = models.ManyToManyField(Category, null=True, blank=True)
     xml = models.TextField(
         default="",
@@ -200,13 +200,11 @@ class WMSSource(models.Model):
     url = models.URLField()
     _params = JSONField(
         null=True, blank=True,
-        default='{"height": "256", "width": "256", '
-        '"styles": "", "format": "image/png", "tiled": "true", '
-        '"transparent": "true"}')
+        default=WMS_PARAMS_DEFAULT)
     # ^^^ special db_column name
     options = models.TextField(
         null=True, blank=True,
-        default='{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}')
+        default=WMS_OPTIONS_DEFAULT)
 
     description = models.TextField(null=True, blank=True)
     metadata = JSONField(
