@@ -16,6 +16,9 @@ function refreshFormAndLayers() {
         var id = $(this).attr("data-workspace-wms-id");
         var params = $(this).attr("data-workspace-wms-params");
         params = $.parseJSON(params);
+        if (params['cql_filter'] === undefined) {
+          params['cql_filter'] = null;
+        };
         wms_layers[id].mergeNewParams(params);
       $("#filter-page-spinner img").fadeOut(100);
       });
