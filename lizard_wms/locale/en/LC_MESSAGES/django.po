@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-05 06:47-0600\n"
+"POT-Creation-Date: 2013-03-05 14:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,61 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: admin.py:86
+msgid "Update all bounding boxes"
+msgstr ""
+
+#: admin.py:92
+msgid "Set the not-yet-set bounding boxes"
+msgstr ""
+
+#: models.py:104
+msgid "title"
+msgstr ""
+
+#: models.py:107 models.py:683
+msgid "slug"
+msgstr ""
+
+#: models.py:109 models.py:210 models.py:602
+msgid "URL"
+msgstr ""
+
+#: models.py:111
+msgid "version"
+msgstr ""
+
+#: models.py:115
+msgid ""
+"Version number for WMS service. Not used. 1.1.1 is used because owslib can "
+"only handle 1.1.1."
+msgstr ""
+
+#: models.py:137
+msgid "WMS connection"
+msgstr ""
+
+#: models.py:138
+msgid "WMS connections"
+msgstr ""
+
 #: models.py:207
+msgid "layer name"
+msgstr ""
+
+#: models.py:209
+msgid "display name"
+msgstr ""
+
+#: models.py:214 models.py:588
+msgid "description"
+msgstr ""
+
+#: models.py:216
+msgid "metadata"
+msgstr ""
+
+#: models.py:217
 msgid ""
 "Key/value metadata for for instance copyright.\n"
 "It should be a dictionary, so surround it with braces and use double "
@@ -25,83 +79,123 @@ msgid ""
 "like {\"key\": \"value\", \"key2\": \"value2\"}.\n"
 msgstr ""
 
-#: models.py:223
+#: models.py:225
+msgid "legend URL"
+msgstr ""
+
+#: models.py:234
 msgid "show legend"
 msgstr ""
 
-#: models.py:224
+#: models.py:235
 msgid "Uncheck it if you want to hide the legend."
 msgstr ""
 
-#: models.py:227
+#: models.py:238
 msgid "enable search"
 msgstr ""
 
-#: models.py:229
+#: models.py:240
 msgid "Uncheck it if you don't want a click on the map to search us."
 msgstr ""
 
-#: models.py:232
+#: models.py:243 models.py:610
 msgid "index"
 msgstr ""
 
-#: models.py:233
+#: models.py:244
 msgid "Number used for ordering categories relative to each other."
 msgstr ""
 
-#: models.py:238 models.py:668
+#: models.py:249 models.py:694
 msgid "WMS source"
 msgstr ""
 
-#: models.py:239
+#: models.py:250
 msgid "WMS sources"
 msgstr ""
 
-#: models.py:582
-msgid "Excel date format"
-msgstr ""
-
-#: models.py:585
-msgid "URL shown as 'click here' link"
-msgstr ""
-
-#: models.py:637
-msgid "Click here for more information"
-msgstr ""
-
-#: models.py:657
-msgid "slug"
-msgstr ""
-
-#: models.py:658
-msgid "Set automatically from the name."
-msgstr ""
-
-#: models.py:660
+#: models.py:584 models.py:686
 msgid "name"
 msgstr ""
 
-#: models.py:662
+#: models.py:591
+msgid "visible"
+msgstr ""
+
+#: models.py:594
+msgid "use as id"
+msgstr ""
+
+#: models.py:597
+msgid "render as"
+msgstr ""
+
+#: models.py:599
+msgid "Text"
+msgstr ""
+
+#: models.py:600
+msgid "Link to an image"
+msgstr ""
+
+#: models.py:601
+msgid "Excel date format"
+msgstr ""
+
+#: models.py:603
+msgid "URL-like text"
+msgstr ""
+
+#: models.py:604
+msgid "URL shown as 'click here' link"
+msgstr ""
+
+#: models.py:605
+msgid "Google column chart"
+msgstr ""
+
+#: models.py:608
+msgid "in hover"
+msgstr ""
+
+#: models.py:616
+msgid "feature line"
+msgstr ""
+
+#: models.py:617
+msgid "feature lines"
+msgstr ""
+
+#: models.py:663
+msgid "Click here for more information"
+msgstr ""
+
+#: models.py:684
+msgid "Set automatically from the name."
+msgstr ""
+
+#: models.py:688
 msgid "Title of the page. If empty, the WMS source's name is used."
 msgstr ""
 
-#: models.py:669
+#: models.py:695
 msgid "WMS source for which we show filters."
 msgstr ""
 
-#: models.py:674
+#: models.py:700
 msgid "available filters"
 msgstr ""
 
-#: models.py:676
+#: models.py:702
 msgid "Feature lines of our WMS source that we use as filters."
 msgstr ""
 
-#: models.py:681
+#: models.py:707
 msgid "WMS filter page"
 msgstr ""
 
-#: models.py:682
+#: models.py:708
 msgid "WMS filter pages"
 msgstr ""
 
@@ -111,4 +205,20 @@ msgstr ""
 
 #: templates/lizard_wms/filter_page.html:35
 msgid "Download spreadsheet"
+msgstr ""
+
+#: templates/lizard_wms/popup-thead.html:4
+msgid "Attribute"
+msgstr ""
+
+#: templates/lizard_wms/popup-thead.html:5
+msgid "Value"
+msgstr ""
+
+#: templates/lizard_wms/popup.html:46
+msgid "Add to selection"
+msgstr ""
+
+#: templates/lizard_wms/popup.html:53
+msgid "No data"
 msgstr ""
