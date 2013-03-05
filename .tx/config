@@ -1,0 +1,8 @@
+[main]
+host = https://translations.lizard.net
+type = PO
+
+[lizardsystem.lizard-wms]
+file_filter = lizard_wms/locale/<lang>/LC_MESSAGES/django.po
+source_file = lizard_wms/locale/en/LC_MESSAGES/django.po
+source_lang = en
