@@ -17,18 +17,11 @@
         {% endif %}
         {% if info.render_as == 'T' %}{{ info.value }}{% endif %}
         {% if info.render_as == 'I' %}<img src="{{ info.value }}" />{% endif %}
-        {% if info.render_as == 'U' %}
+        {% if info.render_as in 'UWM' %}
           <a href="{{ info.value }}"
              target="_blank"
              style="text-decoration:underline; color:blue;">
-            {{ info.value }}
-          </a>
-        {% endif %}
-        {% if info.render_as == 'W' %}
-          <a href="http://{{ info.value }}"
-             target="_blank"
-             style="text-decoration:underline; color:blue;">
-            {{ info.value }}
+            {{ info.link_name }}
           </a>
         {% endif %}
         </td>

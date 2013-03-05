@@ -5,7 +5,12 @@ Changelog of lizard-wms
 1.25 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Added render option to featureline: show a link as 'click here for more
+  info' text instead of a long URL. Both with-and-without-http URLs are
+  supported.
+
+- Refactored the featureline popup rendering: moved it to featureline itself
+  so that proper tests could be added.
 
 
 1.24 (2013-03-04)
