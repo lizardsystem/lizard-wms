@@ -1,4 +1,5 @@
 {% load workspaces %}
+{% load i18n %}
 {% load utility %}
 {% if feature_info %}
 <table class="table table-bordered">
@@ -42,13 +43,13 @@
              data-adapter-layer-json="{{ workspace_item.adapter_layer_json }}"
              data-identifier="{{ identifier }}"
              data-target-id="#edit-collage"
-             title="Toevoegen aan selectie">&nbsp;</a>
+             title='{% trans "Add to selection" %}'>&nbsp;</a>
         </td>
     </tr>
   </table>
   {% endif %}
 {% else %}
 <div class="alert">
-  <h3>Geen data</h3>
+  <h3>{% trans "No data" %}</h3>
 </div>
 {% endif %}
