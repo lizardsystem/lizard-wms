@@ -8,9 +8,6 @@ import datetime
 import json
 import logging
 
-import owslib.wms
-import requests
-
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
@@ -20,9 +17,11 @@ from jsonfield.fields import JSONField
 from lizard_map import coordinates
 from lizard_map.models import ADAPTER_CLASS_WMS
 from lizard_maptree.models import Category
+import owslib.wms
+import requests
 
-from lizard_wms.widgets import WmsWorkspaceAcceptable
 from lizard_wms.chart import google_column_chart_url
+from lizard_wms.widgets import WmsWorkspaceAcceptable
 
 FIXED_WMS_API_VERSION = '1.1.1'
 WMS_TIMEOUT = 10
@@ -409,7 +408,8 @@ like {"key": "value", "key2": "value2"}.
                 # unknown parameters.  see
                 # http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
                 'BUFFER': buffer,
-                # ^^^ Note Reinout: it seems to *greatly* increase search radius.
+                # ^^^ Note Reinout: it seems to *greatly* increase search
+                # radius.
             }
 
             # Add styles to request when defined
