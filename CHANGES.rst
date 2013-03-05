@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.25 (unreleased)
+1.25 (2013-03-05)
 -----------------
 
 - Added Dutch translations. We're now translated on
