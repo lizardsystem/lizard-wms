@@ -38,7 +38,6 @@ class WMSSourceFactory(factory.Factory):
 class FeatureLineFactory(factory.Factory):
     FACTORY_FOR = models.FeatureLine
     wms_layer = factory.SubFactory(WMSSourceFactory)
-    # slug = factory.Sequence(lambda n: 'page{0}'.format(n))
 
 
 class FilterPageFactory(factory.Factory):
