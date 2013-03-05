@@ -198,9 +198,16 @@ class WMSSource(models.Model):
     layer_name = models.TextField()
     display_name = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField()
-    _params = JSONField(null=True, blank=True)
+    _params = JSONField(
+        null=True, blank=True,
+        default='{"height": "256", "width": "256", '
+        '"styles": "", "format": "image/png", "tiled": "true", '
+        '"transparent": "true"}')
     # ^^^ special db_column name
-    options = models.TextField(null=True, blank=True)
+    options = models.TextField(
+        null=True, blank=True,
+        default='{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}')
+
     description = models.TextField(null=True, blank=True)
     metadata = JSONField(
         help_text=_('''Key/value metadata for for instance copyright.
