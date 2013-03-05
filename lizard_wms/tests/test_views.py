@@ -5,6 +5,7 @@ import logging
 # from django.test.utils import override_settings
 import mock
 from django.core.urlresolvers import reverse
+from django.http import QueryDict
 from django.test import TestCase
 from django.test.client import Client
 
@@ -52,16 +53,25 @@ class FilterPageViewTest(TestCase):
         self.view.request = mock.Mock()
         with mock.patch('lizard_wms.views.FilterPageView.available_filters',
                         [('CITY', 'City'),]):
-            self.view.request.GET = {'CITY': 'Nieuwegein'}
-            self.assertEquals(self.view.filters, {'CITY': 'Nieuwegein'})
+            self.view.request.GET = QueryDict('CITY=Nieuwegein')
+            self.assertEquals(self.view.filters, {'CITY': ['Nieuwegein']})
 
     def test_filters4(self):
         # Test with good, but empty GET params.
         self.view.request = mock.Mock()
         with mock.patch('lizard_wms.views.FilterPageView.available_filters',
                         [('CITY', 'City'),]):
-            self.view.request.GET = {'CITY': ''}
+            self.view.request.GET = QueryDict('CITY=')
             self.assertEquals(self.view.filters, {})
+
+    def test_filters5(self):
+        # Test with good multiple GET params.
+        self.view.request = mock.Mock()
+        with mock.patch('lizard_wms.views.FilterPageView.available_filters',
+                        [('CITY', 'City'),]):
+            self.view.request.GET = QueryDict('CITY=Nieuwegein&CITY=Delft')
+            self.assertEquals(self.view.filters,
+                              {'CITY': ['Nieuwegein', 'Delft']})
 
     def test_values_per_dropdown(self):
         features = [

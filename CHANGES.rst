@@ -5,7 +5,7 @@ Changelog of lizard-wms
 1.26 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Swiched dropdowns on filterpage for checkboxes.
 
 
 1.25 (2013-03-05)
