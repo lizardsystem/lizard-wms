@@ -1,0 +1,121 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+#   <admin@example.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: lizardsystem\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-05 06:47-0600\n"
+"PO-Revision-Date: 2013-03-05 12:58+0000\n"
+"Last-Translator: admin <admin@example.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: models.py:207
+msgid ""
+"Key/value metadata for for instance copyright.\n"
+"It should be a dictionary, so surround it with braces and use double "
+"quotes,\n"
+"like {\"key\": \"value\", \"key2\": \"value2\"}.\n"
+msgstr ""
+"Term/waarde metadata voor bijvoorbeeld copyright.\n"
+"Het moet ingetypt worden met accolades en dubbele aanhalingstekens zoals\n"
+"{\"term1\":\"waarde\", \"term2\":\"waarde 2\"}.\n"
+
+#: models.py:223
+msgid "show legend"
+msgstr "toon legenda"
+
+#: models.py:224
+msgid "Uncheck it if you want to hide the legend."
+msgstr "Vink dit uit als je de legenda hiervan niet wil tonen."
+
+#: models.py:227
+msgid "enable search"
+msgstr "sta zoeken toe"
+
+#: models.py:229
+msgid "Uncheck it if you don't want a click on the map to search us."
+msgstr ""
+"Vink dit uit als je niet wilt dat hierin gezocht wordt als er op de kaart "
+"geklikt wordt."
+
+#: models.py:232
+msgid "index"
+msgstr "index"
+
+#: models.py:233
+msgid "Number used for ordering categories relative to each other."
+msgstr "Nummer waarop de categoriën onderling geordend worden."
+
+#: models.py:238 models.py:668
+msgid "WMS source"
+msgstr "WMS bron"
+
+#: models.py:239
+msgid "WMS sources"
+msgstr "WMS bronnen"
+
+#: models.py:582
+msgid "Excel date format"
+msgstr "Excel datumformaat"
+
+#: models.py:585
+msgid "URL shown as 'click here' link"
+msgstr "URL die als 'klik hier' getoond wordt"
+
+#: models.py:637
+msgid "Click here for more information"
+msgstr "Klik hier voor meer informatie"
+
+#: models.py:657
+msgid "slug"
+msgstr "ID in URL"
+
+#: models.py:658
+msgid "Set automatically from the name."
+msgstr "Dit wordt automatisch ingevuld aan de hand van de naam"
+
+#: models.py:660
+msgid "name"
+msgstr "naam"
+
+#: models.py:662
+msgid "Title of the page. If empty, the WMS source's name is used."
+msgstr ""
+"Titel van de pagina. Als het leeg is wordt de naam van de WMS bron gebruikt."
+
+#: models.py:669
+msgid "WMS source for which we show filters."
+msgstr "WMS bron waar we de filters voor tonen."
+
+#: models.py:674
+msgid "available filters"
+msgstr "Beschikbare filters"
+
+#: models.py:676
+msgid "Feature lines of our WMS source that we use as filters."
+msgstr "Features van onze WMS bron die we als filters gebruiken."
+
+#: models.py:681
+msgid "WMS filter page"
+msgstr "WMS filterpagina"
+
+#: models.py:682
+msgid "WMS filter pages"
+msgstr "WMS filterpagina's"
+
+#: templates/lizard_wms/filter_page.html:7
+msgid "Available filters"
+msgstr "Beschikbare filters"
+
+#: templates/lizard_wms/filter_page.html:35
+msgid "Download spreadsheet"
+msgstr "Download spreadsheet"

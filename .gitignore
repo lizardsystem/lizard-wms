@@ -42,3 +42,4 @@ etc/*.apache.conf
 .#*
 *~
 .codeintel/
+.DS_Store
