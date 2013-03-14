@@ -629,7 +629,7 @@ class FeatureLine(models.Model):
 
     def as_popup_info(self, value):
         """Return ourselves as dict for in WMSSource's popup."""
-        show_label = 'true'
+        label_on_separate_line = 'true'
         link_name = ''
         if self.render_as == RENDER_GC_COLUMN:
             json_data = json.loads(value)
@@ -645,7 +645,7 @@ class FeatureLine(models.Model):
                 self.render_as = RENDER_NONE
             else:
                 self.render_as = RENDER_IMAGE
-            show_label = 'false'
+            label_on_separate_line = 'false'
         elif self.render_as == RENDER_XLS_DATE:
             try:
                 date_value = float(value)
@@ -670,7 +670,7 @@ class FeatureLine(models.Model):
             'value': value,
             'link_name': link_name,
             'render_as': self.render_as,
-            'show_label': show_label,
+            'label_on_separate_line': label_on_separate_line,
             }
 
 
