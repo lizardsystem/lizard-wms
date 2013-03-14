@@ -186,7 +186,8 @@ class FilterPageDownload(FilterPageView):
         """Return a csv file."""
         filename = '%s.csv' % self.kwargs['slug']
         response = HttpResponse(mimetype='text/csv')
-        response['Content-Disposition'] = ('attachment; filename="%s"' % filename)
+        response['Content-Disposition'] = (
+            'attachment; filename="%s"' % filename)
 
         names_titles = self.wms_source.featureline_set.filter(
             visible=True).values_list('name', 'description')
