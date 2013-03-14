@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from __future__ import print_function
+import datetime
 import json
 import logging
 
@@ -37,6 +38,12 @@ def choices():
         (RENDER_URL_MORE_LINK, _("URL shown as 'click here' link")),
         (RENDER_GC_COLUMN, _("Google column chart")),
         )
+
+
+def xls_date_to_string(xldate):
+    # Adapted from http://stackoverflow.com/a/1112664/27401
+    dt = datetime.datetime(1899, 12, 30) + datetime.timedelta(days=xldate)
+    return dt.isoformat()[:10]  # Yes, this can be formatted more nicely.
 
 
 def popup_info(feature_line, value):

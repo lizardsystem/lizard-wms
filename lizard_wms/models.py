@@ -4,7 +4,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from urllib import urlencode
 import cgi
-import datetime
 import json
 import logging
 
@@ -57,12 +56,6 @@ def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
         raise TimeoutException("Timeout of %s s expired calling %s " %
                                (timeout_duration, func.__name__))
     return it.result
-
-
-def xls_date_to_string(xldate):
-    # Adapted from http://stackoverflow.com/a/1112664/27401
-    dt = datetime.datetime(1899, 12, 30) + datetime.timedelta(days=xldate)
-    return dt.isoformat()[:10]  # Yes, this can be formatted more nicely.
 
 
 def capabilities_url(url):
