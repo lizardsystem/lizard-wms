@@ -7,7 +7,7 @@
 	{% include "lizard_wms/popup-thead.html" %}
     {% for info in feature_info %}
       <tr>
-        {% if info.label_on_separate_line == 'false' %}
+        {% if info.label_on_separate_line %}
           <td colspan="2">{% if info.name %}<strong>{{ info.name }}<strong>{% endif %}</td>
         </tr>
 	<tr>

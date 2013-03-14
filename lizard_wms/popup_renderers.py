@@ -50,7 +50,7 @@ def xls_date_to_string(xldate):
 
 def popup_info(feature_line, value):
     """Return dict with info for the WMS popup."""
-    label_on_separate_line = 'true'
+    label_on_separate_line = False
     link_name = ''
     if feature_line.render_as == RENDER_GC_COLUMN:
         json_data = json.loads(value)
@@ -66,7 +66,7 @@ def popup_info(feature_line, value):
             feature_line.render_as = RENDER_NONE
         else:
             feature_line.render_as = RENDER_IMAGE
-        label_on_separate_line = 'false'
+        label_on_separate_line = True
     elif feature_line.render_as == RENDER_XLS_DATE:
         try:
             date_value = float(value)
