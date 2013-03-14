@@ -2,33 +2,32 @@
 {% load i18n %}
 {% load utility %}
 {% if feature_info %}
-<table class="table table-bordered">
-  <tbody>
-	{% include "lizard_wms/popup-thead.html" %}
-    {% for info in feature_info %}
-      {% if info.label_on_separate_line %}
-        <tr>
-          <td colspan="2"><strong>{{ info.label }}<strong></td>
-        </tr>
-	<tr>
-          <td colspan="2">{{ info.value }}</td>
-        </tr>
-      {% else %}
-        <tr>
-          <td>{{ info.label }}</td>
-          <td>{{ info.value }}</td>
-        </tr>
-      {% endif %}
-    {% endfor %}
-  </tbody>
-</table>
+  <table class="table table-bordered">
+    <tbody>
+      {% include "lizard_wms/popup-thead.html" %}
+      {% for info in feature_info %}
+        {% if info.label_on_separate_line %}
+          <tr>
+            <td colspan="2"><strong>{{ info.label }}<strong></td>
+          </tr>
+          <tr>
+            <td colspan="2">{{ info.value }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td>{{ info.label }}</td>
+            <td>{{ info.value }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
   {# Extra buttons #}
   {% if add_snippet %}
-  <table cellspacing="0" cellpadding="0">
-    <tr>
+    <table cellspacing="0" cellpadding="0">
+      <tr>
         <td class="button">
-          <a
-             href="{% url lizard_map_collage_add %}"
+          <a href="{% url lizard_map_collage_add %}"
              class="ss_sprite ss_star collage-add"
              data-name="Item uit {{ workspace_item.name }}"
              data-adapter-class="{{ workspace_item.adapter_class }}"
@@ -41,7 +40,7 @@
   </table>
   {% endif %}
 {% else %}
-<div class="alert">
-  <h3>{% trans "No data" %}</h3>
-</div>
+  <div class="alert">
+    <h3>{% trans "No data" %}</h3>
+  </div>
 {% endif %}
