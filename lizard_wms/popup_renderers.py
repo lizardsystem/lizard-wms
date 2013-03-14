@@ -12,13 +12,15 @@ from django.utils.translation import ugettext_lazy as _
 from lizard_wms.chart import google_column_chart_url
 
 
+# Keep these constants in the order of their value.
+# They need to be one character long, btw.
 RENDER_NONE = ''
-RENDER_TEXT = 'T'
-RENDER_IMAGE = 'I'
-RENDER_URL = 'U'
-RENDER_URL_MORE_LINK = 'M'
-RENDER_URL_LIKE = 'W'
 RENDER_GC_COLUMN = 'C'
+RENDER_IMAGE = 'I'
+RENDER_URL_MORE_LINK = 'M'
+RENDER_TEXT = 'T'
+RENDER_URL = 'U'
+RENDER_URL_LIKE = 'W'
 RENDER_XLS_DATE = 'X'
 
 DEFAULT_RENDERER = RENDER_TEXT
