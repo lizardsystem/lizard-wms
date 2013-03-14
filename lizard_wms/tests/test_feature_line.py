@@ -17,6 +17,17 @@ class FeatureLineTest(TestCase):
     def test_smoke(self):
         self.assertTrue(self.feature_line)
 
+    def test_render_xls_date(self):
+        self.feature_line.render_as = popup_renderers.RENDER_XLS_DATE
+        result = self.feature_line.as_popup_info('26658')
+        expected = '1972-12-25'
+        self.assertTrue(expected in result['value'])
+
+    def test_render_xls_date_with_error(self):
+        self.feature_line.render_as = popup_renderers.RENDER_XLS_DATE
+        result = self.feature_line.as_popup_info('my birthday')
+        self.assertEquals(result, None)
+
     def test_render_url(self):
         self.feature_line.render_as = popup_renderers.RENDER_URL
         result = self.feature_line.as_popup_info('http://reinout.vanrees.org')
@@ -36,6 +47,18 @@ class FeatureLineTest(TestCase):
         expected2 = 'Click here'
         self.assertTrue(expected1 in result['value'])
         self.assertTrue(expected2 in result['value'])
+
+    def test_render_google_chart_error1(self):
+        self.feature_line.render_as = popup_renderers.RENDER_GC_COLUMN
+        result = self.feature_line.as_popup_info(None)
+        expected = 'Error converting'
+        self.assertTrue(expected in result['value'])
+
+    def test_render_google_chart_error2(self):
+        self.feature_line.render_as = popup_renderers.RENDER_GC_COLUMN
+        result = self.feature_line.as_popup_info('')
+        expected = 'Error converting'
+        self.assertTrue(expected in result['value'])
 
     def test_functional(self):
         # Bare-bones template test to check if mark_safe works properly.

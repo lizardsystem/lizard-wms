@@ -83,20 +83,24 @@ def popup_info(feature_line, value):
 
     # First some special cases that "convert" themselves to other renderers.
     if render_as == RENDER_GC_COLUMN:
-        json_data = json.loads(value)
-        if json_data is None:
-            # See https://github.com/nens/deltaportaal/issues/4
-            logger.warn(
-                "https://github.com/nens/deltaportaal/issues/4 "
-                "hits again")
-            return
-        url = google_column_chart_url(json_data)
-        value = url
-        if url == '':
+        try:
+            json_data = json.loads(value)
+            if json_data is None:
+                # See https://github.com/nens/deltaportaal/issues/4
+                logger.warn(
+                    "https://github.com/nens/deltaportaal/issues/4 "
+                    "hits again")
+                raise ValueError("Somehow the json data doesn't exist???")
+            value = google_column_chart_url(json_data)
+        except (TypeError, ValueError):
+            logger.exception(
+                "Exception when loading json google chart data")
+            value = ''
+        if value != '':
+            render_as = RENDER_IMAGE
+        else:
             render_as = RENDER_TEXT
             value = _("Error converting data to a graph")
-        else:
-            render_as = RENDER_IMAGE
     elif render_as == RENDER_XLS_DATE:
         try:
             date_value = float(value)
