@@ -17,6 +17,31 @@ class FeatureLineTest(TestCase):
     def test_smoke(self):
         self.assertTrue(self.feature_line)
 
+    def test_render_integer(self):
+        self.feature_line.render_as = popup_renderers.RENDER_INTEGER
+        result = self.feature_line.as_popup_info('10.6')
+        self.assertEquals(result['value'], '11')
+
+    def test_render_integer_with_error(self):
+        self.feature_line.render_as = popup_renderers.RENDER_INTEGER
+        result = self.feature_line.as_popup_info('bla bla')
+        self.assertEquals(result, None)
+
+    def test_render_float1(self):
+        self.feature_line.render_as = popup_renderers.RENDER_TWO_DECIMALS
+        result = self.feature_line.as_popup_info('10.678')
+        self.assertEquals(result['value'], '10.68')
+
+    def test_render_float2(self):
+        self.feature_line.render_as = popup_renderers.RENDER_TWO_DECIMALS
+        result = self.feature_line.as_popup_info('10')
+        self.assertEquals(result['value'], '10.00')
+
+    def test_render_float_with_error(self):
+        self.feature_line.render_as = popup_renderers.RENDER_TWO_DECIMALS
+        result = self.feature_line.as_popup_info('bla bla')
+        self.assertEquals(result, None)
+
     def test_render_xls_date(self):
         self.feature_line.render_as = popup_renderers.RENDER_XLS_DATE
         result = self.feature_line.as_popup_info('26658')

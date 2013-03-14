@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.27 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Added two extra renderers for featurelines: integers ('10') and float with
+  two decimals ('10.26'). Feed it a number-like string and it works.
 
 
 1.26 (2013-03-05)

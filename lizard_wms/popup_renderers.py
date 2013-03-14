@@ -15,6 +15,8 @@ from lizard_wms.chart import google_column_chart_url
 
 # Keep these constants in the order of their value.
 # They need to be one character long, btw.
+RENDER_TWO_DECIMALS = 'A'
+RENDER_INTEGER = 'B'
 RENDER_GC_COLUMN = 'C'
 RENDER_IMAGE = 'I'
 RENDER_URL_MORE_LINK = 'M'
@@ -40,6 +42,8 @@ def choices():
     return (
         (RENDER_TEXT, _("Text")),
         (RENDER_IMAGE, _("Link to an image")),
+        (RENDER_INTEGER, _("Integer")),
+        (RENDER_TWO_DECIMALS, _("Float with two decimals")),
         (RENDER_XLS_DATE, _("Excel date format")),
         (RENDER_URL, _("URL")),
         (RENDER_URL_LIKE, _("URL-like text")),
@@ -121,6 +125,22 @@ def popup_info(feature_line, value):
             # Yes, this means we could do the same for RENDER_URL_LIKE
             # options, but I'm leaving that one alone for the moment.
         render_as = RENDER_URL
+    elif render_as == RENDER_INTEGER:
+        try:
+            value = float(value)
+        except ValueError:
+            logger.warn("Not a number-like value: %r", value)
+            return
+        value = unicode(int(round(value)))
+        render_as = RENDER_TEXT
+    elif render_as == RENDER_TWO_DECIMALS:
+        try:
+            value = float(value)
+        except ValueError:
+            logger.warn("Not a number-like value: %r", value)
+            return
+        value = '%0.2f' % value
+        render_as = RENDER_TEXT
 
     # OK, now the actual rendering. Only text, url and image renderers are
     # left.
