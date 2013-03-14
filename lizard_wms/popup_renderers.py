@@ -8,13 +8,13 @@ import logging
 
 from django.utils.translation import ugettext_lazy as _
 # ^^^ Note: the lasy ugettext as choices() is used in a model.
+from django.utils.safestring import mark_safe
 
 from lizard_wms.chart import google_column_chart_url
 
 
 # Keep these constants in the order of their value.
 # They need to be one character long, btw.
-RENDER_NONE = ''
 RENDER_GC_COLUMN = 'C'
 RENDER_IMAGE = 'I'
 RENDER_URL_MORE_LINK = 'M'
@@ -24,6 +24,12 @@ RENDER_URL_LIKE = 'W'
 RENDER_XLS_DATE = 'X'
 
 DEFAULT_RENDERER = RENDER_TEXT
+
+LINK_TEMPLATE = '''
+<a href="%(url)s"
+   target="_blank"
+   style="text-decoration:underline; color:blue;">%(link_text)s</a>
+'''
 
 
 logger = logging.getLogger(__name__)
@@ -49,10 +55,34 @@ def xls_date_to_string(xldate):
 
 
 def popup_info(feature_line, value):
-    """Return dict with info for the WMS popup."""
-    label_on_separate_line = False
-    link_name = ''
-    if feature_line.render_as == RENDER_GC_COLUMN:
+    """Return dict with info for the WMS popup.
+
+    It should return a dict with three items:
+
+    - **label_on_separate_line**: the output is normally a two-column
+      table. When this option is set to True, the label is printed on a line
+      of its own with the value on a whole line of its own, below. Used for
+      big google graphs.
+
+    - **label**: the label. Shown in the first column.
+
+    - **value**: the value to show. Use ``mark_safe()`` when returning a bunch
+      of html. Note that we do some html rendering here ourselves instead of
+      in the template as we know which rendering methods to use here in this
+      file. The template *used* to be littered with exceptions, being tightly
+      coupled to the constants in this file. Not anymore.
+
+    """
+    render_as = feature_line.render_as
+    replacement_link_text = None
+    label = feature_line.description or feature_line.name
+    if render_as == RENDER_GC_COLUMN:
+        label_on_separate_line = True
+    else:
+        label_on_separate_line = False
+
+    # First some special cases that "convert" themselves to other renderers.
+    if render_as == RENDER_GC_COLUMN:
         json_data = json.loads(value)
         if json_data is None:
             # See https://github.com/nens/deltaportaal/issues/4
@@ -63,33 +93,44 @@ def popup_info(feature_line, value):
         url = google_column_chart_url(json_data)
         value = url
         if url == '':
-            feature_line.render_as = RENDER_NONE
+            render_as = RENDER_TEXT
+            value = _("Error converting data to a graph")
         else:
-            feature_line.render_as = RENDER_IMAGE
-        label_on_separate_line = True
-    elif feature_line.render_as == RENDER_XLS_DATE:
+            render_as = RENDER_IMAGE
+    elif render_as == RENDER_XLS_DATE:
         try:
             date_value = float(value)
         except ValueError:
             logger.warn("Not a float-like value for XLS date: %r", value)
             return
         value = xls_date_to_string(date_value)
-        feature_line.render_as = RENDER_TEXT
-    elif feature_line.render_as == RENDER_URL_LIKE:
-        link_name = value
-        value = 'http://' + value
+        render_as = RENDER_TEXT
+    elif render_as == RENDER_URL_LIKE:
         # Quite brittle, but equal to the code from the template that it
         # replaces.
-    elif feature_line.render_as == RENDER_URL_MORE_LINK:
-        link_name = _("Click here for more information")
+        value = 'http://' + value
+        render_as = RENDER_URL
+    elif render_as == RENDER_URL_MORE_LINK:
+        replacement_link_text = _("Click here for more information")
         if not 'http://' in value:
             value = 'http://' + value
             # Yes, this means we could do the same for RENDER_URL_LIKE
             # options, but I'm leaving that one alone for the moment.
+        render_as = RENDER_URL
+
+    # OK, now the actual rendering. Only text, url and image renderers are
+    # left.
+    if render_as == RENDER_TEXT:
+        pass  # value is fine.
+    elif render_as == RENDER_IMAGE:
+        value = mark_safe('<img src="%s" />' % value)
+    elif render_as == RENDER_URL:
+        link_text = replacement_link_text or value
+        value = mark_safe(LINK_TEMPLATE % {'url': value,
+                                           'link_text': link_text})
+
     return {
-        'name': (feature_line.description or feature_line.name),
-        'value': value,
-        'link_name': link_name,
-        'render_as': feature_line.render_as,
+        'label': label,
         'label_on_separate_line': label_on_separate_line,
+        'value': value,
         }

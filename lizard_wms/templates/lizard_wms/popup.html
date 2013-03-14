@@ -6,27 +6,19 @@
   <tbody>
 	{% include "lizard_wms/popup-thead.html" %}
     {% for info in feature_info %}
-      <tr>
-        {% if info.label_on_separate_line %}
-          <td colspan="2">{% if info.name %}<strong>{{ info.name }}<strong>{% endif %}</td>
+      {% if info.label_on_separate_line %}
+        <tr>
+          <td colspan="2"><strong>{{ info.label }}<strong></td>
         </tr>
 	<tr>
-	  <td colspan="2">
-        {% else %}
-          <td>{{info.name}}</td>
-          <td>
-        {% endif %}
-        {% if info.render_as == 'T' %}{{ info.value }}{% endif %}
-        {% if info.render_as == 'I' %}<img src="{{ info.value }}" />{% endif %}
-        {% if info.render_as in 'UWM' %}
-          <a href="{{ info.value }}"
-             target="_blank"
-             style="text-decoration:underline; color:blue;">
-            {{ info.link_name }}
-          </a>
-        {% endif %}
-        </td>
-      </tr>
+          <td colspan="2">{{ info.value }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td>{{ info.label }}</td>
+          <td>{{ info.value }}</td>
+        </tr>
+      {% endif %}
     {% endfor %}
   </tbody>
 </table>

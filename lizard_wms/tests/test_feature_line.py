@@ -19,16 +19,19 @@ class FeatureLineTest(TestCase):
     def test_render_url(self):
         self.feature_line.render_as = popup_renderers.RENDER_URL
         result = self.feature_line.as_popup_info('http://reinout.vanrees.org')
-        self.assertEquals(result['value'], 'http://reinout.vanrees.org')
+        expected = 'href="http://reinout.vanrees.org"'
+        self.assertTrue(expected in result['value'])
 
     def test_render_url_like(self):
         self.feature_line.render_as = popup_renderers.RENDER_URL_LIKE
         result = self.feature_line.as_popup_info('reinout.vanrees.org')
-        self.assertEquals(result['value'], 'http://reinout.vanrees.org')
-        self.assertEquals(result['link_name'], 'reinout.vanrees.org')
+        expected = 'href="http://reinout.vanrees.org"'
+        self.assertTrue(expected in result['value'])
 
     def test_render_url_more(self):
         self.feature_line.render_as = popup_renderers.RENDER_URL_MORE_LINK
         result = self.feature_line.as_popup_info('reinout.vanrees.org')
-        self.assertEquals(result['value'], 'http://reinout.vanrees.org')
-        self.assertTrue('click here' in result['link_name'].lower())
+        expected1 = 'href="http://reinout.vanrees.org"'
+        expected2 = 'Click here'
+        self.assertTrue(expected1 in result['value'])
+        self.assertTrue(expected2 in result['value'])
