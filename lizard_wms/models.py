@@ -20,20 +20,12 @@ from lizard_maptree.models import Category
 import owslib.wms
 import requests
 
-from lizard_wms.chart import google_column_chart_url
 from lizard_wms.widgets import WmsWorkspaceAcceptable
+from lizard_wms import popup_renderers
 
 FIXED_WMS_API_VERSION = '1.1.1'
 WMS_TIMEOUT = 10
 #FIXED_WMS_API_VERSION = '1.3.0'
-RENDER_NONE = ''
-RENDER_TEXT = 'T'
-RENDER_IMAGE = 'I'
-RENDER_URL = 'U'
-RENDER_URL_MORE_LINK = 'M'
-RENDER_URL_LIKE = 'W'
-RENDER_GC_COLUMN = 'C'
-RENDER_XLS_DATE = 'X'
 
 
 logger = logging.getLogger(__name__)
@@ -595,16 +587,9 @@ class FeatureLine(models.Model):
         default=False)
     render_as = models.CharField(
         verbose_name=_("render as"),
-        max_length=1, choices=(
-            (RENDER_TEXT, _("Text")),
-            (RENDER_IMAGE, _("Link to an image")),
-            (RENDER_XLS_DATE, _("Excel date format")),
-            (RENDER_URL, _("URL")),
-            (RENDER_URL_LIKE, _("URL-like text")),
-            (RENDER_URL_MORE_LINK, _("URL shown as 'click here' link")),
-            (RENDER_GC_COLUMN, _("Google column chart")),
-            ),
-        default=RENDER_TEXT)
+        max_length=1,
+        choices=popup_renderers.choices(),
+        default=popup_renderers.DEFAULT_RENDERER)
     in_hover = models.BooleanField(verbose_name=_("in hover"), default=False)
     order_using = models.IntegerField(
         verbose_name=_("index"),
@@ -629,49 +614,7 @@ class FeatureLine(models.Model):
 
     def as_popup_info(self, value):
         """Return ourselves as dict for in WMSSource's popup."""
-        label_on_separate_line = 'true'
-        link_name = ''
-        if self.render_as == RENDER_GC_COLUMN:
-            json_data = json.loads(value)
-            if json_data is None:
-                # See https://github.com/nens/deltaportaal/issues/4
-                logger.warn(
-                    "https://github.com/nens/deltaportaal/issues/4 "
-                    "hits again")
-                return
-            url = google_column_chart_url(json_data)
-            value = url
-            if url == '':
-                self.render_as = RENDER_NONE
-            else:
-                self.render_as = RENDER_IMAGE
-            label_on_separate_line = 'false'
-        elif self.render_as == RENDER_XLS_DATE:
-            try:
-                date_value = float(value)
-            except ValueError:
-                logger.warn("Not a float-like value for XLS date: %r", value)
-                return
-            value = xls_date_to_string(date_value)
-            self.render_as = RENDER_TEXT
-        elif self.render_as == RENDER_URL_LIKE:
-            link_name = value
-            value = 'http://' + value
-            # Quite brittle, but equal to the code from the template that it
-            # replaces.
-        elif self.render_as == RENDER_URL_MORE_LINK:
-            link_name = _("Click here for more information")
-            if not 'http://' in value:
-                value = 'http://' + value
-                # Yes, this means we could do the same for RENDER_URL_LIKE
-                # options, but I'm leaving that one alone for the moment.
-        return {
-            'name': (self.description or self.name),
-            'value': value,
-            'link_name': link_name,
-            'render_as': self.render_as,
-            'label_on_separate_line': label_on_separate_line,
-            }
+        return popup_renderers.popup_info(self, value)
 
 
 class FilterPage(models.Model):
