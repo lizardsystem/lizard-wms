@@ -139,7 +139,7 @@ Changelog of lizard-wms
 -----------------
 
 - Fix a bug that resets options and categories from wms sources when reloading
-their wms connection from admin.
+  their wms connection from admin.
 
 
 1.12 (2012-12-10)
@@ -168,8 +168,8 @@ their wms connection from admin.
 1.9 (2012-11-29)
 ----------------
 
-- Add sort for WMSSource by index and display name; in admin sort is on display
-name.
+- Add sort for WMSSource by index and display name; in admin sort is on
+  display name.
 
 
 1.8 (2012-11-27)
