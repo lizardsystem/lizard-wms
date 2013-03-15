@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.27 (unreleased)
+1.27 (2013-03-15)
 -----------------
 
 - Added two extra renderers for featurelines: integers ('10') and float with
