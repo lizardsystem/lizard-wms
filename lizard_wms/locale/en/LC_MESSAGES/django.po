@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-05 14:17+0000\n"
+"POT-Creation-Date: 2013-03-14 16:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,53 +25,53 @@ msgstr ""
 msgid "Set the not-yet-set bounding boxes"
 msgstr ""
 
-#: models.py:104
+#: models.py:89
 msgid "title"
 msgstr ""
 
-#: models.py:107 models.py:683
+#: models.py:92 models.py:619
 msgid "slug"
 msgstr ""
 
-#: models.py:109 models.py:210 models.py:602
+#: models.py:94 models.py:195 popup_renderers.py:48
 msgid "URL"
 msgstr ""
 
-#: models.py:111
+#: models.py:96
 msgid "version"
 msgstr ""
 
-#: models.py:115
+#: models.py:100
 msgid ""
 "Version number for WMS service. Not used. 1.1.1 is used because owslib can "
 "only handle 1.1.1."
 msgstr ""
 
-#: models.py:137
+#: models.py:122
 msgid "WMS connection"
 msgstr ""
 
-#: models.py:138
+#: models.py:123
 msgid "WMS connections"
 msgstr ""
 
-#: models.py:207
+#: models.py:192
 msgid "layer name"
 msgstr ""
 
-#: models.py:209
+#: models.py:194
 msgid "display name"
 msgstr ""
 
-#: models.py:214 models.py:588
+#: models.py:199 models.py:573
 msgid "description"
 msgstr ""
 
-#: models.py:216
+#: models.py:201
 msgid "metadata"
 msgstr ""
 
-#: models.py:217
+#: models.py:202
 msgid ""
 "Key/value metadata for for instance copyright.\n"
 "It should be a dictionary, so surround it with braces and use double "
@@ -79,131 +79,143 @@ msgid ""
 "like {\"key\": \"value\", \"key2\": \"value2\"}.\n"
 msgstr ""
 
-#: models.py:225
+#: models.py:210
 msgid "legend URL"
 msgstr ""
 
-#: models.py:234
+#: models.py:219
 msgid "show legend"
 msgstr ""
 
-#: models.py:235
+#: models.py:220
 msgid "Uncheck it if you want to hide the legend."
 msgstr ""
 
-#: models.py:238
+#: models.py:223
 msgid "enable search"
 msgstr ""
 
-#: models.py:240
+#: models.py:225
 msgid "Uncheck it if you don't want a click on the map to search us."
 msgstr ""
 
-#: models.py:243 models.py:610
+#: models.py:228 models.py:588
 msgid "index"
 msgstr ""
 
-#: models.py:244
+#: models.py:229
 msgid "Number used for ordering categories relative to each other."
 msgstr ""
 
-#: models.py:249 models.py:694
+#: models.py:234 models.py:630
 msgid "WMS source"
 msgstr ""
 
-#: models.py:250
+#: models.py:235
 msgid "WMS sources"
 msgstr ""
 
-#: models.py:584 models.py:686
+#: models.py:569 models.py:622
 msgid "name"
 msgstr ""
 
-#: models.py:591
+#: models.py:576
 msgid "visible"
 msgstr ""
 
-#: models.py:594
+#: models.py:579
 msgid "use as id"
 msgstr ""
 
-#: models.py:597
+#: models.py:582
 msgid "render as"
 msgstr ""
 
-#: models.py:599
-msgid "Text"
-msgstr ""
-
-#: models.py:600
-msgid "Link to an image"
-msgstr ""
-
-#: models.py:601
-msgid "Excel date format"
-msgstr ""
-
-#: models.py:603
-msgid "URL-like text"
-msgstr ""
-
-#: models.py:604
-msgid "URL shown as 'click here' link"
-msgstr ""
-
-#: models.py:605
-msgid "Google column chart"
-msgstr ""
-
-#: models.py:608
+#: models.py:586
 msgid "in hover"
 msgstr ""
 
-#: models.py:616
+#: models.py:594
 msgid "feature line"
 msgstr ""
 
-#: models.py:617
+#: models.py:595
 msgid "feature lines"
 msgstr ""
 
-#: models.py:663
-msgid "Click here for more information"
-msgstr ""
-
-#: models.py:684
+#: models.py:620
 msgid "Set automatically from the name."
 msgstr ""
 
-#: models.py:688
+#: models.py:624
 msgid "Title of the page. If empty, the WMS source's name is used."
 msgstr ""
 
-#: models.py:695
+#: models.py:631
 msgid "WMS source for which we show filters."
 msgstr ""
 
-#: models.py:700
+#: models.py:636
 msgid "available filters"
 msgstr ""
 
-#: models.py:702
+#: models.py:638
 msgid "Feature lines of our WMS source that we use as filters."
 msgstr ""
 
-#: models.py:707
+#: models.py:643
 msgid "WMS filter page"
 msgstr ""
 
-#: models.py:708
+#: models.py:644
 msgid "WMS filter pages"
+msgstr ""
+
+#: popup_renderers.py:43
+msgid "Text"
+msgstr ""
+
+#: popup_renderers.py:44
+msgid "Link to an image"
+msgstr ""
+
+#: popup_renderers.py:45
+msgid "Integer"
+msgstr ""
+
+#: popup_renderers.py:46
+msgid "Float with two decimals"
+msgstr ""
+
+#: popup_renderers.py:47
+msgid "Excel date format"
+msgstr ""
+
+#: popup_renderers.py:49
+msgid "URL-like text"
+msgstr ""
+
+#: popup_renderers.py:50
+msgid "URL shown as 'click here' link"
+msgstr ""
+
+#: popup_renderers.py:51
+msgid "Google column chart"
+msgstr ""
+
+#: popup_renderers.py:107
+msgid "Error converting data to a graph"
+msgstr ""
+
+#: popup_renderers.py:122
+msgid "Click here for more information"
 msgstr ""
 
 #: templates/lizard_wms/filter_page.html:7
 msgid "Available filters"
 msgstr ""
 
-#: templates/lizard_wms/filter_page.html:35
+#: templates/lizard_wms/filter_page.html:38
 msgid "Download spreadsheet"
 msgstr ""
 
@@ -215,10 +227,10 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: templates/lizard_wms/popup.html:46
+#: templates/lizard_wms/popup.html:37
 msgid "Add to selection"
 msgstr ""
 
-#: templates/lizard_wms/popup.html:53
+#: templates/lizard_wms/popup.html:44
 msgid "No data"
 msgstr ""

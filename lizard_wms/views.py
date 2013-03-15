@@ -6,11 +6,11 @@ import json
 import logging
 from collections import defaultdict
 
+# from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.html import escapejs
-from django.utils.translation import ugettext as _
 from lizard_map.views import MapView
 from lizard_ui.layout import Action
 import unicodecsv
@@ -186,7 +186,8 @@ class FilterPageDownload(FilterPageView):
         """Return a csv file."""
         filename = '%s.csv' % self.kwargs['slug']
         response = HttpResponse(mimetype='text/csv')
-        response['Content-Disposition'] = ('attachment; filename="%s"' % filename)
+        response['Content-Disposition'] = (
+            'attachment; filename="%s"' % filename)
 
         names_titles = self.wms_source.featureline_set.filter(
             visible=True).values_list('name', 'description')

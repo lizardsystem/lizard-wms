@@ -5,29 +5,16 @@
 # serve to show the default.
 
 import datetime
-import os
-import sys
 
-from pkg_resources import parse_version
-import pkginfo
-
-
-def _egg_info(path_to_egg='../../'):
-    path_to_egg = os.path.join(
-        os.path.dirname(__file__), path_to_egg)
-    egg_info = pkginfo.Develop(path_to_egg)
-    release = egg_info.version
-    parsed_version = parse_version(release)
-    version = '%s.%s' % tuple([int(x) for x in parsed_version[0:2]])
-    return egg_info.name, egg_info.author, version, release
-
-
-project, author, version, release = _egg_info()
+project = "lizard-wms"
+author = "Reinout van Rees"
+version = ""
+release = ""
 this_year = datetime.date.today().year
 copyright = '%s, %s' % (this_year, author)
 # Comment out one of these if we're a django project.
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'lizard_wms.testsettings'
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'lizard_wms.settings'
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'nenslint.testsettings'
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'nenslint.settings'
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
