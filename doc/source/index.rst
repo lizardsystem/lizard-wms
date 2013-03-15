@@ -1,13 +1,12 @@
-Overview
-========
+.. include:: ../../README.rst
 
-TODO: Short one-paragraph intro.
+
+Documentation contents
+----------------------
 
 .. toctree::
    :maxdepth: 1
 
-   project
+   wms_integration
    code
-
-
-.. include:: ../../README.rst
+   project

@@ -1,6 +1,6 @@
 Code documentation
 ==================
 
-.. automodule:: lizard_wms.something
-   :members:
 
+.. automodule:: lizard_wms.popup_renderers
+   :members:

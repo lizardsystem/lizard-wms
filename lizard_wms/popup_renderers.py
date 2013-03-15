@@ -1,5 +1,14 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.rst.
 # -*- coding: utf-8 -*-
+"""
+Popup info rendering
+--------------------
+
+A WMS source has FeatureLines. Clicking on the map opens a popup that shows
+all the lines from the WMS GetFeatureInfo call. Every line can be configured
+to be rendered in a certain way. This module contains the various renderers.
+
+"""
 from __future__ import unicode_literals
 from __future__ import print_function
 import datetime
@@ -25,7 +34,22 @@ RENDER_URL = 'U'
 RENDER_URL_LIKE = 'W'
 RENDER_XLS_DATE = 'X'
 
+#: The default renderer for a popup item: as text.
 DEFAULT_RENDERER = RENDER_TEXT
+
+#: Choices for popup rendering: every FeatureLine can choose how it wants to be
+#: displayed.
+POPUP_RENDER_CHOICES = (
+    (RENDER_TEXT, _("Text")),
+    (RENDER_IMAGE, _("Link to an image")),
+    (RENDER_INTEGER, _("Integer")),
+    (RENDER_TWO_DECIMALS, _("Float with two decimals")),
+    (RENDER_XLS_DATE, _("Excel date format")),
+    (RENDER_URL, _("URL")),
+    (RENDER_URL_LIKE, _("URL-like text")),
+    (RENDER_URL_MORE_LINK, _("URL shown as 'click here' link")),
+    (RENDER_GC_COLUMN, _("Google column chart")),
+    )
 
 LINK_TEMPLATE = '''
 <a href="%(url)s"
@@ -33,27 +57,24 @@ LINK_TEMPLATE = '''
    style="text-decoration:underline; color:blue;">%(link_text)s</a>
 '''
 
-
 logger = logging.getLogger(__name__)
 
 
 def choices():
-    """Return choices for the FeatureLine model."""
-    return (
-        (RENDER_TEXT, _("Text")),
-        (RENDER_IMAGE, _("Link to an image")),
-        (RENDER_INTEGER, _("Integer")),
-        (RENDER_TWO_DECIMALS, _("Float with two decimals")),
-        (RENDER_XLS_DATE, _("Excel date format")),
-        (RENDER_URL, _("URL")),
-        (RENDER_URL_LIKE, _("URL-like text")),
-        (RENDER_URL_MORE_LINK, _("URL shown as 'click here' link")),
-        (RENDER_GC_COLUMN, _("Google column chart")),
-        )
+    """Return choices for the FeatureLine model.
+
+    See :ref:`popup-choices` for the available choices.
+    """
+    return POPUP_RENDER_CHOICES
 
 
 def xls_date_to_string(xldate):
-    # Adapted from http://stackoverflow.com/a/1112664/27401
+    """Return iso-formatted date from an excel float date.
+
+    The method is adapted from http://stackoverflow.com/a/1112664/27401 with
+    the assumption that it is a 1900-based date instead of a 1904 one...
+
+    """
     dt = datetime.datetime(1899, 12, 30) + datetime.timedelta(days=xldate)
     return dt.isoformat()[:10]  # Yes, this can be formatted more nicely.
 
@@ -75,6 +96,9 @@ def popup_info(feature_line, value):
       in the template as we know which rendering methods to use here in this
       file. The template *used* to be littered with exceptions, being tightly
       coupled to the constants in this file. Not anymore.
+
+    The value is rendered based on the ``render_as`` attribute of the
+    featureline. See :ref:`popup-choices` for the available choices.
 
     """
     render_as = feature_line.render_as
