@@ -16,7 +16,7 @@ install_requires = [
     'django-jsonfield',
     'OWSLib',
     'lizard-ui >= 4.0, < 5.0',
-    'lizard-map >= 4.0, < 5.0',
+    'lizard-map >= 4.27, < 5.0',
     'lizard-maptree >= 1.9',
     'django-nose',
     'pkginfo',
