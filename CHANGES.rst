@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.28 (unreleased)
+1.28 (2013-04-04)
 -----------------
 
 - Synced our ``wms_workspace_acceptable.html`` template with lizard-map's
