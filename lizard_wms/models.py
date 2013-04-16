@@ -26,6 +26,11 @@ FIXED_WMS_API_VERSION = '1.1.1'
 WMS_TIMEOUT = 10
 #FIXED_WMS_API_VERSION = '1.3.0'
 
+WMS_PARAMS_DEFAULT = ('{"height": "256", "width": "256", '
+                      '"styles": "", "format": "image/png", "tiled": "true", '
+                      '"transparent": "true"}')
+WMS_OPTIONS_DEFAULT = '''{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}'''
+
 
 logger = logging.getLogger(__name__)
 
@@ -100,13 +105,8 @@ class WMSConnection(models.Model):
             "Version number for WMS service. Not used. 1.1.1 is used "
             "because owslib can only handle 1.1.1."))
 
-    params = models.TextField(
-        default='{"height": "256", "width": "256", '
-        '"styles": "", "format": "image/png", "tiled": "true", '
-        '"transparent": "true"}')
-    options = models.TextField(
-        default='{"buffer": 0, "isBaseLayer": false, '
-        '"opacity": 0.5}')
+    params = models.TextField(default=WMS_PARAMS_DEFAULT)
+    options = models.TextField(default=WMS_OPTIONS_DEFAULT)
     category = models.ManyToManyField(Category, null=True, blank=True)
     xml = models.TextField(
         default="",
@@ -189,6 +189,14 @@ class WMSSource(models.Model):
     Definition of a wms source.
     """
 
+    _params = JSONField(
+        null=True, blank=True,
+        default=WMS_PARAMS_DEFAULT)
+    # ^^^ special db_column name
+    options = models.TextField(
+        null=True, blank=True,
+        default=WMS_OPTIONS_DEFAULT)
+
     layer_name = models.TextField(verbose_name=_("layer name"))
     display_name = models.CharField(
         verbose_name=_("display name"), max_length=255, null=True, blank=True)
@@ -196,7 +204,8 @@ class WMSSource(models.Model):
     _params = JSONField(null=True, blank=True)
     # ^^^ special db_column name
     options = models.TextField(null=True, blank=True)
-    description = models.TextField(verbose_name=_("description"), null=True, blank=True)
+    description = models.TextField(verbose_name=_("description"),
+                                   null=True, blank=True)
     metadata = JSONField(
         verbose_name=_("metadata"),
         help_text=_('''Key/value metadata for for instance copyright.

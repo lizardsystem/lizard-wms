@@ -198,7 +198,6 @@ class FilterPageAdmin(admin.ModelAdmin):
     filter_horizontal = ('available_filters',)
 
 
-
 admin.site.register(models.WMSSource, WMSSourceAdmin)
 admin.site.register(models.WMSConnection, WMSConnectionAdmin)
 admin.site.register(models.FilterPage, FilterPageAdmin)
