@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.29 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Feature info lines with no data, i.e. u'' are now recognized as valid feature
+  lines during import.
 
 
 1.28 (2013-04-04)

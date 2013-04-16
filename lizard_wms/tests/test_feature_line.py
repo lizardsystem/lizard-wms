@@ -1,12 +1,26 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 
+import mock
+
 from django.template import Context
 from django.test import TestCase
 from django.template.loader import get_template
 
 from lizard_wms.tests import factories
 from lizard_wms import popup_renderers
+from lizard_wms import models
+
+
+class FeatureLineCreationTest(TestCase):
+
+    text = """Results for FeatureType 'ThreeDi:Waterlijnen':\n--------------------------------------------\nthe_geom = [GEOMETRY (MultiLineString) with 3 points]\nKDUIDENT = KDU-Q-34096\nBODEMHOOGT = -1.18000006676\nOPMERKING = Afgeleid van (BOKBO_L + BOKBE_L) / 2\nKSYIDENT = \nOVKIDENT = \nIWS_CATEGO = 0\nBREEDTE = 0.699999988079\nopm_breedt = Afgeleid van KDUBREED\nOPM_kunstw = \nBreedte_2D = 0.699999988079\nTYPE = 14\nTypering = Duiker (boezem)\nOWAIDENT = \nET_Source = \nx_start = 0.0\ny_start = 0.0\nx_end = 0.0\ny_end = 0.0\nOPM_BODEMH = \nOPM_BREED = \n--------------------------------------------\n"""
+
+    @mock.patch('requests.get',
+                return_value=type(str('cls'), (), {'text': text}))
+    def test_get_feature_info(self, request):
+        result = models.WMSSource().get_feature_info(bbox=True)
+        self.assertEqual(len(result[0].keys()), 20)
 
 
 class FeatureLineTest(TestCase):

@@ -376,6 +376,7 @@ like {"key": "value", "key2": "value2"}.
 
         Normally the bbox is constructed with ``.bbox_for_feature_info()``.
         """
+
         if not bbox:
             return
         logger.debug("Getting feature info for %s item(s) in bbox %s",
@@ -435,7 +436,6 @@ like {"key": "value", "key2": "value2"}.
             # "Parse"
             one_result = {}
             for line in r.text.split("\n"):
-                line = line.strip()
                 if '----------' in line:
                     # Store the result, start a new one.
                     if one_result:
