@@ -55,7 +55,7 @@ class WMSSourceAdmin(admin.ModelAdmin):
                     'enable_search')
     search_fields = ('display_name', 'layer_name', 'url', 'category__name',
                      'connection__title')
-    list_filter = ('category', )
+    list_filter = ('category', 'connection__title')
     actions = ['update_bounding_box', 'initialize_bounding_box']
 
     def update_bounding_box(self, request, queryset, force=True):
@@ -196,7 +196,6 @@ class FilterPageAdmin(admin.ModelAdmin):
     list_editable = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('available_filters',)
-
 
 
 admin.site.register(models.WMSSource, WMSSourceAdmin)

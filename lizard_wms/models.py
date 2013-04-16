@@ -196,7 +196,8 @@ class WMSSource(models.Model):
     _params = JSONField(null=True, blank=True)
     # ^^^ special db_column name
     options = models.TextField(null=True, blank=True)
-    description = models.TextField(verbose_name=_("description"), null=True, blank=True)
+    description = models.TextField(verbose_name=_("description"),
+                                   null=True, blank=True)
     metadata = JSONField(
         verbose_name=_("metadata"),
         help_text=_('''Key/value metadata for for instance copyright.
@@ -367,6 +368,7 @@ like {"key": "value", "key2": "value2"}.
 
         Normally the bbox is constructed with ``.bbox_for_feature_info()``.
         """
+
         if not bbox:
             return
         logger.debug("Getting feature info for %s item(s) in bbox %s",
@@ -416,6 +418,8 @@ like {"key": "value", "key2": "value2"}.
                 payload['CQL_FILTER'] = cql_filter_string
 
             r = requests.get(self.url, params=payload, timeout=10)
+            if 'group' in self.name.lower():
+                import pdb; pdb.set_trace()
 
             # XXX Check result code etc
             if 'no features were found' in r.text:
@@ -426,7 +430,6 @@ like {"key": "value", "key2": "value2"}.
             # "Parse"
             one_result = {}
             for line in r.text.split("\n"):
-                line = line.strip()
                 if '----------' in line:
                     # Store the result, start a new one.
                     if one_result:
