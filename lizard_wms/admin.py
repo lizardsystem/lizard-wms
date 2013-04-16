@@ -3,10 +3,11 @@ import urlparse
 import urllib2
 import logging
 
+from django import forms
 from django.contrib import admin
 from django.contrib import messages
 from django.db import models as django_models
-from django import forms
+from django.utils.translation import ugettext as _
 
 from lizard_maptree.models import Category
 from lizard_wms import models
@@ -82,12 +83,12 @@ class WMSSourceAdmin(admin.ModelAdmin):
         self.message_user(request,
                           "Loaded/updated %s bounding boxes." % (num_updated))
 
-    update_bounding_box.short_description = "Update all bounding boxes"
+    update_bounding_box.short_description = _("Update all bounding boxes")
 
     def initialize_bounding_box(self, request, queryset):
         self.update_bounding_box(request, queryset, force=False)
 
-    initialize_bounding_box.short_description = (
+    initialize_bounding_box.short_description = _(
         "Set the not-yet-set bounding boxes")
 
     def save_model(self, request, layer_instance, form, change):

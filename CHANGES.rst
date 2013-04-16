@@ -2,10 +2,46 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.25 (unreleased)
+1.29 (unreleased)
 -----------------
 
 - Nothing changed yet.
+
+
+1.28 (2013-04-04)
+-----------------
+
+- Synced our ``wms_workspace_acceptable.html`` template with lizard-map's
+  ``workspace_acceptable.html`` again. Not nice that we have to do that, this
+  will need to be fixed one time.
+
+
+1.27 (2013-03-15)
+-----------------
+
+- Added two extra renderers for featurelines: integers ('10') and float with
+  two decimals ('10.26'). Feed it a number-like string and it works.
+
+
+1.26 (2013-03-05)
+-----------------
+
+- Swiched dropdowns on filterpage for checkboxes.
+
+
+1.25 (2013-03-05)
+-----------------
+
+- Added Dutch translations. We're now translated on
+  https://translations.lizard.net/projects/p/lizardsystem/resource/lizard-wms/
+  .
+
+- Added render option to featureline: show a link as 'click here for more
+  info' text instead of a long URL. Both with-and-without-http URLs are
+  supported.
+
+- Refactored the featureline popup rendering: moved it to featureline itself
+  so that proper tests could be added.
 
 
 1.24 (2013-03-04)
@@ -117,7 +153,7 @@ Changelog of lizard-wms
 -----------------
 
 - Fix a bug that resets options and categories from wms sources when reloading
-their wms connection from admin.
+  their wms connection from admin.
 
 
 1.12 (2012-12-10)
@@ -146,8 +182,8 @@ their wms connection from admin.
 1.9 (2012-11-29)
 ----------------
 
-- Add sort for WMSSource by index and display name; in admin sort is on display
-name.
+- Add sort for WMSSource by index and display name; in admin sort is on
+  display name.
 
 
 1.8 (2012-11-27)

@@ -1,61 +1,46 @@
 {% load workspaces %}
+{% load i18n %}
 {% load utility %}
 {% if feature_info %}
-<table class="table table-bordered">
-  <tbody>
-	{% include "lizard_wms/popup-thead.html" %}
-    {% for info in feature_info %}
-      <tr>
-        {% if info.show_label == 'false' %}
-          <td colspan="2">{% if info.name %}<strong>{{ info.name }}<strong>{% endif %}</td>
-        </tr>
-	<tr>
-	  <td colspan="2">
-        {% else %}
-          <td>{{info.name}}</td>
-          <td>
+  <table class="table table-bordered">
+    <tbody>
+      {% include "lizard_wms/popup-thead.html" %}
+      {% for info in feature_info %}
+        {% if info.label_on_separate_line %}
+          <tr>
+            <td colspan="2"><strong>{{ info.label }}<strong></td>
+          </tr>
+          <tr>
+            <td colspan="2">{{ info.value }}</td>
+          </tr>
+        {% else %}  {# Label on the same line as the value #}
+          <tr>
+            <td>{{ info.label }}</td>
+            <td>{{ info.value }}</td>
+          </tr>
         {% endif %}
-        {% if info.render_as == 'T' %}{{ info.value }}{% endif %}
-        {% if info.render_as == 'I' %}<img src="{{ info.value }}" />{% endif %}
-        {% if info.render_as == 'U' %}
-          <a href="{{ info.value }}"
-             target="_blank"
-             style="text-decoration:underline; color:blue;">
-            {{ info.value }}
-          </a>
-        {% endif %}
-        {% if info.render_as == 'W' %}
-          <a href="http://{{ info.value }}"
-             target="_blank"
-             style="text-decoration:underline; color:blue;">
-            {{ info.value }}
-          </a>
-        {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      {% endfor %}
+    </tbody>
+  </table>
   {# Extra buttons #}
   {% if add_snippet %}
-  <table cellspacing="0" cellpadding="0">
-    <tr>
+    <table cellspacing="0" cellpadding="0">
+      <tr>
         <td class="button">
-          <a
-             href="{% url lizard_map_collage_add %}"
+          <a href="{% url lizard_map_collage_add %}"
              class="ss_sprite ss_star collage-add"
              data-name="Item uit {{ workspace_item.name }}"
              data-adapter-class="{{ workspace_item.adapter_class }}"
              data-adapter-layer-json="{{ workspace_item.adapter_layer_json }}"
              data-identifier="{{ identifier }}"
              data-target-id="#edit-collage"
-             title="Toevoegen aan selectie">&nbsp;</a>
+             title='{% trans "Add to selection" %}'>&nbsp;</a>
         </td>
     </tr>
   </table>
   {% endif %}
 {% else %}
-<div class="alert">
-  <h3>Geen data</h3>
-</div>
+  <div class="alert">
+    <h3>{% trans "No data" %}</h3>
+  </div>
 {% endif %}
