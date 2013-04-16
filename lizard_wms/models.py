@@ -418,8 +418,6 @@ like {"key": "value", "key2": "value2"}.
                 payload['CQL_FILTER'] = cql_filter_string
 
             r = requests.get(self.url, params=payload, timeout=10)
-            if 'group' in self.name.lower():
-                import pdb; pdb.set_trace()
 
             # XXX Check result code etc
             if 'no features were found' in r.text:
