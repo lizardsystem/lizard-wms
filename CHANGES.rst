@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.29 (unreleased)
+1.29 (2013-04-16)
 -----------------
 
 - Feature info lines with no data, i.e. u'' are now recognized as valid feature
