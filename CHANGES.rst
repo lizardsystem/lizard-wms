@@ -5,7 +5,7 @@ Changelog of lizard-wms
 1.30 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Add chinese translations.
 
 
 1.29 (2013-04-16)
