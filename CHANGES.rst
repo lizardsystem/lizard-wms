@@ -7,6 +7,8 @@ Changelog of lizard-wms
 
 - Add chinese translations.
 
+- Popup is shown regardless of 'name' in hover.
+
 
 1.29 (2013-04-16)
 -----------------
