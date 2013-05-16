@@ -60,12 +60,6 @@ class AdapterWMS(WorkspaceItemAdapter):
         feature_info = self.wms_source.search_one_item(x, y, radius)
         name = self.wms_source.get_feature_name(feature_info)
 
-        if not name:
-            # We're not making up a name if we can't find one.
-            # A debug string isn't handy for the customers.
-            # You should simply configure a proper name!
-            return []
-
         if feature_info:
             return [{
                     'name': name,
@@ -90,12 +84,11 @@ class AdapterWMS(WorkspaceItemAdapter):
             identifiers=identifiers,
             template=template,
             layout_options=layout_options,
-            extra_render_kwargs=
-            {
-            'feature_info': self.wms_source.get_popup_info(feature_info),
-            'workspace_item' : self.workspace_item,
-            'identifier': adapter_serialize(identifier),
-            })
+            extra_render_kwargs={
+                'feature_info': self.wms_source.get_popup_info(feature_info),
+                'workspace_item': self.workspace_item,
+                'identifier': adapter_serialize(identifier),
+                })
 
     def symbol_url(self, identifier=None, start_date=None, end_date=None):
         """
@@ -114,6 +107,7 @@ class AdapterWMS(WorkspaceItemAdapter):
 
     def legend_image_urls(self):
         """Return url with WMS legend image."""
+
         if not self.wms_source.show_legend:
             return []
         if 'legend_url' in self.layer_arguments:
