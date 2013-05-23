@@ -22,23 +22,6 @@
       {% endfor %}
     </tbody>
   </table>
-  {# Extra buttons #}
-  {% if add_snippet %}
-    <table cellspacing="0" cellpadding="0">
-      <tr>
-        <td class="button">
-          <a href="{% url lizard_map_collage_add %}"
-             class="ss_sprite ss_star collage-add"
-             data-name="Item uit {{ workspace_item.name }}"
-             data-adapter-class="{{ workspace_item.adapter_class }}"
-             data-adapter-layer-json="{{ workspace_item.adapter_layer_json }}"
-             data-identifier="{{ identifier }}"
-             data-target-id="#edit-collage"
-             title='{% trans "Add to selection" %}'>&nbsp;</a>
-        </td>
-    </tr>
-  </table>
-  {% endif %}
 {% else %}
   <div class="alert">
     <h3>{% trans "No data" %}</h3>
