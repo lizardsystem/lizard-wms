@@ -4,7 +4,6 @@
 {% if feature_info %}
   <table class="table table-bordered">
     <tbody>
-      {% include "lizard_wms/popup-thead.html" %}
       {% for info in feature_info %}
         {% if info.label_on_separate_line %}
           <tr>
