@@ -18,6 +18,7 @@ install_requires = [
     'lizard-ui >= 4.0, < 5.0',
     'lizard-map >= 4.27, < 5.0',
     'lizard-maptree >= 1.9',
+    'lizard-security >= 0.5',
     'django-nose',
     'pkginfo',
     'GChartWrapper',

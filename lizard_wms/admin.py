@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.db import models as django_models
 from django.utils.translation import ugettext as _
 
+from lizard_security.admin import SecurityFilteredAdmin
+
 from lizard_maptree.models import Category
 from lizard_wms import models
 
@@ -47,7 +49,7 @@ class WMSSourceForm(forms.ModelForm):
         model = models.WMSSource
 
 
-class WMSSourceAdmin(admin.ModelAdmin):
+class WMSSourceAdmin(SecurityFilteredAdmin):
     """WMS source admin. Show a few fields that may be edited regularly
     (layer name, category) and hide the rest in a collapsed section."""
 

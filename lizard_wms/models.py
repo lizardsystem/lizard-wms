@@ -19,6 +19,9 @@ from lizard_maptree.models import Category
 import owslib.wms
 import requests
 
+from lizard_security.manager import FilteredManager
+from lizard_security.models import DataSet
+
 from lizard_wms.widgets import WmsWorkspaceAcceptable
 from lizard_wms import popup_renderers
 
@@ -188,6 +191,10 @@ class WMSSource(models.Model):
     """
     Definition of a wms source.
     """
+
+    supports_object_permissions = True
+    data_set = models.ForeignKey(DataSet, null=True, blank=True)
+    objects = FilteredManager()
 
     _params = JSONField(
         null=True, blank=True,

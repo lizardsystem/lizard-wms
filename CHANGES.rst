@@ -9,6 +9,8 @@ Changelog of lizard-wms
 
 - Popup is shown regardless of 'name' in hover.
 
+- Integrate wms layers with lizard security.
+
 
 1.29 (2013-04-16)
 -----------------
