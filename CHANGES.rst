@@ -11,6 +11,8 @@ Changelog of lizard-wms
 
 - Integrate wms layers with lizard security.
 
+- Fix a bug when " = " is present in the feature value.
+
 
 1.29 (2013-04-16)
 -----------------
