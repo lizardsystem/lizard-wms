@@ -449,7 +449,7 @@ like {"key": "value", "key2": "value2"}.
                         result.append(one_result)
                     one_result = {}
                     continue
-                parts = line.split(" = ")
+                parts = line.split(" = ", 1)
                 if len(parts) != 2:
                     continue
                 feature, value = parts
