@@ -339,7 +339,9 @@ like {"key": "value", "key2": "value2"}.
             # choose the feature closest to x, y.
             if radius is not None:
                 # Adjust the estimated "radius" of an icon on the map.
-                radius /= 50
+                # Note: by request of Jonas, this is finetuned from 50 to 250.
+                # This might make it hard to click on icons!
+                radius /= 250
                 # Convert to wgs84, which is the only supported format for
                 # pyproj.geodesic
                 lon, lat = coordinates.google_to_wgs84(x, y)
