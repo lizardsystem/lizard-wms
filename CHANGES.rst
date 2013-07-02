@@ -13,6 +13,9 @@ Changelog of lizard-wms
 
 - Fix a bug when " = " is present in the feature value.
 
+- Finetuned search radius on hover / click by request of Jonas.
+  This might make clicking and hover on icons slightly harder!
+
 
 1.29 (2013-04-16)
 -----------------
