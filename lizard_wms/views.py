@@ -7,8 +7,10 @@ import logging
 from collections import defaultdict
 
 # from django.utils.translation import ugettext as _
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.html import escapejs
 from lizard_map.views import MapView
@@ -203,3 +205,14 @@ class FilterPageDownload(FilterPageView):
             writer.writerow(feature)
 
         return response
+
+
+def WmsProxyView(request, wms_source_id):
+    if request.method != 'GET':
+        return PermissionDenied()
+
+    wms_source = get_object_or_404(
+        models.WMSSource.objects.get,
+        pk=wms_source_id)
+
+    return HttpResponseRedirect(wms_source.url)
