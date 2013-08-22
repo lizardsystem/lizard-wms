@@ -28,8 +28,8 @@ urlpatterns = patterns(
     url(r'^page/(?P<slug>.*).csv$',
         views.FilterPageDownload.as_view(),
         name='lizard_wms.filter_page_export'),
-    url(r'^wmsproxy/(?P<wms_source_id>)/wms/',
-        views.WmsProxy,
+    url(r'^proxy/(?P<wms_source_id>\d+)/',
+        views.wms_proxy_view,
         name='lizard_wms.wms_proxy'),
     )
 

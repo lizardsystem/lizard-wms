@@ -7,6 +7,7 @@ import cgi
 import json
 import logging
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
@@ -265,6 +266,27 @@ like {"key": "value", "key2": "value2"}.
             # Grmbl, this won't be good for performance.
             return
 
+    def _proxify(self, url):
+        if url is None:
+            return None
+
+        proxied_wms_servers = getattr(settings, 'PROXIED_WMS_SERVERS', {})
+        for proxied_domain in proxied_wms_servers:
+            if proxied_domain in url:
+                return url.replace(
+                    proxied_domain,
+                    reverse('lizard_wms.wms_proxy', kwargs={
+                            'wms_source_id': self.id}))
+        return url
+
+    @property
+    def proxied_url(self):
+        return self._proxify(self.url)
+
+    @property
+    def proxied_legend_url(self):
+        return self._proxify(self.legend_url)
+
     @property
     def params(self):
         params = {}
@@ -314,9 +336,9 @@ like {"key": "value", "key2": "value2"}.
             adapter_layer_json=json.dumps(
                 {'wms_source_id': self.id,
                  'name': self.layer_name,
-                 'url': self.url,
+                 'url': self.proxied_url,
                  'params': self.params,
-                 'legend_url': self.legend_url,
+                 'legend_url': self.proxied_legend_url,
                  'options': self.options,
                  'cql_filters': list(allowed_cql_filters),
                  }),

@@ -7,6 +7,7 @@ import logging
 from collections import defaultdict
 
 # from django.utils.translation import ugettext as _
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -18,6 +19,7 @@ from lizard_ui.layout import Action
 import unicodecsv
 
 from lizard_wms import models
+from lizard_wms import url_utils
 
 EMPTY_OPTION = ''
 
@@ -207,12 +209,33 @@ class FilterPageDownload(FilterPageView):
         return response
 
 
-def WmsProxyView(request, wms_source_id):
+def wms_proxy_view(request, wms_source_id):
     if request.method != 'GET':
-        return PermissionDenied()
+        raise PermissionDenied()
 
+    # If lizard_security decides the current user is not allowed to see
+    # this wms_source, Http404 will be raised
     wms_source = get_object_or_404(
-        models.WMSSource.objects.get,
+        models.WMSSource,
         pk=wms_source_id)
 
-    return HttpResponseRedirect(wms_source.url)
+    url = url_utils.combine_url_and_params(
+        wms_source.url, request.GET)
+
+    # In debug mode, just redirect
+    if settings.DEBUG:
+        return HttpResponseRedirect(url)
+
+    # use Nginx X-Accel-Redirect in production
+    proxied_wms_servers = getattr(settings, 'PROXIED_WMS_SERVERS', {})
+    for proxied_domain, internal_url in proxied_wms_servers.items():
+        if proxied_domain in url:
+            url = url.replace(
+                proxied_domain,
+                internal_url)
+            break
+
+    response = HttpResponse()
+    response['X-Accel-Redirect'] = url
+    return response
+
