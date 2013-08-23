@@ -7,7 +7,7 @@ import cgi
 import json
 import logging
 
-from django.conf import settings
+from lizard_wms.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
@@ -270,7 +270,7 @@ like {"key": "value", "key2": "value2"}.
         if url is None:
             return None
 
-        proxied_wms_servers = getattr(settings, 'PROXIED_WMS_SERVERS', {})
+        proxied_wms_servers = settings.WMS_PROXIED_WMS_SERVERS
         for proxied_domain in proxied_wms_servers:
             if proxied_domain in url:
                 return url.replace(

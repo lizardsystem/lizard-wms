@@ -24,6 +24,7 @@ install_requires = [
     'GChartWrapper',
     'requests',
     'unicodecsv',
+    'django-appconf',
     ],
 
 tests_require = [

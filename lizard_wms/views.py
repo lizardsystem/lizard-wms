@@ -7,7 +7,7 @@ import logging
 from collections import defaultdict
 
 # from django.utils.translation import ugettext as _
-from django.conf import settings
+from lizard_wms.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -227,7 +227,7 @@ def wms_proxy_view(request, wms_source_id):
         return HttpResponseRedirect(url)
 
     # use Nginx X-Accel-Redirect in production
-    proxied_wms_servers = getattr(settings, 'PROXIED_WMS_SERVERS', {})
+    proxied_wms_servers = settings.WMS_PROXIED_WMS_SERVERS
     for proxied_domain, internal_url in proxied_wms_servers.items():
         if proxied_domain in url:
             url = url.replace(
