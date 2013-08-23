@@ -50,7 +50,7 @@ servers. This has three possible benefits:
   by the outside world, then this proxying can be part of a secure
   solution for showing its layers to the outside world.
 
-To setup the proxying, two things are needed:
+To setup the proxying, two things are needed::
 
 1. In the site's nginx.conf, an internal URL must be defined that
    redirects to the real WMS source. This URL is internal so that it
@@ -61,7 +61,7 @@ To setup the proxying, two things are needed:
        proxy_pass http://geoserver6.lizard.net/geoserver;
    }
 
-2. In the site's settings.py, a reverse mapping of same must be set:
+2. In the site's settings.py, a reverse mapping of same must be set::
 
    # Dictionary of domain names that can be handled by lizard-wms' WmsProxyView, that
    # redirects them to an internal URL defined in nginx.conf. Domains names are keys,
