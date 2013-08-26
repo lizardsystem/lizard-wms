@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.30 (unreleased)
+1.30 (2013-08-26)
 -----------------
 
 - Add chinese translations.
