@@ -12,11 +12,15 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
 from django.template.defaultfilters import urlizetrunc
+from django.utils.html import escapejs
 from django.utils.translation import ugettext_lazy as _
+
 from jsonfield.fields import JSONField
+
 from lizard_map import coordinates
 from lizard_map.models import ADAPTER_CLASS_WMS
 from lizard_maptree.models import Category
+
 import owslib.wms
 import requests
 
@@ -293,6 +297,8 @@ like {"key": "value", "key2": "value2"}.
         if self._params is not None:
             params = self._params.copy()
         params['layers'] = self.layer_name
+        if 'cql_filter' in params:
+            params['cql_filter'] = escapejs(params['cql_filter'])
         return json.dumps(params)
 
     def update_bounding_box(self, force=False):
