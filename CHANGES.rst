@@ -5,7 +5,7 @@ Changelog of lizard-wms
 1.31 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Add cql filtering escapes for wms params.
 
 
 1.30 (2013-08-26)
