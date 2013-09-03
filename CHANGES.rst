@@ -9,6 +9,7 @@ Changelog of lizard-wms
 
 - Switch GetFeatureInfo response to JSON. Gives cleaner code.
 
+- Added date/time selection for GetFeatureInfo.
 
 1.31 (2013-09-02)
 -----------------

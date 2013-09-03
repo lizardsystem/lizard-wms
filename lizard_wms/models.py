@@ -6,6 +6,7 @@ from urllib import urlencode
 import cgi
 import json
 import logging
+import tls
 
 from lizard_wms.conf import settings
 from django.core.urlresolvers import reverse
@@ -19,6 +20,7 @@ from jsonfield.fields import JSONField
 
 from lizard_map import coordinates
 from lizard_map.models import ADAPTER_CLASS_WMS
+from lizard_map.views import get_view_state
 from lizard_maptree.models import Category
 
 import owslib.wms
@@ -447,6 +449,17 @@ like {"key": "value", "key2": "value2"}.
             payload['STYLES'] = params['styles']
         if cql_filter_string:
             payload['CQL_FILTER'] = cql_filter_string
+
+        # Time selection is added when 'tijd' or 'time' is in the display name
+        if ('tijd' in self.display_name.lower() or
+            'time' in self.display_name.lower()):
+
+            # Get the user selected date/time selection.
+            date = get_view_state(tls.request)
+            formatting = '%Y-%m-%dT%H:%M:%SZ'
+            payload['TIME'] = '/'.join(
+                d.strftime(formatting)
+                for d in [date['dt_start'], date['dt_end']])
 
         return payload
 

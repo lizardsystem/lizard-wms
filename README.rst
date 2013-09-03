@@ -7,6 +7,13 @@ Lizard-wms makes remote WMS layers accessible in Lizard.
    :target: http://travis-ci.org/#!/lizardsystem/lizard-wms
 
 
+Layers
+-----------
+
+When a layer has 'tijd' or 'Time' in the layer_name 
+a time selection is possible.
+
+
 Usage
 -----
 
