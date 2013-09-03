@@ -82,6 +82,7 @@ class FilterPageView(MapView):
         return result
 
     def features(self, cql_filter_string=None):
+        return []
         return self.wms_source.get_feature_info(
             bbox=self.bbox,
             feature_count=100,
@@ -238,4 +239,3 @@ def wms_proxy_view(request, wms_source_id):
     response = HttpResponse()
     response['X-Accel-Redirect'] = url
     return response
-

@@ -399,7 +399,7 @@ like {"key": "value", "key2": "value2"}.
         """Return getfeatureinfo values found for a single item."""
         values = {}
         bbox = self._bbox_for_feature_info(x=x, y=y, radius=radius)
-        results = self.get_feature_info(bbox=bbox, buffer=16)
+        results = self.get_feature_info(bbox=bbox, _buffer=16)
         # ^^^ Note Reinout: I wonder about that buffer.
         if results:
             for result in results:
@@ -407,17 +407,75 @@ like {"key": "value", "key2": "value2"}.
         self._store_features(values)
         return values
 
+    def _build_payload(self, params, layer, feature_count, version, bbox,
+                       cql_filter_string, _buffer):
+        """Build the request payload for GetFeatureInfo."""
+
+        payload = {
+            'REQUEST': 'GetFeatureInfo',
+            'EXCEPTIONS': 'application/json',
+            'INFO_FORMAT': 'application/json',
+            'SERVICE': 'WMS',
+            'SRS': 'EPSG:3857',  # Always Google (web mercator)
+            'FEATURE_COUNT': feature_count,
+            # Set the layer we want
+            'LAYERS': layer,
+            'QUERY_LAYERS': layer,
+
+            'BBOX': bbox,
+
+            # Get the value at the single pixel of a 1x1 picture
+            'HEIGHT': 1,
+            'WIDTH': 1,
+            'X': 0,
+            'Y': 0,
+
+            # Version from parameter
+            'VERSION': version,
+
+            # Non-standard WMS parameter to slightly increase search
+            # radius.  Shouldn't hurt as most WMS server software ignore
+            # unknown parameters.  see
+            # http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
+            'BUFFER': _buffer,
+            # ^^^ Note Reinout: it seems to *greatly* increase search
+            # radius.
+            }
+
+        # Add styles to request when defined
+        if 'styles' in params and params['styles']:
+            payload['STYLES'] = params['styles']
+        if cql_filter_string:
+            payload['CQL_FILTER'] = cql_filter_string
+
+        return payload
+
+    def _parse_response(self, response):
+        if response.status_code != 200:
+            return []
+
+        response_dict = json.loads(response.text)
+        if "exceptions" in response_dict:
+            logger.warning("Error in GetFeatureInfo for layer %s. %s"
+                           % (self.layer_name,
+                              response_dict['exceptions'][0]['text']))
+            return []
+
+        features = response_dict['features']
+        return [obj["properties"] for obj in features]
+
     def get_feature_info(self, bbox=None, feature_count=1,
-                         buffer=1, cql_filter_string=None):
+                         _buffer=1, cql_filter_string=None):
         """Gets feature info from the server inside the bbox.
 
         Normally the bbox is constructed with ``.bbox_for_feature_info()``.
         """
-
         if not bbox:
             return
-        logger.debug("Getting feature info for %s item(s) in bbox %s",
-                     feature_count, bbox)
+
+        logger.warning("Getting feature info for %s item(s) in bbox %s",
+                       feature_count, bbox)
+
         version = '1.1.1'
         if self.connection and self.connection.version:
             version = self.connection.version
@@ -425,73 +483,15 @@ like {"key": "value", "key2": "value2"}.
         params = json.loads(self.params)
         result = []
         for layer in params['layers'].split(","):
-            payload = {
-                'REQUEST': 'GetFeatureInfo',
-                'EXCEPTIONS': 'application/vnd.ogc.se_xml',
-                'INFO_FORMAT': 'text/plain',
-                'SERVICE': 'WMS',
-                'SRS': 'EPSG:3857',  # Always Google (web mercator)
-                'FEATURE_COUNT': feature_count,
-                # Set the layer we want
-                'LAYERS': layer,
-                'QUERY_LAYERS': layer,
+            payload = self._build_payload(params, layer, feature_count,
+                                          version, bbox, cql_filter_string,
+                                          _buffer)
+            response = requests.get(self.url, params=payload, timeout=10)
+            layer_result = self._parse_response(response)
 
-                'BBOX': bbox,
-
-                # Get the value at the single pixel of a 1x1 picture
-                'HEIGHT': 1,
-                'WIDTH': 1,
-                'X': 0,
-                'Y': 0,
-
-                # Version from parameter
-                'VERSION': version,
-
-                # Non-standard WMS parameter to slightly increase search
-                # radius.  Shouldn't hurt as most WMS server software ignore
-                # unknown parameters.  see
-                # http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
-                'BUFFER': buffer,
-                # ^^^ Note Reinout: it seems to *greatly* increase search
-                # radius.
-            }
-
-            # Add styles to request when defined
-            if 'styles' in params and params['styles']:
-                payload['STYLES'] = params['styles']
-            if cql_filter_string:
-                payload['CQL_FILTER'] = cql_filter_string
-
-            r = requests.get(self.url, params=payload, timeout=10)
-
-            # XXX Check result code etc
-            if 'no features were found' in r.text:
-                continue
-
-            if not r.text.startswith("Results for FeatureType"):
-                continue
-            # "Parse"
-            one_result = {}
-            for line in r.text.split("\n"):
-                if '----------' in line:
-                    # Store the result, start a new one.
-                    if one_result:
-                        result.append(one_result)
-                    one_result = {}
-                    continue
-                parts = line.split(" = ", 1)
-                if len(parts) != 2:
-                    continue
-                feature, value = parts
-
-                if value.startswith("[GEOMETRY"):
-                    # I think these are always uninteresting
-                    continue
-
-                one_result[feature] = value
             # Store the last result, too, if applicable.
-            if one_result:
-                result.append(one_result)
+            if layer_result:
+                result.extend(layer_result)
         logger.debug("Found %s GetFeatureInfo results.", len(result))
         return result
 

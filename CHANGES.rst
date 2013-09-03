@@ -5,7 +5,9 @@ Changelog of lizard-wms
 1.32 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Update buildout.
+
+- Switch GetFeatureInfo response to JSON. Gives cleaner code.
 
 
 1.31 (2013-09-02)
