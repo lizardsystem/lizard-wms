@@ -7,17 +7,25 @@ import cgi
 import json
 import logging
 
+from lizard_wms.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
 from django.template.defaultfilters import urlizetrunc
+from django.utils.html import escapejs
 from django.utils.translation import ugettext_lazy as _
+
 from jsonfield.fields import JSONField
+
 from lizard_map import coordinates
 from lizard_map.models import ADAPTER_CLASS_WMS
 from lizard_maptree.models import Category
+
 import owslib.wms
 import requests
+
+from lizard_security.manager import FilteredManager
+from lizard_security.models import DataSet
 
 from lizard_wms.widgets import WmsWorkspaceAcceptable
 from lizard_wms import popup_renderers
@@ -189,6 +197,10 @@ class WMSSource(models.Model):
     Definition of a wms source.
     """
 
+    supports_object_permissions = True
+    data_set = models.ForeignKey(DataSet, null=True, blank=True)
+    objects = FilteredManager()
+
     _params = JSONField(
         null=True, blank=True,
         default=WMS_PARAMS_DEFAULT)
@@ -258,12 +270,35 @@ like {"key": "value", "key2": "value2"}.
             # Grmbl, this won't be good for performance.
             return
 
+    def _proxify(self, url):
+        if url is None:
+            return None
+
+        proxied_wms_servers = settings.WMS_PROXIED_WMS_SERVERS
+        for proxied_domain in proxied_wms_servers:
+            if proxied_domain in url:
+                return url.replace(
+                    proxied_domain,
+                    reverse('lizard_wms.wms_proxy', kwargs={
+                            'wms_source_id': self.id}))
+        return url
+
+    @property
+    def proxied_url(self):
+        return self._proxify(self.url)
+
+    @property
+    def proxied_legend_url(self):
+        return self._proxify(self.legend_url)
+
     @property
     def params(self):
         params = {}
         if self._params is not None:
             params = self._params.copy()
         params['layers'] = self.layer_name
+        if 'cql_filter' in params:
+            params['cql_filter'] = escapejs(params['cql_filter'])
         return json.dumps(params)
 
     def update_bounding_box(self, force=False):
@@ -307,9 +342,9 @@ like {"key": "value", "key2": "value2"}.
             adapter_layer_json=json.dumps(
                 {'wms_source_id': self.id,
                  'name': self.layer_name,
-                 'url': self.url,
+                 'url': self.proxied_url,
                  'params': self.params,
-                 'legend_url': self.legend_url,
+                 'legend_url': self.proxied_legend_url,
                  'options': self.options,
                  'cql_filters': list(allowed_cql_filters),
                  }),
@@ -332,7 +367,9 @@ like {"key": "value", "key2": "value2"}.
             # choose the feature closest to x, y.
             if radius is not None:
                 # Adjust the estimated "radius" of an icon on the map.
-                radius /= 50
+                # Note: by request of Jonas, this is finetuned from 50 to 250.
+                # This might make it hard to click on icons!
+                radius /= 250
                 # Convert to wgs84, which is the only supported format for
                 # pyproj.geodesic
                 lon, lat = coordinates.google_to_wgs84(x, y)
@@ -442,7 +479,7 @@ like {"key": "value", "key2": "value2"}.
                         result.append(one_result)
                     one_result = {}
                     continue
-                parts = line.split(" = ")
+                parts = line.split(" = ", 1)
                 if len(parts) != 2:
                     continue
                 feature, value = parts

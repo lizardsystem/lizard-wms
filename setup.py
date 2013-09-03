@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '1.30.dev0'
+version = '1.32.dev0'
 
 long_description = '\n\n'.join([
     open('README.rst').read(),
@@ -18,11 +18,13 @@ install_requires = [
     'lizard-ui >= 4.0, < 5.0',
     'lizard-map >= 4.27, < 5.0',
     'lizard-maptree >= 1.9',
+    'lizard-security >= 0.5',
     'django-nose',
     'pkginfo',
     'GChartWrapper',
     'requests',
     'unicodecsv',
+    'django-appconf',
     ],
 
 tests_require = [
