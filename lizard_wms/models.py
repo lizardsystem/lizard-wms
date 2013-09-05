@@ -133,6 +133,7 @@ overwrites.""")
                 connection=self, layer_name=name, defaults=defaults)
             if created:
                 layer_instance.category = self.category.all()
+            layer_instance.timepositions = layer.timepositions
             layer_instance.import_bounding_box(layer)
             layer_instance.save()
 
@@ -210,6 +211,8 @@ like {"key": "value", "key2": "value2"}.
         verbose_name=_('index'), default=1000,
         help_text=_("Number used for ordering categories relative to each "
                     "other."))
+    timepositions = models.CharField(
+        verbose_name=_("Time positions"), null=True, blank=True, max_length=2048)
 
     class Meta:
         ordering = ('index', 'display_name')
