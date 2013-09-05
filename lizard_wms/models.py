@@ -6,6 +6,7 @@ from urllib import urlencode
 import cgi
 import json
 import logging
+import socket
 
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -33,34 +34,6 @@ WMS_OPTIONS_DEFAULT = '''{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}'''
 
 
 logger = logging.getLogger(__name__)
-
-
-class TimeoutException(Exception):
-    pass
-
-
-def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
-    """This function will spawn a thread and run the given function
-    using the args, kwargs and return the given default value if the
-    timeout_duration is exceeded.
-    """
-    import threading
-
-    class InterruptableThread(threading.Thread):
-        def __init__(self):
-            threading.Thread.__init__(self)
-            self.result = default
-
-        def run(self):
-            self.result = func(*args, **kwargs)
-
-    it = InterruptableThread()
-    it.start()
-    it.join(timeout_duration)
-    if it.isAlive():
-        raise TimeoutException("Timeout of %s s expired calling %s " %
-                               (timeout_duration, func.__name__))
-    return it.result
 
 
 def capabilities_url(url):
@@ -269,9 +242,11 @@ like {"key": "value", "key2": "value2"}.
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
             try:
-                wms = timeout(owslib.wms.WebMapService,
-                              (self.url, FIXED_WMS_API_VERSION),
-                              timeout_duration=WMS_TIMEOUT)
+                orig_timeout = socket.getdefaulttimeout()
+                socket.setdefaulttimeout(WMS_TIMEOUT)
+                wms = owslib.wms.WebMapService(self.url, version=FIXED_WMS_API_VERSION)
+                socket.setdefaulttimeout(orig_timeout)
+
                 params = json.loads(self.params)
                 for name, layer in wms.contents.iteritems():
                     if layer.name == params['layers']:
