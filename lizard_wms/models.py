@@ -290,6 +290,7 @@ like {"key": "value", "key2": "value2"}.
                  'legend_url': self.legend_url,
                  'options': self.options,
                  'cql_filters': list(allowed_cql_filters),
+                 'timepositions': self.timepositions,
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
         return result
