@@ -54,7 +54,7 @@ class WMSSourceAdmin(SecurityFilteredAdmin):
     (layer name, category) and hide the rest in a collapsed section."""
 
     list_display = ('display_name', 'layer_name',  source_domain, 'connection',
-                    'enable_search')
+                    'enable_search', 'timepositions')
     search_fields = ('display_name', 'layer_name', 'url', 'category__name',
                      'connection__title')
     list_filter = ('category', 'connection__title')
@@ -107,10 +107,10 @@ class WMSSourceAdmin(SecurityFilteredAdmin):
     fieldsets = (
         (None, {'fields': ('display_name', 'layer_name', 'category')}),
         ('Details',
-         {'classes': ('collapse',),
-          'fields': ('url', '_params', 'options', 'description',
+         {'fields': ('url', '_params', 'options', 'description',
                      'metadata', 'connection', 'legend_url', 'bbox',
                      'show_legend', 'enable_search', 'data_set'),
+                     'show_legend', 'enable_search', 'timepositions'),
           }),
     )
     inlines = [FeatureLineInline]
