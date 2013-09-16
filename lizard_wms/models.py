@@ -6,6 +6,7 @@ from urllib import urlencode
 import cgi
 import json
 import logging
+import socket
 
 from lizard_wms.conf import settings
 from django.core.urlresolvers import reverse
@@ -41,34 +42,6 @@ WMS_OPTIONS_DEFAULT = '''{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}'''
 
 
 logger = logging.getLogger(__name__)
-
-
-class TimeoutException(Exception):
-    pass
-
-
-def timeout(func, args=(), kwargs={}, timeout_duration=45, default=None):
-    """This function will spawn a thread and run the given function
-    using the args, kwargs and return the given default value if the
-    timeout_duration is exceeded.
-    """
-    import threading
-
-    class InterruptableThread(threading.Thread):
-        def __init__(self):
-            threading.Thread.__init__(self)
-            self.result = default
-
-        def run(self):
-            self.result = func(*args, **kwargs)
-
-    it = InterruptableThread()
-    it.start()
-    it.join(timeout_duration)
-    if it.isAlive():
-        raise TimeoutException("Timeout of %s s expired calling %s " %
-                               (timeout_duration, func.__name__))
-    return it.result
 
 
 def capabilities_url(url):
@@ -168,6 +141,7 @@ overwrites.""")
                 connection=self, layer_name=name, defaults=defaults)
             if created:
                 layer_instance.category = self.category.all()
+            layer_instance.timepositions = layer.timepositions
             layer_instance.import_bounding_box(layer)
             layer_instance.save()
 
@@ -249,6 +223,8 @@ like {"key": "value", "key2": "value2"}.
         verbose_name=_('index'), default=1000,
         help_text=_("Number used for ordering categories relative to each "
                     "other."))
+    timepositions = models.CharField(
+        verbose_name=_("Time positions"), null=True, blank=True, max_length=2048)
 
     class Meta:
         ordering = ('index', 'display_name')
@@ -304,9 +280,11 @@ like {"key": "value", "key2": "value2"}.
     def update_bounding_box(self, force=False):
         if force or not self.bbox:
             try:
-                wms = timeout(owslib.wms.WebMapService,
-                              (self.url, FIXED_WMS_API_VERSION),
-                              timeout_duration=WMS_TIMEOUT)
+                orig_timeout = socket.getdefaulttimeout()
+                socket.setdefaulttimeout(WMS_TIMEOUT)
+                wms = owslib.wms.WebMapService(self.url, version=FIXED_WMS_API_VERSION)
+                socket.setdefaulttimeout(orig_timeout)
+
                 params = json.loads(self.params)
                 for name, layer in wms.contents.iteritems():
                     if layer.name == params['layers']:
@@ -347,6 +325,7 @@ like {"key": "value", "key2": "value2"}.
                  'legend_url': self.proxied_legend_url,
                  'options': self.options,
                  'cql_filters': list(allowed_cql_filters),
+                 'timepositions': self.timepositions,
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
         return result
