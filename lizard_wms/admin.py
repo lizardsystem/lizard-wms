@@ -109,8 +109,8 @@ class WMSSourceAdmin(SecurityFilteredAdmin):
         ('Details',
          {'fields': ('url', '_params', 'options', 'description',
                      'metadata', 'connection', 'legend_url', 'bbox',
-                     'show_legend', 'enable_search', 'data_set'),
-                     'show_legend', 'enable_search', 'timepositions'),
+                     'show_legend', 'enable_search', 'timepositions',
+                     'data_set'),
           }),
     )
     inlines = [FeatureLineInline]
