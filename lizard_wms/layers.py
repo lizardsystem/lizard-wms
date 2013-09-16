@@ -83,8 +83,6 @@ class AdapterWMS(WorkspaceItemAdapter):
         width, height = map(request.GET.get, ['width', 'height'])
         x, y = map(request.GET.get, ['x_pixel', 'y_pixel'])
         cql_filters = request.GET.get('cql_filters', None)
-        if cql_filters:
-            import pdb; pdb.set_trace()
         if cql_filters is not None:
             cql_filters = json.loads(cql_filters)
         return x, y, bbox, width, height, cql_filters
