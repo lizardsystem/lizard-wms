@@ -7,8 +7,7 @@ from django.conf.urls.defaults import url
 from django.contrib import admin
 
 from lizard_maptree.views import MaptreeHomepageView
-from lizard_wms.views import FilterPageView
-from lizard_wms.views import FilterPageDownload
+from lizard_wms import views
 
 
 ITEM_MODELS = ['wmssource', ]  # for maptree items.
@@ -24,11 +23,14 @@ urlpatterns = patterns(
         {'item_models': ITEM_MODELS},
         name='lizard_wms.homepage'),
     url(r'^page/(?P<slug>.*)/$',
-        FilterPageView.as_view(),
+        views.FilterPageView.as_view(),
         name='lizard_wms.filter_page'),
     url(r'^page/(?P<slug>.*).csv$',
-        FilterPageDownload.as_view(),
+        views.FilterPageDownload.as_view(),
         name='lizard_wms.filter_page_export'),
+    url(r'^proxy/(?P<wms_source_id>\d+)/',
+        views.wms_proxy_view,
+        name='lizard_wms.wms_proxy'),
     )
 
 if getattr(settings, 'LIZARD_WMS_STANDALONE', False):

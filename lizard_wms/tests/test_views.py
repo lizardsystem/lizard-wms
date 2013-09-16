@@ -89,7 +89,6 @@ class FilterPageViewTest(TestCase):
                  'inhabitant': ['Arjan', 'Reinout', 'Remco']})
 
 
-
 class FilterPageViewFunctionalTest(TestCase):
 
     def setUp(self):
@@ -101,5 +100,14 @@ class FilterPageViewFunctionalTest(TestCase):
                            kwargs={'slug': self.filter_page.slug})
 
     def test_url(self):
-        response = self.client.get(self.url)
+        features = [
+            {'city': 'Nieuwegein',
+             'inhabitant': 'Reinout'},
+            {'city': 'Nieuwegein',
+             'inhabitant': 'Arjan'},
+            {'city': 'Arnhem',
+             'inhabitant': 'Remco'}]
+        with mock.patch('lizard_wms.views.FilterPageView.features',
+                        lambda x: features):
+            response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

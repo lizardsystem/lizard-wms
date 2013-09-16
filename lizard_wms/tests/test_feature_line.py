@@ -14,10 +14,11 @@ from lizard_wms import models
 
 class FeatureLineCreationTest(TestCase):
 
-    text = """Results for FeatureType 'ThreeDi:Waterlijnen':\n--------------------------------------------\nthe_geom = [GEOMETRY (MultiLineString) with 3 points]\nKDUIDENT = KDU-Q-34096\nBODEMHOOGT = -1.18000006676\nOPMERKING = Afgeleid van (BOKBO_L + BOKBE_L) / 2\nKSYIDENT = \nOVKIDENT = \nIWS_CATEGO = 0\nBREEDTE = 0.699999988079\nopm_breedt = Afgeleid van KDUBREED\nOPM_kunstw = \nBreedte_2D = 0.699999988079\nTYPE = 14\nTypering = Duiker (boezem)\nOWAIDENT = \nET_Source = \nx_start = 0.0\ny_start = 0.0\nx_end = 0.0\ny_end = 0.0\nOPM_BODEMH = \nOPM_BREED = \n--------------------------------------------\n"""
+    text = """{"features":[{"properties":{"KDUIDENT": "KDU-Q-34096","BODEMHOOGT":-1.18000006676,"OPMERKING": "Afgeleid van (BOKBO_L + BOKBE_L) / 2","KSYIDENT": "", "OVKIDENT": "", "IWS_CATEGO": 0, "BREEDTE": 0.699999988079, "opm_breedt": "Afgeleid van KDUBREED", "OPM_kunstw": "", "Breedte_2D": 0.699999988079, "TYPE": 14, "Typering": "Duiker (boezem)", "OWAIDENT": "", "ET_Source": "", "x_start": 0.0, "y_start":0.0, "x_end": 0.0, "y_end": 0.0, "OPM_BODEMH": "", "OPM_BREED": ""}}]}"""
 
     @mock.patch('requests.get',
-                return_value=type(str('cls'), (), {'text': text}))
+                return_value=type(str('cls'), (), {'text': text,
+                                                   'status_code': 200}))
     def test_get_feature_info(self, request):
         result = models.WMSSource().get_feature_info(bbox=True)
         self.assertEqual(len(result[0].keys()), 20)

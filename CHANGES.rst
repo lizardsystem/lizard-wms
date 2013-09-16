@@ -2,12 +2,38 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.30 (unreleased)
+1.32 (unreleased)
+-----------------
+
+- Update buildout.
+
+- Switch GetFeatureInfo response to JSON. Gives cleaner code.
+
+- Added date/time selection for GetFeatureInfo.
+
+- Add CQL filter to GetFeatureInfo
+
+- Make GetFeatureInfo zoom level aware.
+
+1.31 (2013-09-02)
+-----------------
+
+- Add cql filtering escapes for wms params.
+
+
+1.30 (2013-08-26)
 -----------------
 
 - Add chinese translations.
 
 - Popup is shown regardless of 'name' in hover.
+
+- Integrate wms layers with lizard security.
+
+- Fix a bug when " = " is present in the feature value.
+
+- Finetuned search radius on hover / click by request of Jonas.
+  This might make clicking and hover on icons slightly harder!
 
 
 1.29 (2013-04-16)
