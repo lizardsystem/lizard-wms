@@ -417,9 +417,7 @@ like {"key": "value", "key2": "value2"}.
             payload['CQL_FILTER'] = ' AND '.join(total_cql_filter)
 
         # Time selection is added when 'tijd' or 'time' is in the display name
-        if ('tijd' in self.display_name.lower() or
-            'time' in self.display_name.lower()):
-
+        if self.timepositions is not None:
             # Get the user selected date/time selection.
             date = get_view_state(tls.request)
             formatting = '%Y-%m-%dT%H:%M:%SZ'
