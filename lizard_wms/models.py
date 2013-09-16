@@ -356,61 +356,31 @@ like {"key": "value", "key2": "value2"}.
     def capabilities_url(self):
         return capabilities_url(self.url)
 
-    def _bbox_for_feature_info(self, x=None, y=None, radius=None):
-        """Return bbox at point (x,y) in Google coordinates.
-
-        If x, y aren't given, use this layer's bbox, if any. Useful to
-        get available features immediately after fetching the layer.
-        """
-        if x is not None:
-            # Construct the "bounding box", a tiny area around (x,y) We use a
-            # tiny custom radius, because otherwise we don't have enough
-            # control over which feature is returned, there is no mechanism to
-            # choose the feature closest to x, y.
-            if radius is not None:
-                # Adjust the estimated "radius" of an icon on the map.
-                # Note: by request of Jonas, this is finetuned from 50 to 250.
-                # This might make it hard to click on icons!
-                radius /= 250
-                # Convert to wgs84, which is the only supported format for
-                # pyproj.geodesic
-                lon, lat = coordinates.google_to_wgs84(x, y)
-                # Translate center coordinates to lower left and upper right.
-                # Only supports wgs84.
-                # Note: 180 + 45 = 225 = bbox lower left.
-                geod_bbox = coordinates.translate_coords(
-                    [lon] * 2, [lat] * 2, [225, 45], [radius] * 2)
-                # Convert back to web mercator.
-                ll = coordinates.wgs84_to_google(geod_bbox[0][0],
-                                                 geod_bbox[1][0])
-                ur = coordinates.wgs84_to_google(geod_bbox[0][1],
-                                                 geod_bbox[1][1])
-                # Format should be: minX, minY, maxX, maxY.
-                bbox = '{0},{1},{2},{3}'.format(ll[0], ll[1], ur[0], ur[1])
-            else:
-                # Use the old method.
-                fixed_radius = 10
-                bbox = '{0},{1},{2},{3}'.format(
-                    x - fixed_radius, y - fixed_radius,
-                    x + fixed_radius, y + fixed_radius)
-        else:
-            bbox = self.bbox
-        return bbox
-
-    def search_one_item(self, x=None, y=None, radius=None):
+    def search_one_item(self, x=None, y=None, bbox=None,
+                        width=None, height=None, cql_filters=None,
+                        cql_filter_string=None):
         """Return getfeatureinfo values found for a single item."""
-        values = {}
-        bbox = self._bbox_for_feature_info(x=x, y=y, radius=radius)
-        results = self.get_feature_info(bbox=bbox, _buffer=16)
+
+        if bbox is None and self.bbox:
+            bbox = self.bbox
+
+        results = self.get_feature_info(
+            bbox=bbox, x=x, y=y, _buffer=16, width=width, height=height,
+            cql_filters=cql_filters,
+            cql_filter_string=cql_filter_string)
+
         # ^^^ Note Reinout: I wonder about that buffer.
+        values = {}
         if results:
             for result in results:
                 values.update(result)
         self._store_features(values)
         return values
 
-    def _build_payload(self, params, layer, feature_count, version, bbox,
-                       cql_filter_string, _buffer):
+    def _build_payload(self, params, layer, feature_count, version,
+                       bbox, width, height, x, y,
+                       cql_filters, cql_filter_string,
+                       _buffer):
         """Build the request payload for GetFeatureInfo."""
 
         payload = {
@@ -423,14 +393,13 @@ like {"key": "value", "key2": "value2"}.
             # Set the layer we want
             'LAYERS': layer,
             'QUERY_LAYERS': layer,
-
             'BBOX': bbox,
-
-            # Get the value at the single pixel of a 1x1 picture
-            'HEIGHT': 1,
-            'WIDTH': 1,
-            'X': 0,
-            'Y': 0,
+            # Height and width in pixels
+            'HEIGHT': height,
+            'WIDTH': width,
+            # The clicked on pixel
+            'X': x,
+            'Y': y,
 
             # Version from parameter
             'VERSION': version,
@@ -440,15 +409,31 @@ like {"key": "value", "key2": "value2"}.
             # unknown parameters.  see
             # http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
             'BUFFER': _buffer,
-            # ^^^ Note Reinout: it seems to *greatly* increase search
-            # radius.
             }
 
         # Add styles to request when defined
         if 'styles' in params and params['styles']:
             payload['STYLES'] = params['styles']
+
+        total_cql_filter = []
+        # cql filter string comes from Filter Page
         if cql_filter_string:
-            payload['CQL_FILTER'] = cql_filter_string
+            total_cql_filter.append(cql_filter_string)
+
+        # cql filter defined in the wms source parameters
+        if 'cql_filter' in params and params['cql_filter']:
+            total_cql_filter.append(params['cql_filter'])
+
+        # CQL filters passed through from the frontend
+        if cql_filters is not None:
+            allowed_filters = self.featureline_set.filter(
+                visible=True, name__in=cql_filters.keys()
+                ).values_list('name', flat=True)
+            for key in allowed_filters:
+                total_cql_filter.append('='.join([key, str(cql_filters[key])]))
+
+        if total_cql_filter:
+            payload['CQL_FILTER'] = ' AND '.join(total_cql_filter)
 
         # Time selection is added when 'tijd' or 'time' is in the display name
         if ('tijd' in self.display_name.lower() or
@@ -477,11 +462,10 @@ like {"key": "value", "key2": "value2"}.
         features = response_dict['features']
         return [obj["properties"] for obj in features]
 
-    def get_feature_info(self, bbox=None, feature_count=1,
-                         _buffer=1, cql_filter_string=None):
+    def get_feature_info(self, bbox=None, width=1, height=1, x=0, y=0,
+                         feature_count=1, _buffer=1,
+                         cql_filters=None, cql_filter_string=None):
         """Gets feature info from the server inside the bbox.
-
-        Normally the bbox is constructed with ``.bbox_for_feature_info()``.
         """
         if not bbox:
             return
@@ -497,7 +481,8 @@ like {"key": "value", "key2": "value2"}.
         result = []
         for layer in params['layers'].split(","):
             payload = self._build_payload(params, layer, feature_count,
-                                          version, bbox, cql_filter_string,
+                                          version, bbox, width, height, x, y,
+                                          cql_filters, cql_filter_string,
                                           _buffer)
             response = requests.get(self.url, params=payload, timeout=10)
             layer_result = self._parse_response(response)

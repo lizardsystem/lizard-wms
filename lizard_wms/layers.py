@@ -7,6 +7,8 @@ from lizard_map.workspace import WorkspaceItemAdapter, adapter_serialize
 
 from lizard_wms import models
 
+from tls import request
+
 logger = logging.getLogger(__name__)
 
 
@@ -15,6 +17,8 @@ class AdapterWMS(WorkspaceItemAdapter):
     Adapter. Tries to get information for X,Y points using
     GetFeatureInfo requests.
     """
+
+    search_with_request = True
 
     @property
     def wms_source(self):
@@ -41,11 +45,11 @@ class AdapterWMS(WorkspaceItemAdapter):
     def location(self, x, y, radius):
         """This can't possibly be correct, but it works."""
 
-        search = self.search(x, y, radius)
+        search = self.search(x, y, radius, request=request)
         if search:
             return search[0]
 
-    def search(self, x, y, radius=None):
+    def search(self, lon, lat, radius=None, request=None):
         """Get information about features at x, y from this WMS layer.
 
         The construction of the result is somewhat difficult: what do we use
@@ -57,28 +61,40 @@ class AdapterWMS(WorkspaceItemAdapter):
         """
         if not self.wms_source.enable_search:
             return []
-        feature_info = self.wms_source.search_one_item(x, y, radius)
-        name = self.wms_source.get_feature_name(feature_info)
+
+        params = self._build_search_parameters(request)
+        feature_info = self.wms_source.search_one_item(*params)
 
         if feature_info:
             return [{
-                    'name': name,
+                    'name': self.wms_source.get_feature_name(feature_info),
                     'distance': 0,
                     'workspace_item': self.workspace_item,
                     'identifier': {
-                        'x': x,
-                        'y': y,
+                        'x': lon,
+                        'y': lat,
                         'radius': radius},
                     }]
         return []
+
+    def _build_search_parameters(self, request):
+        bbox = ','.join(map(request.GET.get, ['extent_left', 'extent_bottom',
+                                              'extent_right', 'extent_top']))
+        width, height = map(request.GET.get, ['width', 'height'])
+        x, y = map(request.GET.get, ['x_pixel', 'y_pixel'])
+        cql_filters = request.GET.get('cql_filters', None)
+        if cql_filters:
+            import pdb; pdb.set_trace()
+        if cql_filters is not None:
+            cql_filters = json.loads(cql_filters)
+        return x, y, bbox, width, height, cql_filters
 
     def html(self, identifiers, layout_options=None,
              template="lizard_wms/popup.html"):
         identifier = identifiers[0]
 
-        feature_info = self.wms_source.search_one_item(identifier['x'],
-                                                       identifier['y'],
-                                                       identifier['radius'])
+        params = self._build_search_parameters(layout_options['request'])
+        feature_info = self.wms_source.search_one_item(*params)
 
         return self.html_default(
             identifiers=identifiers,
@@ -100,7 +116,7 @@ class AdapterWMS(WorkspaceItemAdapter):
             'color': (0, 1, 0, 0)}
 
         return super(AdapterWMS, self).symbol_url(
-            identifier=identifier,
+
             start_date=start_date,
             end_date=end_date,
             icon_style=icon_style)

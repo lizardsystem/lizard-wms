@@ -11,6 +11,10 @@ Changelog of lizard-wms
 
 - Added date/time selection for GetFeatureInfo.
 
+- Add CQL filter to GetFeatureInfo
+
+- Make GetFeatureInfo zoom level aware.
+
 1.31 (2013-09-02)
 -----------------
 

@@ -82,7 +82,6 @@ class FilterPageView(MapView):
         return result
 
     def features(self, cql_filter_string=None):
-        return []
         return self.wms_source.get_feature_info(
             bbox=self.bbox,
             feature_count=100,
