@@ -2,8 +2,8 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.33 (unreleased)
------------------
+1.32.1 (2013-09-18)
+-------------------
 
 - Fix real world bug where timeposition is an empty string.
 
