@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.33 (unreleased)
+1.33 (2013-09-19)
 -----------------
 
 - Add username password authentication for GetFeatureInfo when behind a 
