@@ -10,7 +10,7 @@ Lizard-wms makes remote WMS layers accessible in Lizard.
 Layers
 -----------
 
-When a layer has 'tijd' or 'Time' in the layer_name 
+When a layer has 'tijd' or 'Time' in the layer_name
 a time selection is possible.
 
 
@@ -50,8 +50,7 @@ servers. This has three possible benefits:
   source is restricted to users that have access to that DataSet. The
   proxy will also only work for logged in users that have access.
 
-- The real URL of the WMS source is hidden. This can act as a form of
-  'security by obscurity'.
+- The real URL of the WMS source is hidden and behind a username, password.
 
 - If the real WMS server is on a private network and isn't reachable
   by the outside world, then this proxying can be part of a secure
@@ -66,6 +65,8 @@ To setup the proxying, two things are needed::
    location /geoserver6/ {
        internal;
        proxy_pass http://geoserver6.lizard.net/geoserver;
+       proxy_set_header Authorization "Basic BASE64 encoded username:password";
+
    }
 
 2. In the site's settings.py, a reverse mapping of same must be set::
@@ -74,7 +75,9 @@ To setup the proxying, two things are needed::
    # redirects them to an internal URL defined in nginx.conf. Domains names are keys,
    # internal URLs are values.
    PROXIED_WMS_SERVERS = {
-       'http://geoserver6.lizard.net/geoserver': '/geoserver6/',
+       'http://geoserver6.lizard.net/geoserver': {'url': '/geoserver6/',
+	                                              'username': 'Username',
+												  'password': 'SuperSecret'}
    }
 
 The result is that all WMS source URLs shown in Lizard (as workspace

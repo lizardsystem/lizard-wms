@@ -458,11 +458,17 @@ like {"key": "value", "key2": "value2"}.
         params = json.loads(self.params)
         result = []
         for layer in params['layers'].split(","):
+            autharg = {}
+            proxy = _get_proxy(self.url)
+            if proxy:
+                autharg = {'auth': (proxy['username'], proxy['password'])}
+
             payload = self._build_payload(params, layer, feature_count,
                                           version, bbox, width, height, x, y,
                                           cql_filters, cql_filter_string,
                                           _buffer)
-            response = requests.get(self.url, params=payload, timeout=10)
+            response = requests.get(self.url, params=payload, timeout=10,
+                                    **autharg)
             layer_result = self._parse_response(response)
 
             # Store the last result, too, if applicable.
@@ -679,3 +685,12 @@ class FilterPage(models.Model):
 
     def get_absolute_url(self):
         return reverse('lizard_wms.filter_page', kwargs={'slug': self.slug})
+
+
+def _get_proxy(url):
+    """Check if a url is proxied and return the proxy settings."""
+
+    for proxied_domain, proxy in settings.WMS_PROXIED_WMS_SERVERS.items():
+        if proxied_domain in url:
+            return proxy
+    return False

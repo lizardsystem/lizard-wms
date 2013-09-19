@@ -228,11 +228,11 @@ def wms_proxy_view(request, wms_source_id):
 
     # use Nginx X-Accel-Redirect in production
     proxied_wms_servers = settings.WMS_PROXIED_WMS_SERVERS
-    for proxied_domain, internal_url in proxied_wms_servers.items():
+    for proxied_domain, proxy in proxied_wms_servers.items():
         if proxied_domain in url:
             url = url.replace(
                 proxied_domain,
-                internal_url)
+                proxy['url'])
             break
 
     response = HttpResponse()

@@ -5,7 +5,8 @@ Changelog of lizard-wms
 1.33 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Add username password authentication for GetFeatureInfo when behind a 
+  wms proxy is used.
 
 
 1.32.1 (2013-09-18)
