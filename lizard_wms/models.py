@@ -9,6 +9,8 @@ import logging
 import tls
 import socket
 
+from xml.etree import ElementTree
+
 from lizard_wms.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -366,8 +368,8 @@ like {"key": "value", "key2": "value2"}.
 
         payload = {
             'REQUEST': 'GetFeatureInfo',
-            'EXCEPTIONS': 'application/json',
-            'INFO_FORMAT': 'application/json',
+            'EXCEPTIONS': 'application/vnd.ogc.se_xml',
+            'INFO_FORMAT': 'application/gml',
             'SERVICE': 'WMS',
             'SRS': 'EPSG:3857',  # Always Google (web mercator)
             'FEATURE_COUNT': feature_count,
@@ -426,7 +428,33 @@ like {"key": "value", "key2": "value2"}.
 
         return payload
 
-    def _parse_response(self, response):
+    def _parse_response_gml(self, response):
+        if response.status_code != 200:
+            return []
+
+        root = ElementTree.fromstring(response.text)
+        if 'ServiceException' in root.tag:
+            logger.warning("Error in GetFeatureInfo for layer %s."
+                           % (self.layer_name))
+            return []
+
+        feature = root.find('{http://www.opengis.net/gml}featureMember')
+        layer = feature.getchildren()[0]
+        namespace, _ = layer.tag[1:].split('}')
+
+        d = {}
+        for item in layer.getchildren():
+            if 'gml_id' in item.tag:
+                continue
+
+            # Namespace and layer can be '{SomeThing}LayerName'
+            _, name = item.tag[1:].split('}')
+            d[name] = item.text
+        return [d]
+
+    _parse_response = _parse_response_gml
+
+    def _parse_response_json(self, response):
         if response.status_code != 200:
             return []
 
@@ -439,6 +467,8 @@ like {"key": "value", "key2": "value2"}.
 
         features = response_dict['features']
         return [obj["properties"] for obj in features]
+
+
 
     def get_feature_info(self, bbox=None, width=1, height=1, x=0, y=0,
                          feature_count=1, _buffer=1,

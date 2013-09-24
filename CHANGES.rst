@@ -18,6 +18,8 @@ Changelog of lizard-wms
 - Remove animation icon on layers because lizard5 doesn't
   use animations.
 
+- Move GetFeatureInfo to use GML instead of json by default.
+
 1.31 (2013-09-02)
 -----------------
 
