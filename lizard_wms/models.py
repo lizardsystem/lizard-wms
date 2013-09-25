@@ -369,7 +369,7 @@ like {"key": "value", "key2": "value2"}.
         payload = {
             'REQUEST': 'GetFeatureInfo',
             'EXCEPTIONS': 'application/vnd.ogc.se_xml',
-            'INFO_FORMAT': 'application/gml',
+            'INFO_FORMAT': 'application/vnd.ogc.gml',
             'SERVICE': 'WMS',
             'SRS': 'EPSG:3857',  # Always Google (web mercator)
             'FEATURE_COUNT': feature_count,
