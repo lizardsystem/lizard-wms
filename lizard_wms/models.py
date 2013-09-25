@@ -440,7 +440,7 @@ like {"key": "value", "key2": "value2"}.
 
         feature = root.find('{http://www.opengis.net/gml}featureMember')
         layer = feature.getchildren()[0]
-        namespace, _ = layer.tag[1:].split('}')
+        namespace, ignored = layer.tag[1:].split('}')
 
         d = {}
         for item in layer.getchildren():
@@ -448,7 +448,7 @@ like {"key": "value", "key2": "value2"}.
                 continue
 
             # Namespace and layer can be '{SomeThing}LayerName'
-            _, name = item.tag[1:].split('}')
+            ignored, name = item.tag[1:].split('}')
             d[name] = item.text
         return [d]
 
