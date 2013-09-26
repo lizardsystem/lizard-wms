@@ -11,7 +11,7 @@ Changelog of lizard-wms
 1.34 (2013-09-26)
 -----------------
 
-- Nothing changed yet.
+- Switch GetFeatureInfo to use GML. GML is the most used GetFeatureInfo Format.
 
 
 1.33 (2013-09-19)
