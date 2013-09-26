@@ -35,6 +35,8 @@ Changelog of lizard-wms
 - Make GetFeatureInfo zoom level aware.
 
 
+- Move GetFeatureInfo to use GML instead of json by default.
+
 1.31 (2013-09-02)
 -----------------
 

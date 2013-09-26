@@ -20,8 +20,11 @@ class FeatureLineCreationTest(TestCase):
                 return_value=type(str('cls'), (), {'text': text,
                                                    'status_code': 200}))
     def test_get_feature_info(self, request):
+        models.WMSSource._parse_response = \
+            models.WMSSource._parse_response_json
         result = models.WMSSource().get_feature_info(bbox=True)
         self.assertEqual(len(result[0].keys()), 20)
+        models.WMSSource._parse_response = models.WMSSource._parse_response_gml
 
 
 class FeatureLineTest(TestCase):
