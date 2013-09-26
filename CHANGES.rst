@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.34 (unreleased)
+1.34 (2013-09-26)
 -----------------
 
 - Nothing changed yet.
