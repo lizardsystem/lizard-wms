@@ -439,6 +439,8 @@ like {"key": "value", "key2": "value2"}.
             return []
 
         feature = root.find('{http://www.opengis.net/gml}featureMember')
+        if feature is None:
+            return []
         layer = feature.getchildren()[0]
         namespace, ignored = layer.tag[1:].split('}')
 
@@ -467,8 +469,6 @@ like {"key": "value", "key2": "value2"}.
 
         features = response_dict['features']
         return [obj["properties"] for obj in features]
-
-
 
     def get_feature_info(self, bbox=None, width=1, height=1, x=0, y=0,
                          feature_count=1, _buffer=1,
