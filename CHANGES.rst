@@ -5,7 +5,7 @@ Changelog of lizard-wms
 1.35 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Add a 'check layer' option to see if the layer works.
 
 
 1.34 (2013-09-26)

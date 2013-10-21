@@ -228,7 +228,14 @@ like {"key": "value", "key2": "value2"}.
         help_text=_("Number used for ordering categories relative to each "
                     "other."))
     timepositions = models.CharField(
-        verbose_name=_("Time positions"), null=True, blank=True, max_length=2048)
+        verbose_name=_("Time positions"), null=True, blank=True,
+        max_length=2048)
+
+    layer_ok = models.BooleanField(
+        verbose_name=_('Layer on WMSserver seems okay'),
+        help_text=_(
+            "A check to see if the layer is okay or not."),
+        default=False)
 
     class Meta:
         ordering = ('index', 'display_name')
@@ -468,8 +475,6 @@ like {"key": "value", "key2": "value2"}.
         features = response_dict['features']
         return [obj["properties"] for obj in features]
 
-
-
     def get_feature_info(self, bbox=None, width=1, height=1, x=0, y=0,
                          feature_count=1, _buffer=1,
                          cql_filters=None, cql_filter_string=None):
@@ -487,12 +492,12 @@ like {"key": "value", "key2": "value2"}.
 
         params = json.loads(self.params)
         result = []
-        for layer in params['layers'].split(","):
-            autharg = {}
-            proxy = _get_proxy(self.url)
-            if proxy:
-                autharg = {'auth': (proxy['username'], proxy['password'])}
+        proxy = _get_proxy(self.url)
+        autharg = {}
+        if proxy:
+            autharg = {'auth': (proxy['username'], proxy['password'])}
 
+        for layer in params['layers'].split(","):
             payload = self._build_payload(params, layer, feature_count,
                                           version, bbox, width, height, x, y,
                                           cql_filters, cql_filter_string,
@@ -608,6 +613,50 @@ like {"key": "value", "key2": "value2"}.
         keys = sorted(self.metadata.keys())
         result = [(key, self.metadata[key]) for key in keys]
         return result
+
+    def check_layer_status(self):
+        """True if a GetFeatureRequest on the layer is working."""
+
+        bbox = self.bbox
+        width = 1
+        height = 1
+        x = 0
+        y = 0
+        feature_count = 1
+        _buffer = 1
+        version = '1.1.1'
+        cql_filters = None
+        cql_filter_string = None
+
+        autharg = {}
+        proxy = _get_proxy(self.url)
+        if proxy:
+            autharg = {'auth': (proxy['username'], proxy['password'])}
+
+        params = json.loads(self.params)
+
+        ok = True
+        for layer in params['layers'].split(","):
+            payload = self._build_payload(params, layer, feature_count,
+                                          version, bbox, width, height, x, y,
+                                          cql_filters, cql_filter_string,
+                                          _buffer)
+            try:
+                response = requests.get(self.url, params=payload, timeout=10,
+                                        **autharg)
+            except requests.exceptions.Timeout:
+                ok = False
+            else:
+                if response.status_code != 200:
+                    ok = False
+                if 'ServiceException' in response.text:
+                    ok = False
+                if ok is False:
+                    break
+
+        self.layer_ok = ok
+        self.save()
+        return ok
 
 
 class FeatureLine(models.Model):

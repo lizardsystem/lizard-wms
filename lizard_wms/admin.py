@@ -3,6 +3,8 @@ import urlparse
 import urllib2
 import logging
 
+import threading
+
 from django import forms
 from django.contrib import admin
 from django.contrib import messages
@@ -54,11 +56,12 @@ class WMSSourceAdmin(SecurityFilteredAdmin):
     (layer name, category) and hide the rest in a collapsed section."""
 
     list_display = ('display_name', 'layer_name',  source_domain, 'connection',
-                    'enable_search', 'timepositions')
+                    'enable_search', 'timepositions', 'layer_ok')
     search_fields = ('display_name', 'layer_name', 'url', 'category__name',
                      'connection__title')
-    list_filter = ('category', 'connection__title')
-    actions = ['update_bounding_box', 'initialize_bounding_box']
+    list_filter = ('category', 'connection__title', 'layer_ok')
+    actions = ['update_bounding_box', 'initialize_bounding_box',
+               'check_layers_status']
 
     def update_bounding_box(self, request, queryset, force=True):
         num_updated = 0
@@ -92,6 +95,22 @@ class WMSSourceAdmin(SecurityFilteredAdmin):
 
     initialize_bounding_box.short_description = _(
         "Set the not-yet-set bounding boxes")
+
+    def check_layers_status(self, request, queryset):
+        threads = [threading.Thread(target=wms_source.check_layer_status) for
+                   wms_source in queryset]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+
+        okay = queryset.filter(layer_ok=True).count()
+        not_okay = queryset.filter(layer_ok=False).count()
+        self.message_user(request,
+                          '%i are okay, %i are not okay' % (okay, not_okay))
+
+    check_layers_status.short_description = _(
+        "Check if the layers are okay")
 
     def save_model(self, request, layer_instance, form, change):
         # Update the bounding box if it has not been set.
