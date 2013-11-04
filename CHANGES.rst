@@ -7,6 +7,7 @@ Changelog of lizard-wms
 
 - Add a 'check layer' option to see if the layer works.
 
+- Add username/password combo to a connection.fetch.
 
 1.34 (2013-09-26)
 -----------------

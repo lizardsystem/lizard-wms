@@ -119,6 +119,14 @@ overwrites.""")
         if self.xml:
             wms_kwargs['xml'] = self.xml.encode('utf8').strip()
 
+        proxied_wms_servers = settings.WMS_PROXIED_WMS_SERVERS
+        for proxied_domain, proxy in proxied_wms_servers.items():
+            if (proxied_domain in self.url and
+                proxy.has_key('username') and proxy.has_key('password')):
+                wms_kwargs['username'] = proxy['username']
+                wms_kwargs['password'] = proxy['password']
+                break
+
         wms = owslib.wms.WebMapService(self.url, **wms_kwargs)
 
         fetched = set()
