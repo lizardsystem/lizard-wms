@@ -7,7 +7,7 @@ Changelog of lizard-wms
 
 - Update buildout.
 
-- Switch GetFeatureInfo response to JSON. Gives cleaner code.
+- Implement GetFeatureInfo for json, gml and arcgis xml.
 
 - Added date/time selection for GetFeatureInfo.
 
@@ -18,7 +18,6 @@ Changelog of lizard-wms
 - Remove animation icon on layers because lizard5 doesn't
   use animations.
 
-- Move GetFeatureInfo to use GML instead of json by default.
 
 1.31 (2013-09-02)
 -----------------

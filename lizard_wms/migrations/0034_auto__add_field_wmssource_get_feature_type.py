@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'WMSSource.data_set'
-        db.add_column('lizard_wms_wmssource', 'data_set',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['lizard_security.DataSet'], null=True, blank=True),
+        # Adding field 'WMSSource.get_feature_type'
+        db.add_column('lizard_wms_wmssource', 'get_feature_type',
+                      self.gf('django.db.models.fields.CharField')(default=u'gml', max_length=100),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'WMSSource.data_set'
-        db.delete_column('lizard_wms_wmssource', 'data_set_id')
+        # Deleting field 'WMSSource.get_feature_type'
+        db.delete_column('lizard_wms_wmssource', 'get_feature_type')
 
 
     models = {
@@ -68,7 +68,7 @@ class Migration(SchemaMigration):
         },
         'lizard_wms.wmssource': {
             'Meta': {'ordering': "(u'index', u'display_name')", 'object_name': 'WMSSource'},
-            '_params': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
+            '_params': ('jsonfield.fields.JSONField', [], {'default': 'u\'{"height": "256", "width": "256", "styles": "", "format": "image/png", "tiled": "true", "transparent": "true"}\'', 'null': 'True', 'blank': 'True'}),
             'bbox': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['lizard_maptree.Category']", 'null': 'True', 'blank': 'True'}),
             'connection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lizard_wms.WMSConnection']", 'null': 'True', 'blank': 'True'}),
@@ -76,6 +76,7 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'enable_search': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'get_feature_type': ('django.db.models.fields.CharField', [], {'default': "u'gml'", 'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.IntegerField', [], {'default': '1000'}),
             'layer_name': ('django.db.models.fields.TextField', [], {}),

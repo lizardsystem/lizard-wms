@@ -28,7 +28,7 @@ class WMSSourceTest(TestCase):
         response.text = """{"type":"FeatureCollection","features":[]}"""
 
         wms_source = WMSSourceFactory.build()
-        self.assertEquals(wms_source._parse_response(response),
+        self.assertEquals(wms_source._parse_response_json(response),
                           [])
 
     def test_parse_response(self):
@@ -54,7 +54,6 @@ class WMSSourceTest(TestCase):
         parsed_response = wms_source._parse_response_json(response)
         self.assertEquals(parsed_response, [])
 
-
     def test_parse_response_gml(self):
         response = mock.Mock()
         response.status_code = 200
@@ -72,4 +71,22 @@ No code &quot;EPSG:289923&quot; from authority &quot;European Petroleum Survey G
 </ServiceException></ServiceExceptionReport>"""
         wms_source = WMSSourceFactory.build()
         parsed_response = wms_source._parse_response_gml(response)
+        self.assertEquals(parsed_response, [])
+
+    def test_parse_response_arcgis_wms_xml(self):
+        response = mock.Mock()
+        response.status_code = 200
+        response.text = """<?xml version="1.0" encoding="UTF-8"?><FeatureInfoResponse xmlns:esri_wms="http://www.esri.com/wms" xmlns="http://www.esri.com/wms"><FIELDS GEOMETRIE="Polyline" Objectcode="L_OWP_NIE_AAL_0001" Naam="Aaldoncksebeek" Opgenomenin="legger" Categorie="primair" Opnamejaar="2012" Waterbeheerder="Waterschap Peel en Maasvallei" Onderhoudsplichtige="Waterschap Peel en Maasvallei" Leggerstatus="Vastgesteld" OBJECTID="423"></FIELDS></FeatureInfoResponse>"""
+        wms_source = WMSSourceFactory.build()
+        parsed_response = wms_source._parse_response_arcgis_wms_xml(response)
+        self.assertEquals(len(parsed_response), 1)
+
+    def test_parse_response_arcgis_wms_xml_exception(self):
+        response = mock.Mock()
+        response.status_code = 200
+        response.text ="""<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<ServiceExceptionReport version="1.3.0"  xmlns="http://www.opengis.net/ogc"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.opengis.net/ogc http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd">  <ServiceException code="InvalidSRS(CRS)">Parameter 'srs(crs)' has wrong value.  </ServiceException></ServiceExceptionReport>"""
+        wms_source = WMSSourceFactory.build()
+        parsed_response = wms_source._parse_response_arcgis_wms_xml(response)
         self.assertEquals(parsed_response, [])

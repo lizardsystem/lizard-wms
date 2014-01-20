@@ -2,6 +2,7 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 from __future__ import print_function
 from __future__ import unicode_literals
+
 from urllib import urlencode
 import cgi
 import json
@@ -121,6 +122,17 @@ overwrites.""")
 
         wms = owslib.wms.WebMapService(self.url, **wms_kwargs)
 
+        feature_options = wms.getOperationByName('GetFeatureInfo'
+                                                 ).formatOptions
+        mimetypes = WMSSource.get_feature_info_mimetypes()
+
+        # find the mimetype we support
+        for feature_type, mimetype in mimetypes:
+            if mimetype in feature_options:
+                break
+        else:
+            feature_type = 'gml'
+
         fetched = set()
         for name, layer in wms.contents.iteritems():
             logger.debug("Fetching layer name %s" % (name,))
@@ -142,7 +154,8 @@ overwrites.""")
                 defaults['legend_url'] = layer_style[0]['legend']
 
             layer_instance, created = WMSSource.objects.get_or_create(
-                connection=self, layer_name=name, defaults=defaults)
+                connection=self, layer_name=name,
+                get_feature_type=feature_type, defaults=defaults)
             if created:
                 layer_instance.category = self.category.all()
             layer_instance.timepositions = layer.timepositions
@@ -175,6 +188,12 @@ class WMSSource(models.Model):
     Definition of a wms source.
     """
 
+    WMS_FEATURE_INFO_CHOICES = (
+        ('gml', 'gml: Geoserver < 2.3 and MapServer'),
+        ('json', 'json: Geoserver >= 2.3'),
+        ('arcgis_wms_xml', 'ArcGis'),
+        )
+
     supports_object_permissions = True
     data_set = models.ForeignKey(DataSet, null=True, blank=True)
     objects = FilteredManager()
@@ -191,8 +210,6 @@ class WMSSource(models.Model):
     display_name = models.CharField(
         verbose_name=_("display name"), max_length=255, null=True, blank=True)
     url = models.URLField(verbose_name=_("URL"))
-    _params = JSONField(null=True, blank=True)
-    # ^^^ special db_column name
     options = models.TextField(null=True, blank=True)
     description = models.TextField(verbose_name=_("description"),
                                    null=True, blank=True)
@@ -214,6 +231,12 @@ like {"key": "value", "key2": "value2"}.
 
     connection = models.ForeignKey(WMSConnection, blank=True, null=True)
 
+    get_feature_type = models.CharField(
+        max_length=100,
+        verbose_name=_('Select the mimetype of the GetFeatureInfo'),
+        choices=WMS_FEATURE_INFO_CHOICES,
+        default='gml')
+
     show_legend = models.BooleanField(
         verbose_name=_('show legend'),
         help_text=_("Uncheck it if you want to hide the legend."),
@@ -228,7 +251,8 @@ like {"key": "value", "key2": "value2"}.
         help_text=_("Number used for ordering categories relative to each "
                     "other."))
     timepositions = models.CharField(
-        verbose_name=_("Time positions"), null=True, blank=True, max_length=2048)
+        verbose_name=_("Time positions"), null=True, blank=True,
+        max_length=2048)
 
     class Meta:
         ordering = ('index', 'display_name')
@@ -366,12 +390,20 @@ like {"key": "value", "key2": "value2"}.
                        _buffer):
         """Build the request payload for GetFeatureInfo."""
 
+        DATUM_key = 'SRS'
+        X_key = 'X'
+        Y_key = 'Y'
+        if version == '1.3.0':
+            DATUM_key = 'CRS'
+            X_key = 'I'
+            Y_key = 'J'
+
         payload = {
             'REQUEST': 'GetFeatureInfo',
             'EXCEPTIONS': 'application/vnd.ogc.se_xml',
-            'INFO_FORMAT': 'application/vnd.ogc.gml',
+            'INFO_FORMAT': self._get_feature_mimetype(),
             'SERVICE': 'WMS',
-            'SRS': 'EPSG:3857',  # Always Google (web mercator)
+            DATUM_key: 'EPSG:3857',  # Always Google (web mercator)
             'FEATURE_COUNT': feature_count,
             # Set the layer we want
             'LAYERS': layer,
@@ -381,8 +413,8 @@ like {"key": "value", "key2": "value2"}.
             'HEIGHT': height,
             'WIDTH': width,
             # The clicked on pixel
-            'X': x,
-            'Y': y,
+            X_key: x,
+            Y_key: y,
 
             # Version from parameter
             'VERSION': version,
@@ -429,9 +461,6 @@ like {"key": "value", "key2": "value2"}.
         return payload
 
     def _parse_response_gml(self, response):
-        if response.status_code != 200:
-            return []
-
         root = ElementTree.fromstring(response.text)
         if 'ServiceException' in root.tag:
             logger.warning("Error in GetFeatureInfo for layer %s."
@@ -453,8 +482,7 @@ like {"key": "value", "key2": "value2"}.
             ignored, name = item.tag[1:].split('}')
             d[name] = item.text
         return [d]
-
-    _parse_response = _parse_response_gml
+    _parse_response_gml.mimetype = 'application/vnd.ogc.gml'
 
     def _parse_response_json(self, response):
         if response.status_code != 200:
@@ -469,6 +497,40 @@ like {"key": "value", "key2": "value2"}.
 
         features = response_dict['features']
         return [obj["properties"] for obj in features]
+    _parse_response_json.mimetype = 'application/json'
+
+    def _parse_response_arcgis_wms_xml(self, response):
+        if response.status_code != 200:
+            return []
+        root = ElementTree.fromstring(response.text)
+        elements = root.getchildren()
+        if len(elements) == 0:
+            return []
+        if elements[0].tag == '{http://www.opengis.net/ogc}ServiceException':
+            logger.warning("Error in GetFeatureInfo for layer %s. %s"
+                           % (self.layer_name, elements[0].attrib))
+            return []
+        return [elements[0].attrib]
+    _parse_response_arcgis_wms_xml.mimetype = "application/vnd.ogc.wms_xml"
+
+    def _get_feature_mimetype(self):
+        """Return the mimetype for the GetFeatureInfo."""
+        return self._get_feature_function().mimetype
+
+    @classmethod
+    def get_feature_info_mimetypes(cls):
+        return [(_type, getattr(cls, '_parse_response_' + _type).mimetype) for
+                _type, name in cls.WMS_FEATURE_INFO_CHOICES]
+
+    def _get_feature_function(self):
+        """Dynamically get the function for the response."""
+        return getattr(self, '_parse_response_' + self.get_feature_type)
+
+    def _parse_response(self, response):
+        if response.status_code != 200:
+            return []
+        parse_feature = self._get_feature_function()
+        return parse_feature(response)
 
     def get_feature_info(self, bbox=None, width=1, height=1, x=0, y=0,
                          feature_count=1, _buffer=1,
