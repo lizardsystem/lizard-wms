@@ -200,6 +200,10 @@ class FilterPageAdmin(admin.ModelAdmin):
     filter_horizontal = ('available_filters',)
 
 
+class WMSFilterAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'cql_filter', 'index', 'display', 'default')
+    list_editable = ('name', 'cql_filter', 'index', 'display', 'default')
+
 admin.site.register(models.WMSSource, WMSSourceAdmin)
 admin.site.register(models.WMSConnection, WMSConnectionAdmin)
-admin.site.register(models.FilterPage, FilterPageAdmin)
+admin.site.register(models.WMSFilter, WMSFilterAdmin)

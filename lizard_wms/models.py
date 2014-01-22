@@ -191,7 +191,7 @@ class WMSSource(models.Model):
     WMS_FEATURE_INFO_CHOICES = (
         ('gml', 'gml: Geoserver < 2.3 and MapServer'),
         ('json', 'json: Geoserver >= 2.3'),
-        ('arcgis_wms_xml', 'ArcGis'),
+        ('arcgis_wms_xml', 'xml: ArcGis'),
         )
 
     supports_object_permissions = True
@@ -771,3 +771,39 @@ class FilterPage(models.Model):
 
     def get_absolute_url(self):
         return reverse('lizard_wms.filter_page', kwargs={'slug': self.slug})
+
+
+class WMSFilter(models.Model):
+    """Buttons for WMSFilter."""
+
+    name = models.CharField(
+        verbose_name=_('name'),
+        help_text=_("The name on the button."),
+        max_length=100)
+
+    cql_filter = JSONField(
+        verbose_name=_("CQL filter"),
+        help_text=_("The filter for the wms layer."),
+        null=True, blank=True)
+
+    index = models.IntegerField(
+        verbose_name=_('index'),
+        help_text=_("The order of the buttons."),
+        default=1000)
+
+    display = models.BooleanField(
+        verbose_name=_('Display'),
+        help_text=_("Is this button displayed?"),
+        default=True)
+
+    default = models.BooleanField(
+        default=False, help_text="This is the filter that is used as default.")
+
+    def save(self, *args, **kwargs):
+        """A special save to make sure only one default is selected."""
+        if self.default:
+            WMSFilter.objects.filter(default=True).update(default=False)
+        super(WMSFilter, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ('index',)
