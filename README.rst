@@ -74,10 +74,10 @@ To setup the proxying, two things are needed::
    # Dictionary of domain names that can be handled by lizard-wms' WmsProxyView, that
    # redirects them to an internal URL defined in nginx.conf. Domains names are keys,
    # internal URLs are values.
-   PROXIED_WMS_SERVERS = {
+   WMS_PROXIED_WMS_SERVERS = {
        'http://geoserver6.lizard.net/geoserver': {'url': '/geoserver6/',
-	                                              'username': 'Username',
-												  'password': 'SuperSecret'}
+                                                  'username': 'Username',
+                                                  'password': 'SuperSecret'}
    }
 
 The result is that all WMS source URLs shown in Lizard (as workspace
