@@ -533,8 +533,6 @@ like {"key": "value", "key2": "value2"}.
         autharg = {}
         if proxy:
             autharg = {'auth': (proxy['username'], proxy['password'])}
-        locallogger = logging.getLogger('reutel')
-        locallogger.error(self.params)
         for layer in params['layers'].split(","):
             payload = self._build_payload(params, layer, feature_count,
                                           version, bbox, width, height, x, y,
