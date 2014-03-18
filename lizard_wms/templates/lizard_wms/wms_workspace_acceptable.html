@@ -9,6 +9,13 @@
      style="display: block; float:right; text-decoration: none;"
      href="{{ acceptable.filter_page_url }}">&nbsp;</a>
 {% endif %}
+
+{% if acceptable.time_page_url %}
+  <a class="icon-filter"
+     style="display: block; float:right; text-decoration: none;"
+     href="{{ acceptable.time_page_url }}">&nbsp;</a>
+{% endif %}
+
 {# End of addition #}
 
 {% if acceptable.description %}
