@@ -1,0 +1,13 @@
+{% extends "lizard_map/wms.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load compress %}
+
+{% block sidebar %}
+<h2>{% trans "Available dates" %}</h2>
+<ul>
+  {% for time in view.wms_source.times %}
+    <li>{{ time }}</li>
+  {% endfor %}
+</ul>
+{% endblock sidebar %}

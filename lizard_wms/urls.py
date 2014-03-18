@@ -31,6 +31,9 @@ urlpatterns = patterns(
     url(r'^proxy/(?P<wms_source_id>\d+)/',
         views.wms_proxy_view,
         name='lizard_wms.wms_proxy'),
+    url(r'^time/(?P<id>.*)/$',
+        views.TimeWmsView.as_view(),
+        name='lizard_wms.time_page'),
     )
 
 if getattr(settings, 'LIZARD_WMS_STANDALONE', False):

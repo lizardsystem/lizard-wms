@@ -6,7 +6,6 @@ from urllib import urlencode
 import cgi
 import json
 import logging
-import tls
 import socket
 
 from xml.etree import ElementTree
@@ -23,7 +22,6 @@ from jsonfield.fields import JSONField
 
 from lizard_map import coordinates
 from lizard_map.models import ADAPTER_CLASS_WMS
-from lizard_map.views import get_view_state
 from lizard_maptree.models import Category
 
 import owslib.wms
@@ -323,6 +321,22 @@ like {"key": "value", "key2": "value2"}.
                              e)
                 logger.exception(msg)
         return False
+
+    def times(self):
+        if not self.has_timepositions:
+            return
+        orig_timeout = socket.getdefaulttimeout()
+        socket.setdefaulttimeout(WMS_TIMEOUT)
+        wms = owslib.wms.WebMapService(
+            self.url,
+            version=FIXED_WMS_API_VERSION)
+        socket.setdefaulttimeout(orig_timeout)
+
+        params = json.loads(self.params)
+        for name, layer in wms.contents.iteritems():
+            if layer.name == params['layers']:
+                return layer.timepositions
+        logger.warn(u"Layer %s not found." % params['layers'])
 
     def workspace_acceptable(self):
         allowed_cql_filters = self.featureline_set.filter(
