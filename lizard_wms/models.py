@@ -299,6 +299,7 @@ like {"key": "value", "key2": "value2"}.
         if self.hacked_time:
             # Dirty hack
             params['time'] = self.hacked_time
+            logger.warn("Using hacked time param %s", params)
         return json.dumps(params)
 
     def update_bounding_box(self, force=False):
