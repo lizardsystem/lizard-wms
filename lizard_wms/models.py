@@ -461,14 +461,9 @@ like {"key": "value", "key2": "value2"}.
         if total_cql_filter:
             payload['CQL_FILTER'] = ' AND '.join(total_cql_filter)
 
-        # TODO: get the desired time from somewhere.
-        # if self.timepositions:
-        #     # Get the user selected date/time selection.
-        #     date = get_view_state(tls.request)
-        #     formatting = '%Y-%m-%dT%H:%M:%SZ'
-        #     payload['TIME'] = '/'.join(
-        #         d.strftime(formatting)
-        #         for d in [date['dt_start'], date['dt_end']])
+        # Dirty hack
+        if self.hacked_time:
+            payload['TIME'] = self.hacked_time
 
         return payload
 
