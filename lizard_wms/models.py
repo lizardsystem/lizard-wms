@@ -357,6 +357,9 @@ like {"key": "value", "key2": "value2"}.
             description += '</dl>'
         name = self.display_name
         if time:
+            # Dirty hack upon dirty hack. This at least gets us the right
+            # params in the smallest amount of work.
+            self.hacked_time = time
             name += ' at %s' % time
         result = WmsWorkspaceAcceptable(
             name=name,
