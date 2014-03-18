@@ -14,6 +14,7 @@ class WmsWorkspaceAcceptable(WorkspaceAcceptable):
     """
     template_name = 'lizard_wms/wms_workspace_acceptable.html'
 
-    def __init__(self, filter_page_url=None, **kwargs):
+    def __init__(self, filter_page_url=None, time_page_url=None, **kwargs):
         super(WmsWorkspaceAcceptable, self).__init__(**kwargs)
         self.filter_page_url = filter_page_url
+        self.time_page_url = time_page_url
