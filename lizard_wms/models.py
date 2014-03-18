@@ -362,7 +362,7 @@ like {"key": "value", "key2": "value2"}.
             # params in the smallest amount of work.
             self.hacked_time = time
             name += ' at %s' % time
-        time_page_url = ''
+        time_page_url = None
         if self.has_timepositions:
             time_page_url = reverse('lizard_wms.time_page', id=self.id)
         result = WmsWorkspaceAcceptable(
