@@ -7,7 +7,7 @@
 <h2>{% trans "Available dates" %}</h2>
 <ul>
   {% for acceptable in view.acceptables %}
-    <li>{{ acceptable }}</li>
+    <li>{{ acceptable.to_html }}</li>
   {% endfor %}
 </ul>
 {% endblock sidebar %}
