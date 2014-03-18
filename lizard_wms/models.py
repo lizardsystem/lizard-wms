@@ -355,16 +355,16 @@ like {"key": "value", "key2": "value2"}.
                 description += '<dt>%s</dt><dd>%s</dd>' % (
                     key, urlizetrunc(value, 35))
             description += '</dl>'
-        name = self.layer_name
+        name = self.display_name
         if time:
             name += ' at %s' % time
         result = WmsWorkspaceAcceptable(
-            name=self.display_name,
+            name=name,
             description=description,
             filter_page_url=self.filter_page_url,
             adapter_layer_json=json.dumps(
                 {'wms_source_id': self.id,
-                 'name': name,
+                 'name': self.layer_name,
                  'url': self.proxied_url,
                  'params': self.params,
                  'legend_url': self.proxied_legend_url,
