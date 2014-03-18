@@ -56,7 +56,7 @@ class WMSSourceAdmin(SecurityFilteredAdmin):
     (layer name, category) and hide the rest in a collapsed section."""
 
     list_display = ('display_name', 'layer_name',  source_domain, 'connection',
-                    'enable_search', 'timepositions', 'layer_ok')
+                    'enable_search', 'has_timepositions', 'layer_ok')
     search_fields = ('display_name', 'layer_name', 'url', 'category__name',
                      'connection__title')
     list_filter = ('category', 'connection__title', 'layer_ok')
@@ -128,7 +128,7 @@ class WMSSourceAdmin(SecurityFilteredAdmin):
         ('Details',
          {'fields': ('url', '_params', 'options', 'description',
                      'metadata', 'connection', 'legend_url', 'bbox',
-                     'show_legend', 'enable_search', 'timepositions',
+                     'show_legend', 'enable_search', 'has_timepositions',
                      'data_set'),
           }),
     )

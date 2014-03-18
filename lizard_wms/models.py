@@ -153,7 +153,7 @@ overwrites.""")
                 connection=self, layer_name=name, defaults=defaults)
             if created:
                 layer_instance.category = self.category.all()
-            layer_instance.timepositions = layer.timepositions
+            layer_instance.has_timepositions = bool(layer.timepositions)
             layer_instance.import_bounding_box(layer)
             layer_instance.save()
 
@@ -235,9 +235,12 @@ like {"key": "value", "key2": "value2"}.
         verbose_name=_('index'), default=1000,
         help_text=_("Number used for ordering categories relative to each "
                     "other."))
-    timepositions = models.CharField(
-        verbose_name=_("Time positions"), null=True, blank=True,
-        max_length=2048)
+    # timepositions = models.CharField(
+    #     verbose_name=_("Time positions"), null=True, blank=True,
+    #     max_length=2048)
+    has_timepositions = models.BooleanField(
+        verbose_name=_('has TIME'),
+        default=False)
 
     layer_ok = models.BooleanField(
         verbose_name=_('Layer on WMSserver seems okay'),
@@ -346,7 +349,7 @@ like {"key": "value", "key2": "value2"}.
                  'legend_url': self.proxied_legend_url,
                  'options': self.options,
                  'cql_filters': list(allowed_cql_filters),
-                 'timepositions': self.timepositions,
+                 # 'timepositions': self.timepositions,
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
         return result
@@ -433,13 +436,14 @@ like {"key": "value", "key2": "value2"}.
         if total_cql_filter:
             payload['CQL_FILTER'] = ' AND '.join(total_cql_filter)
 
-        if self.timepositions:
-            # Get the user selected date/time selection.
-            date = get_view_state(tls.request)
-            formatting = '%Y-%m-%dT%H:%M:%SZ'
-            payload['TIME'] = '/'.join(
-                d.strftime(formatting)
-                for d in [date['dt_start'], date['dt_end']])
+        # TODO: get the desired time from somewhere.
+        # if self.timepositions:
+        #     # Get the user selected date/time selection.
+        #     date = get_view_state(tls.request)
+        #     formatting = '%Y-%m-%dT%H:%M:%SZ'
+        #     payload['TIME'] = '/'.join(
+        #         d.strftime(formatting)
+        #         for d in [date['dt_start'], date['dt_end']])
 
         return payload
 
