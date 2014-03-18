@@ -36,6 +36,7 @@ class AdapterWMS(WorkspaceItemAdapter):
             time = self.layer_arguments.get('time')
             if time:
                 self._wms_source.hacked_time = time
+                logger.warn("Passing time %s to wms source", time)
                 # Dirty hack.
         return self._wms_source
 
