@@ -364,7 +364,8 @@ like {"key": "value", "key2": "value2"}.
             name += ' at %s' % time
         time_page_url = None
         if self.has_timepositions:
-            time_page_url = reverse('lizard_wms.time_page', id=self.id)
+            time_page_url = reverse('lizard_wms.time_page',
+                                    kwargs={'id': self.id})
         result = WmsWorkspaceAcceptable(
             name=name,
             description=description,
