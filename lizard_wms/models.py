@@ -533,7 +533,7 @@ like {"key": "value", "key2": "value2"}.
         autharg = {}
         if proxy:
             autharg = {'auth': (proxy['username'], proxy['password'])}
-        logger.warn("Running get_feature_info with params: %s", params)
+        print("Running get_feature_info with params: %s" % params)
         for layer in params['layers'].split(","):
             payload = self._build_payload(params, layer, feature_count,
                                           version, bbox, width, height, x, y,
