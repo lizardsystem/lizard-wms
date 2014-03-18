@@ -180,6 +180,7 @@ class WMSSource(models.Model):
     """
     Definition of a wms source.
     """
+    hacked_time = None
 
     supports_object_permissions = True
     data_set = models.ForeignKey(DataSet, null=True, blank=True)
@@ -295,6 +296,9 @@ like {"key": "value", "key2": "value2"}.
         params['layers'] = self.layer_name
         if 'cql_filter' in params:
             params['cql_filter'] = escapejs(params['cql_filter'])
+        if self.hacked_time:
+            # Dirty hack
+            params['time'] = self.hacked_time
         return json.dumps(params)
 
     def update_bounding_box(self, force=False):
@@ -338,7 +342,7 @@ like {"key": "value", "key2": "value2"}.
                 return layer.timepositions
         logger.warn(u"Layer %s not found." % params['layers'])
 
-    def workspace_acceptable(self):
+    def workspace_acceptable(self, time=None):
         allowed_cql_filters = self.featureline_set.filter(
             visible=True).values_list('name', flat=True)
         # A ValuesListQuerySet is not serializable to JSON,
@@ -351,19 +355,22 @@ like {"key": "value", "key2": "value2"}.
                 description += '<dt>%s</dt><dd>%s</dd>' % (
                     key, urlizetrunc(value, 35))
             description += '</dl>'
+        name = self.layer_name
+        if time:
+            name += ' at %s' % time
         result = WmsWorkspaceAcceptable(
             name=self.display_name,
             description=description,
             filter_page_url=self.filter_page_url,
             adapter_layer_json=json.dumps(
                 {'wms_source_id': self.id,
-                 'name': self.layer_name,
+                 'name': name,
                  'url': self.proxied_url,
                  'params': self.params,
                  'legend_url': self.proxied_legend_url,
                  'options': self.options,
                  'cql_filters': list(allowed_cql_filters),
-                 # 'timepositions': self.timepositions,
+                 'time': time,
                  }),
             adapter_name=ADAPTER_CLASS_WMS)
         return result

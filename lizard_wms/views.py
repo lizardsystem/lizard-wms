@@ -193,6 +193,11 @@ class TimeWmsView(MapView):
         return get_object_or_404(models.WMSSource, pk=self.kwargs['id'])
 
     @property
+    def acceptables(self):
+        for time in self.wms_source.times():
+            yield self.wms_source.workspace_acceptable(time=time)
+
+    @property
     def page_title(self):
         return self.wms_source
 

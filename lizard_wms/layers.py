@@ -31,6 +31,12 @@ class AdapterWMS(WorkspaceItemAdapter):
                 # Just ignore it and carry on.
                 return
             self._wms_source = models.WMSSource.objects.get(pk=pk)
+        if self._wms_source.has_timepositions:
+            # Grab timestep stored in workspaceitem
+            time = self.layer_arguments.get('time')
+            if time:
+                self._wms_source.hacked_time = time
+                # Dirty hack.
         return self._wms_source
 
     def edit_link(self):

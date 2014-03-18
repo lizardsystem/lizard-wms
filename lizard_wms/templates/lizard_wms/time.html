@@ -6,8 +6,8 @@
 {% block sidebar %}
 <h2>{% trans "Available dates" %}</h2>
 <ul>
-  {% for time in view.wms_source.times %}
-    <li>{{ time }}</li>
+  {% for acceptable in view.acceptables %}
+    <li>{{ acceptable }}</li>
   {% endfor %}
 </ul>
 {% endblock sidebar %}
