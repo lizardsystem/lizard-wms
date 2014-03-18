@@ -4,7 +4,7 @@
 {% load compress %}
 
 {% block sidebar %}
-<h2>{% trans "Available dates" %}</h2>
+<h2>{% trans "Available dates for" %} {{ view.wms_source.display_name }}</h2>
 <ul>
   {% for acceptable in view.acceptables %}
     <li>{{ acceptable.to_html }}</li>
