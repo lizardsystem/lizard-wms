@@ -10,13 +10,14 @@ import socket
 
 from xml.etree import ElementTree
 
-from lizard_wms.conf import settings
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
 from django.template.defaultfilters import urlizetrunc
 from django.utils.html import escapejs
 from django.utils.translation import ugettext_lazy as _
+from lizard_wms.conf import settings
 
 from jsonfield.fields import JSONField
 
@@ -44,6 +45,17 @@ WMS_OPTIONS_DEFAULT = '''{"buffer": 0, "isBaseLayer": false, "opacity": 0.5}'''
 
 
 logger = logging.getLogger(__name__)
+
+
+def cache_times(callable):
+    def inner(self):
+        cache_key = 'wms_times_%s' % self.id
+        result = cache.get(cache_key)
+        if result is None:
+            result = callable(self)
+            cache.set(cache_key, result, 120)
+        return result
+    return inner
 
 
 def capabilities_url(url):
@@ -327,6 +339,7 @@ like {"key": "value", "key2": "value2"}.
                 logger.exception(msg)
         return False
 
+    @cache_times
     def times(self):
         if not self.has_timepositions:
             return
