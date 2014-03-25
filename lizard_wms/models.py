@@ -60,10 +60,10 @@ def cache_times(callable):
 
 def cache_workspace_acceptable(callable):
     def inner(self, time=None):
-        cache_key = 'wms_acceptable_%s_%s' % (self.id, time)
+        cache_key = 'wms_acceptable2_%s_%s' % (self.id, time)
         result = cache.get(cache_key)
         if result is None:
-            result = callable(self)
+            result = callable(self, time)
             cache.set(cache_key, result, 60 * 60)
         return result
     return inner
