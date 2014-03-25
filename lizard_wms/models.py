@@ -61,7 +61,7 @@ def cache_times(callable):
 
 def cache_workspace_acceptable(callable):
     def inner(self, time=None):
-        cache_key = 'wms_acceptable3_%s_%s' % (self.id, time)
+        cache_key = 'wms_acceptable4_%s_%s' % (self.id, time)
         result = cache.get(cache_key)
         if result is None:
             result = callable(self, time)
@@ -389,7 +389,7 @@ like {"key": "value", "key2": "value2"}.
             self.hacked_time = time
             formatted_time = time[:16]
             formatted_time = datetime.datetime.strptime(
-                formatted_time, '%Y-%m-%dT%H:%M').strftime('%d %B %Y, %H:%M')
+                formatted_time, '%Y-%m-%dT%H:%M').strftime('%d %b %Y, %H:%M')
             name += ' at %s' % formatted_time
         time_page_url = None
         if self.has_timepositions and time is None:
