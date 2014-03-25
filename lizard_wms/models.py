@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from urllib import urlencode
 import cgi
+import datetime
 import json
 import logging
 import socket
@@ -386,7 +387,10 @@ like {"key": "value", "key2": "value2"}.
             # Dirty hack upon dirty hack. This at least gets us the right
             # params in the smallest amount of work.
             self.hacked_time = time
-            name += ' at %s' % time
+            formatted_time = time[:16]
+            formatted_time = datetime.datetime.strptime(
+                formatted_time, '%Y-%m-%dT%H:%M').strftime('%d %B %Y, %H:%M')
+            name += ' at %s' % formatted_time
         time_page_url = None
         if self.has_timepositions and time is None:
             time_page_url = reverse('lizard_wms.time_page',
