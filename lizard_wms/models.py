@@ -53,7 +53,18 @@ def cache_times(callable):
         result = cache.get(cache_key)
         if result is None:
             result = callable(self)
-            cache.set(cache_key, result, 120)
+            cache.set(cache_key, result, 5 * 60)
+        return result
+    return inner
+
+
+def cache_workspace_acceptable(callable):
+    def inner(self, time=None):
+        cache_key = 'wms_acceptable_%s_%s' % (self.id, time)
+        result = cache.get(cache_key)
+        if result is None:
+            result = callable(self)
+            cache.set(cache_key, result, 60 * 60)
         return result
     return inner
 
@@ -356,6 +367,7 @@ like {"key": "value", "key2": "value2"}.
                 return layer.timepositions
         logger.warn(u"Layer %s not found." % params['layers'])
 
+    @cache_workspace_acceptable
     def workspace_acceptable(self, time=None):
         allowed_cql_filters = self.featureline_set.filter(
             visible=True).values_list('name', flat=True)
