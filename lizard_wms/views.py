@@ -221,7 +221,7 @@ class TimeWmsView(MapView):
             # lizard-map request to grab the new workspace. Don't render the
             # whole huge 'acceptables' list.
             return []
-        if not self.year_and_month:
+        if self.year_and_month:
             return [self.wms_source.workspace_acceptable(time=time)
                     for time in self.wms_source.times()
                     if time.startswith(self.year_and_month)]
