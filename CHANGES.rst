@@ -9,6 +9,9 @@ Changelog of lizard-wms
 
 - Add username/password combo to a connection.fetch.
 
+- Added 'time' support with a special page, originally for the 'basisims' project.
+
+
 1.34 (2013-09-26)
 -----------------
 
@@ -18,7 +21,7 @@ Changelog of lizard-wms
 1.33 (2013-09-19)
 -----------------
 
-- Add username password authentication for GetFeatureInfo when behind a 
+- Add username password authentication for GetFeatureInfo when behind a
   wms proxy is used.
 
 
