@@ -13,7 +13,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.utils.html import escapejs
+from django.views.decorators.cache import cache_control
 from lizard_map.views import MapView
 from lizard_ui.layout import Action
 from lizard_wms.conf import settings
@@ -199,6 +201,10 @@ def cache_acceptables(callable):
 class TimeWmsView(MapView):
     """View for a wms layer with TIME parameter."""
     template_name = 'lizard_wms/time.html'
+
+    @method_decorator(cache_control(private=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TimeWmsView, self).dispatch(*args, **kwargs)
 
     @property
     def wms_source(self):
