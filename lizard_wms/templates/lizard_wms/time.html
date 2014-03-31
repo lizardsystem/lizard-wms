@@ -5,6 +5,13 @@
 {% load cache %}
 
 {% block sidebar %}
+  <h2>Years</h2>
+  <ul>
+    {% for year in view.years %}
+      <li><a href="?year={{ year}}">{{ year }}</a></li>
+    {% endfor %}
+  </ul>
+
   <h2>{% trans "Available dates for" %} {{ view.wms_source.display_name }}</h2>
   <ul>
     {% for acceptable in view.acceptables %}

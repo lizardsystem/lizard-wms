@@ -211,22 +211,26 @@ class TimeWmsView(MapView):
         return get_object_or_404(models.WMSSource, pk=self.kwargs['id'])
 
     @cached_property
-    def year_and_month(self):
-        return self.request.GET.get('ym', None)
+    def year(self):
+        from_request = self.request.GET.get('year', None)
+        if from_request is None:
+            return 2014  # Default
+        return int(from_request)
 
-    # @cache_acceptables
+    @cached_property
+    def years(self):
+        yyyys = set([time[:4] for time in self.wms_source.times()])
+        return sorted(list(yyyys))
+
     @cached_property
     def acceptables(self):
         if self.request.is_ajax():
             # lizard-map request to grab the new workspace. Don't render the
             # whole huge 'acceptables' list.
             return []
-        if self.year_and_month:
-            return [self.wms_source.workspace_acceptable(time=time)
-                    for time in self.wms_source.times()
-                    if time.startswith(self.year_and_month)]
         return [self.wms_source.workspace_acceptable(time=time)
-                for time in self.wms_source.times()]
+                for time in self.wms_source.times()
+                if time.startswith(str(self.year))]
 
     @cached_property
     def page_title(self):
