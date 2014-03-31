@@ -202,10 +202,10 @@ class TimeWmsView(MapView):
     """View for a wms layer with TIME parameter."""
     template_name = 'lizard_wms/time.html'
 
-    @method_decorator(cache_control(private=True,
-                                    max_age=5 * 60))
-    def dispatch(self, *args, **kwargs):
-        return super(TimeWmsView, self).dispatch(*args, **kwargs)
+    # @method_decorator(cache_control(private=True,
+    #                                 max_age=5 * 60))
+    # def dispatch(self, *args, **kwargs):
+    #     return super(TimeWmsView, self).dispatch(*args, **kwargs)
 
     @property
     def wms_source(self):
