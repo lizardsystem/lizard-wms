@@ -280,7 +280,7 @@ like {"key": "value", "key2": "value2"}.
     def __unicode__(self):
         return 'WMS Layer {0}'.format(self.layer_name)
 
-    @cached_property
+    @property
     def filter_page_url(self):
         """Return url of a filter page that links to us.
 
@@ -305,15 +305,15 @@ like {"key": "value", "key2": "value2"}.
                             'wms_source_id': self.id}))
         return url
 
-    @cached_property
+    @property
     def proxied_url(self):
         return self._proxify(self.url)
 
-    @cached_property
+    @property
     def proxied_legend_url(self):
         return self._proxify(self.legend_url)
 
-    @cached_property
+    @property
     def params(self):
         params = {}
         if self._params is not None:
@@ -659,16 +659,16 @@ like {"key": "value", "key2": "value2"}.
                     info.append(popup_info)
         return info
 
-    @cached_property
+    @property
     def bounding_box(self):
         if self.bbox:
             return tuple(float(coord) for coord in self.bbox.split(","))
 
-    @cached_property
+    @property
     def name(self):
         return self.display_name or self.layer_name
 
-    @cached_property
+    @property
     def metadata_for_display(self):
         """Return list of key/value metadata tuples.
 
@@ -770,7 +770,7 @@ class FeatureLine(models.Model):
     def __unicode__(self):
         return self.name
 
-    @cached_property
+    @property
     def title(self):
         """Return description or else the name.
 
@@ -816,7 +816,7 @@ class FilterPage(models.Model):
         verbose_name = _("WMS filter page")
         verbose_name_plural = _("WMS filter pages")
 
-    @cached_property
+    @property
     def title(self):
         """Return title for use on the page.
 
