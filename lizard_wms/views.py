@@ -186,17 +186,6 @@ class FilterPageView(MapView):
         return url
 
 
-def cache_acceptables(callable):
-    def inner(self):
-        cache_key = 'wms_acceptables_%s_%s' % (self.wms_source.id, self.year)
-        result = cache.get(cache_key)
-        if result is None:
-            result = callable(self)
-            cache.set(cache_key, result, 10 * 60)
-        return result
-    return inner
-
-
 class TimeWmsView(MapView):
     """View for a wms layer with TIME parameter."""
     template_name = 'lizard_wms/time.html'
@@ -222,7 +211,7 @@ class TimeWmsView(MapView):
         yyyys = set([time[:4] for time in self.wms_source.times()])
         return sorted(list(yyyys))
 
-    @cache_acceptables
+    @cached_property
     def acceptables(self):
         if self.request.is_ajax():
             # lizard-map request to grab the new workspace. Don't render the
