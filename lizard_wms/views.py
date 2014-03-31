@@ -210,14 +210,18 @@ class TimeWmsView(MapView):
     def wms_source(self):
         return get_object_or_404(models.WMSSource, pk=self.kwargs['id'])
 
-    # @cached_property
-    # def year_and_month(self):
-
+    @cached_property
+    def year_and_month(self):
+        return self.request.GET.get('ym', None)
 
     @cache_acceptables
     def acceptables(self):
+        if not self.year_and_month:
+            return [self.wms_source.workspace_acceptable(time=time)
+                    for time in self.wms_source.times()]
         return [self.wms_source.workspace_acceptable(time=time)
-                for time in self.wms_source.times()]
+                for time in self.wms_source.times()
+                if time.startswith(self.year_and_month)]
 
     @cached_property
     def page_title(self):
