@@ -214,7 +214,8 @@ class TimeWmsView(MapView):
     def year_and_month(self):
         return self.request.GET.get('ym', None)
 
-    @cache_acceptables
+    # @cache_acceptables
+    @cached_property
     def acceptables(self):
         if not self.year_and_month:
             return [self.wms_source.workspace_acceptable(time=time)
