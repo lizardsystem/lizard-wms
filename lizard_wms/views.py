@@ -188,7 +188,7 @@ class FilterPageView(MapView):
 
 def cache_acceptables(callable):
     def inner(self):
-        cache_key = 'wms_acceptables_%s' % self.wms_source.id
+        cache_key = 'wms_acceptables_%s_%s' % (self.wms_source.id, self.year)
         result = cache.get(cache_key)
         if result is None:
             result = callable(self)
@@ -222,7 +222,7 @@ class TimeWmsView(MapView):
         yyyys = set([time[:4] for time in self.wms_source.times()])
         return sorted(list(yyyys))
 
-    @cached_property
+    @cache_acceptables
     def acceptables(self):
         if self.request.is_ajax():
             # lizard-map request to grab the new workspace. Don't render the
