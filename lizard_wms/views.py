@@ -7,7 +7,7 @@ import logging
 from collections import defaultdict
 
 # from django.utils.translation import ugettext as _
-from lizard_wms.conf import settings
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.html import escapejs
 from lizard_map.views import MapView
 from lizard_ui.layout import Action
+from lizard_wms.conf import settings
 import unicodecsv
 
 from lizard_wms import models
@@ -184,6 +185,17 @@ class FilterPageView(MapView):
         return url
 
 
+def cache_acceptables(callable):
+    def inner(self):
+        cache_key = 'wms_acceptables_%s' % self.wms_source.id
+        result = cache.get(cache_key)
+        if result is None:
+            result = callable(self)
+            cache.set(cache_key, result, 10 * 60)
+        return result
+    return inner
+
+
 class TimeWmsView(MapView):
     """View for a wms layer with TIME parameter."""
     template_name = 'lizard_wms/time.html'
@@ -192,10 +204,10 @@ class TimeWmsView(MapView):
     def wms_source(self):
         return get_object_or_404(models.WMSSource, pk=self.kwargs['id'])
 
-    @property
+    @cache_acceptables
     def acceptables(self):
-        for time in self.wms_source.times():
-            yield self.wms_source.workspace_acceptable(time=time)
+        return [self.wms_source.workspace_acceptable(time=time)
+                for time in self.wms_source.times()]
 
     @property
     def page_title(self):
