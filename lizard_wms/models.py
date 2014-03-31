@@ -16,6 +16,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import transaction
 from django.template.defaultfilters import urlizetrunc
+from django.utils.functional import cached_property
 from django.utils.html import escapejs
 from django.utils.translation import ugettext_lazy as _
 from lizard_wms.conf import settings
@@ -279,7 +280,7 @@ like {"key": "value", "key2": "value2"}.
     def __unicode__(self):
         return 'WMS Layer {0}'.format(self.layer_name)
 
-    @property
+    @cached_property
     def filter_page_url(self):
         """Return url of a filter page that links to us.
 
@@ -304,15 +305,15 @@ like {"key": "value", "key2": "value2"}.
                             'wms_source_id': self.id}))
         return url
 
-    @property
+    @cached_property
     def proxied_url(self):
         return self._proxify(self.url)
 
-    @property
+    @cached_property
     def proxied_legend_url(self):
         return self._proxify(self.legend_url)
 
-    @property
+    @cached_property
     def params(self):
         params = {}
         if self._params is not None:
@@ -658,16 +659,16 @@ like {"key": "value", "key2": "value2"}.
                     info.append(popup_info)
         return info
 
-    @property
+    @cached_property
     def bounding_box(self):
         if self.bbox:
             return tuple(float(coord) for coord in self.bbox.split(","))
 
-    @property
+    @cached_property
     def name(self):
         return self.display_name or self.layer_name
 
-    @property
+    @cached_property
     def metadata_for_display(self):
         """Return list of key/value metadata tuples.
 
@@ -769,7 +770,7 @@ class FeatureLine(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
+    @cached_property
     def title(self):
         """Return description or else the name.
 
@@ -815,7 +816,7 @@ class FilterPage(models.Model):
         verbose_name = _("WMS filter page")
         verbose_name_plural = _("WMS filter pages")
 
-    @property
+    @cached_property
     def title(self):
         """Return title for use on the page.
 

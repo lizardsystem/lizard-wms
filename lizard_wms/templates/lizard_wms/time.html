@@ -5,12 +5,10 @@
 {% load cache %}
 
 {% block sidebar %}
-  {% cache 300 wms-time-sidebar %}
-    <h2>{% trans "Available dates for" %} {{ view.wms_source.display_name }}</h2>
-    <ul>
-      {% for acceptable in view.acceptables %}
-        <li>{{ acceptable.to_html }}</li>
-      {% endfor %}
-    </ul>
-  {% endcache %}
+  <h2>{% trans "Available dates for" %} {{ view.wms_source.display_name }}</h2>
+  <ul>
+    {% for acceptable in view.acceptables %}
+      <li>{{ acceptable.to_html }}</li>
+    {% endfor %}
+  </ul>
 {% endblock sidebar %}

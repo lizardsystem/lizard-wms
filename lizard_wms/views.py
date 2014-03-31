@@ -13,9 +13,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.utils.html import escapejs
-from django.views.decorators.cache import cache_control
 from lizard_map.views import MapView
 from lizard_ui.layout import Action
 from lizard_wms.conf import settings
@@ -207,20 +206,24 @@ class TimeWmsView(MapView):
     # def dispatch(self, *args, **kwargs):
     #     return super(TimeWmsView, self).dispatch(*args, **kwargs)
 
-    @property
+    @cached_property
     def wms_source(self):
         return get_object_or_404(models.WMSSource, pk=self.kwargs['id'])
+
+    # @cached_property
+    # def year_and_month(self):
+
 
     @cache_acceptables
     def acceptables(self):
         return [self.wms_source.workspace_acceptable(time=time)
                 for time in self.wms_source.times()]
 
-    @property
+    @cached_property
     def page_title(self):
         return self.wms_source
 
-    @property
+    @cached_property
     def breadcrumbs(self):
         result = super(TimeWmsView, self).breadcrumbs
         our_url = reverse('lizard_wms.time_page', id=self.kwargs['id'])
