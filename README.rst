@@ -60,25 +60,27 @@ To setup the proxying, two things are needed::
 
 1. In the site's nginx.conf, an internal URL must be defined that
    redirects to the real WMS source. This URL is internal so that it
-   can't be used by external browsers, only by the proxying mechanism.
+   can't be used by external browsers, only by the proxying mechanism::
 
-   location /geoserver6/ {
-       internal;
-       proxy_pass http://geoserver6.lizard.net/geoserver;
-       proxy_set_header Authorization "Basic BASE64 encoded username:password";
+    location /geoserver6/ {
+        internal;
+        proxy_pass http://geoserver6.lizard.net/geoserver;
+        proxy_set_header Authorization "Basic BASE64 encoded username:password";
 
-   }
+    }
 
-2. In the site's settings.py, a reverse mapping of same must be set::
+2. In the site's settings.py, a reverse mapping of same must be set
 
-   # Dictionary of domain names that can be handled by lizard-wms' WmsProxyView, that
-   # redirects them to an internal URL defined in nginx.conf. Domains names are keys,
-   # internal URLs are values.
-   WMS_PROXIED_WMS_SERVERS = {
-       'http://geoserver6.lizard.net/geoserver': {'url': '/geoserver6/',
-                                                  'username': 'Username',
-                                                  'password': 'SuperSecret'}
-   }
+   ::
+
+    # Dictionary of domain names that can be handled by lizard-wms' WmsProxyView, that
+    # redirects them to an internal URL defined in nginx.conf. Domains names are keys,
+    # internal URLs are values.
+    WMS_PROXIED_WMS_SERVERS = {
+        'http://geoserver6.lizard.net/geoserver': {'url': '/geoserver6/',
+                                                   'username': 'Username',
+                                                   'password': 'SuperSecret'}
+    }
 
 The result is that all WMS source URLs shown in Lizard (as workspace
 items) that start with 'http://geoserver6.lizard.net/geoserver' are
