@@ -5,6 +5,8 @@ Changelog of lizard-wms
 1.35 (unreleased)
 -----------------
 
+- Upgrade bootstrap.py to solve a version conflict with setuptools.
+
 - Add a 'check layer' option to see if the layer works.
 
 - Add username/password combo to a connection.fetch.
