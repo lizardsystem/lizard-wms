@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.35 (unreleased)
+1.35 (2014-04-10)
 -----------------
 
 - Upgrade bootstrap.py to solve a version conflict with setuptools.
