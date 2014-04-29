@@ -540,8 +540,8 @@ like {"key": "value", "key2": "value2"}.
         if not bbox:
             return
 
-        logger.warning("Getting feature info for %s item(s) in bbox %s",
-                       feature_count, bbox)
+        logger.debug("Getting feature info for %s item(s) in bbox %s",
+                     feature_count, bbox)
 
         version = '1.1.1'
         if self.connection and self.connection.version:
