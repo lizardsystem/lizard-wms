@@ -1,7 +1,35 @@
 """Chart url generator."""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 
+from GChartWrapper import Encoder
 from GChartWrapper import VerticalBarStack
+
+
+def encodedata(self, data):
+    """Monkey-patched version of encodedata that supports negative values.
+
+    Not sure why, but the unpatched version filters out values smaller
+    than -1. Google Image Charts, however, is able to handle negative
+    floating point values (its most recent incarnation is, at least).
+
+    NB: Google's Image Charts has been officially deprecated as of
+    April 20, 2012.
+
+    """
+    sub_data = []
+    for value in data:
+        if value in (None, 'None'):
+            sub_data.append(self.codeset['none'])
+        elif isinstance(value, str):
+            sub_data.append(value)
+        else:
+            try:
+                sub_data.append(self.codeset['value'](self.scalevalue(value)))
+            except:
+                raise ValueError('cannot encode value: %s' % value)
+    return self.codeset['dchar'].join(sub_data)
+
+Encoder.encodedata = encodedata
 
 SORT_ORDER_ASC = 'asc'
 SORT_ORDER_DESC = 'desc'
@@ -40,20 +68,12 @@ def google_column_chart_url(data):
         data.sort(key=lambda row: row[sortcolumn])
         if sortorder == SORT_ORDER_DESC:
             data.reverse()
-    maxy = 0
-    for i in range(len(data)):
-        total = 0
-        for j in range(len(header)):
-            if j != primary:
-                total += data[i][j]
-        maxy = max(total, maxy)
     data = zip(*data)
     if len(data) == 0:
         return ''
     if primary > -1:
         xaxis = data.pop(primary)
     chart = VerticalBarStack(data, encoding='text')
-    chart.axes.range(0, 0, maxy)
     axes = 'y'
     if primary > -1:
         chart.axes.label(1, *xaxis)
@@ -69,7 +89,7 @@ def google_column_chart_url(data):
     chart.fill('bg', 's', 'ffffff00')
     chart.bar(17, 630 / length - 17)
     chart.size(758, 200)
-    chart.scale(0, maxy)
+    chart.scale('a')  # automatic
     chart.legend(*legend)
     #Hack to allow a reversed legend.
     # http://code.google.com/p/google-chartwrapper/issues/detail?id=36
