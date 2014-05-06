@@ -28,6 +28,7 @@ RENDER_TWO_DECIMALS = 'A'
 RENDER_INTEGER = 'B'
 RENDER_GC_COLUMN = 'C'
 RENDER_IMAGE = 'I'
+RENDER_IMAGE_FULLWIDTH = 'J'
 RENDER_URL_MORE_LINK = 'M'
 RENDER_TEXT = 'T'
 RENDER_URL = 'U'
@@ -42,6 +43,7 @@ DEFAULT_RENDERER = RENDER_TEXT
 POPUP_RENDER_CHOICES = (
     (RENDER_TEXT, _("Text")),
     (RENDER_IMAGE, _("Link to an image")),
+    (RENDER_IMAGE_FULLWIDTH, _("Link to an image, full table width")),
     (RENDER_INTEGER, _("Integer")),
     (RENDER_TWO_DECIMALS, _("Float with two decimals")),
     (RENDER_XLS_DATE, _("Excel date format")),
@@ -104,7 +106,7 @@ def popup_info(feature_line, value):
     render_as = feature_line.render_as
     replacement_link_text = None
     label = feature_line.description or feature_line.name
-    if render_as == RENDER_GC_COLUMN:
+    if render_as in [RENDER_GC_COLUMN, RENDER_IMAGE_FULLWIDTH]:
         label_on_separate_line = True
     else:
         label_on_separate_line = False
@@ -172,6 +174,8 @@ def popup_info(feature_line, value):
         pass  # value is fine.
     elif render_as == RENDER_IMAGE:
         value = mark_safe('<img src="%s" />' % value)
+    elif render_as == RENDER_IMAGE_FULLWIDTH:
+        value = mark_safe('<img src="%s" class="wms-full-width-image" />' % value)
     elif render_as == RENDER_URL:
         link_text = replacement_link_text or value
         value = mark_safe(LINK_TEMPLATE % {'url': value,
