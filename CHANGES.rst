@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.36 (unreleased)
+1.36 (2014-05-12)
 -----------------
 
 - Allow for negative values with Google Image Charts.
