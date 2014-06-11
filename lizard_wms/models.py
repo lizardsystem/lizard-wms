@@ -11,6 +11,7 @@ import tls
 import socket
 
 from xml.etree import ElementTree
+from xml.parsers.expat import ExpatError
 
 from lizard_wms.conf import settings
 from django.core.urlresolvers import reverse
@@ -461,7 +462,11 @@ like {"key": "value", "key2": "value2"}.
         return payload
 
     def _parse_response_gml(self, response):
-        root = ElementTree.fromstring(response.text)
+        try:
+            root = ElementTree.fromstring(response.text)
+        except ExpatError:
+            # GML parsing error.
+            return []
         if 'ServiceException' in root.tag:
             logger.warning("Error in GetFeatureInfo for layer %s."
                            % (self.layer_name))
