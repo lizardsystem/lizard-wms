@@ -469,8 +469,10 @@ like {"key": "value", "key2": "value2"}.
             return []
         if 'ServiceException' in root.tag:
             logger.warning(
-                "Got an error back for GetFeatureInfo for layer %s: %s",
-                self.layer_name, response.text)
+                "Error in GetFeatureInfo for layer %s (connection %s): %s",
+                self.layer_name,
+                self.connection,
+                response.text)
             return []
 
         feature = root.find('{http://www.opengis.net/gml}featureMember')
@@ -496,9 +498,11 @@ like {"key": "value", "key2": "value2"}.
 
         response_dict = json.loads(response.text)
         if "exceptions" in response_dict:
-            logger.warning("Error in GetFeatureInfo for layer %s. %s"
-                           % (self.layer_name,
-                              response_dict['exceptions'][0]['text']))
+            logger.warning(
+                "Error in GetFeatureInfo for layer %s (connection %s): %s",
+                self.layer_name,
+                self.connection,
+                response_dict['exceptions'][0]['text'])
             return []
 
         features = response_dict['features']
@@ -513,8 +517,11 @@ like {"key": "value", "key2": "value2"}.
         if len(elements) == 0:
             return []
         if elements[0].tag == '{http://www.opengis.net/ogc}ServiceException':
-            logger.warning("Error in GetFeatureInfo for layer %s. %s"
-                           % (self.layer_name, elements[0].attrib))
+            logger.warning(
+                "Error in GetFeatureInfo for layer %s (connection %s): %s",
+                self.layer_name,
+                self.connection,
+                response.text)
             return []
         return [elements[0].attrib]
     _parse_response_arcgis_wms_xml.mimetype = "application/vnd.ogc.wms_xml"
