@@ -468,8 +468,9 @@ like {"key": "value", "key2": "value2"}.
             # GML parsing error.
             return []
         if 'ServiceException' in root.tag:
-            logger.warning("Error in GetFeatureInfo for layer %s."
-                           % (self.layer_name))
+            logger.warning(
+                "Got an error back for GetFeatureInfo for layer %s: %s",
+                self.layer_name, response.text)
             return []
 
         feature = root.find('{http://www.opengis.net/gml}featureMember')
