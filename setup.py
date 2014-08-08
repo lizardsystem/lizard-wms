@@ -10,15 +10,14 @@ long_description = '\n\n'.join([
     ])
 
 install_requires = [
-    'Django',
-    'django-staticfiles',
+    'Django >= 1.4, < 1.7',
     'django-extensions',
     'django-jsonfield',
     'OWSLib',
-    'lizard-ui >= 4.0, < 5.0',
-    'lizard-map >= 4.32, < 5.0',
-    'lizard-maptree >= 1.9',
-    'lizard-security >= 0.5',
+    'lizard-ui >= 4.40, < 5.0',
+    'lizard-map >= 4.40, < 5.0',
+    'lizard-maptree >= 1.11',
+    'lizard-security >= 0.7',
     'django-nose',
     'pkginfo',
     'GChartWrapper',
