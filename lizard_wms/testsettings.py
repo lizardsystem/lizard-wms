@@ -130,6 +130,8 @@ SOUTH_TESTS_MIGRATE = False
 
 LIZARD_WMS_STANDALONE = True
 
+SECRET_KEY = "Does not need to be secret while unit testing"
+
 try:
     # Import local settings that aren't stored in svn.
     from lizard_wms.local_testsettings import *
