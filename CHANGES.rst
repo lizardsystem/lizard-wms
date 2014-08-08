@@ -5,7 +5,9 @@ Changelog of lizard-wms
 1.37 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Made lizard-wms compatible with Django 1.6.5, requires lizard-map/ui
+  4.40. Also lizard-wms doesn't use mapnik, so it's lizard-map 4.50
+  compatible too.
 
 
 1.36 (2014-05-12)
@@ -32,7 +34,7 @@ Changelog of lizard-wms
 1.33 (2013-09-19)
 -----------------
 
-- Add username password authentication for GetFeatureInfo when behind a 
+- Add username password authentication for GetFeatureInfo when behind a
   wms proxy is used.
 
 
