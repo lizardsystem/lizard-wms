@@ -5,8 +5,10 @@ import factory
 from lizard_wms import models
 
 
-class WMSConnectionFactory(factory.Factory):
-    FACTORY_FOR = models.WMSConnection
+class WMSConnectionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.WMSConnection
+
     title = "WMS title"
     slug = "wmsslug"
     url = "http://test.com/wms"
@@ -14,8 +16,10 @@ class WMSConnectionFactory(factory.Factory):
                             'getCapabilities.xml')).read()
 
 
-class WMSSourceFactory(factory.Factory):
-    FACTORY_FOR = models.WMSSource
+class WMSSourceFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.WMSSource
+
     layer_name = 'layer_name'
     display_name = 'Display Name'
     url = 'http://test.com'
@@ -35,12 +39,16 @@ class WMSSourceFactory(factory.Factory):
         return wms_source
 
 
-class FeatureLineFactory(factory.Factory):
-    FACTORY_FOR = models.FeatureLine
+class FeatureLineFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.FeatureLine
+
     wms_layer = factory.SubFactory(WMSSourceFactory)
 
 
-class FilterPageFactory(factory.Factory):
-    FACTORY_FOR = models.FilterPage
+class FilterPageFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.FilterPage
+
     wms_source = factory.SubFactory(WMSSourceFactory)
     slug = factory.Sequence(lambda n: 'page{0}'.format(n))
