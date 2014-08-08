@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-1.37 (2014-08-08)
+1.40 (2014-08-08)
 -----------------
 
 - Made lizard-wms compatible with Django 1.6.5, requires lizard-map/ui
