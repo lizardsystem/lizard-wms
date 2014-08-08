@@ -1,8 +1,8 @@
 """Defining lizard_wms' adapter."""
+import json
 import logging
 
 from django.core.urlresolvers import reverse
-from django.utils import simplejson as json
 from lizard_map.workspace import WorkspaceItemAdapter, adapter_serialize
 
 from lizard_wms import models
