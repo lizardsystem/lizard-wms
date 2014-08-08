@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'lizard_maptree',
     'lizard_security',
     'south',
-    'staticfiles',
+    'django.contrib.staticfiles',
     'compressor',
     'django_nose',
     'django_extensions',
