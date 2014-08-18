@@ -25,6 +25,7 @@ install_requires = [
     'requests',
     'unicodecsv',
     'django-appconf',
+    'translations',
     ],
 
 tests_require = [
