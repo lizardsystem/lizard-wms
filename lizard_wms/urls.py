@@ -40,5 +40,5 @@ if getattr(settings, 'LIZARD_WMS_STANDALONE', False):
         (r'^ui/', include('lizard_ui.urls')),
         (r'^map/', include('lizard_map.urls')),
         (r'^admin/', include(admin.site.urls)),
-        (r'', include('staticfiles.urls')),
+        (r'', include('django.contrib.staticfiles.urls')),
     )

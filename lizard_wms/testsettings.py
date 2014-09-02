@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'lizard_maptree',
     'lizard_security',
     'south',
-    'staticfiles',
+    'django.contrib.staticfiles',
     'compressor',
     'django_nose',
     'django_extensions',
@@ -44,9 +44,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    # Needs to be added for django-staticfiles to allow you to use
-    # {{ STATIC_URL }}myapp/my.css in your templates.
-    'staticfiles.context_processors.static_url',
+    'django.core.context_processors.static',
     # For lizard-map
     "django.core.context_processors.request",
     )

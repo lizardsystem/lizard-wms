@@ -11,7 +11,6 @@ long_description = '\n\n'.join([
 
 install_requires = [
     'Django',
-    'django-staticfiles',
     'django-extensions',
     'django-jsonfield',
     'OWSLib',
