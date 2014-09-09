@@ -1,9 +1,9 @@
 """Urls for lizard_wms."""
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 from django.conf import settings
-from django.conf.urls.defaults import include
-from django.conf.urls.defaults import patterns
-from django.conf.urls.defaults import url
+from django.conf.urls import include
+from django.conf.urls import patterns
+from django.conf.urls import url
 from django.contrib import admin
 
 from lizard_maptree.views import MaptreeHomepageView
@@ -40,5 +40,5 @@ if getattr(settings, 'LIZARD_WMS_STANDALONE', False):
         (r'^ui/', include('lizard_ui.urls')),
         (r'^map/', include('lizard_map.urls')),
         (r'^admin/', include(admin.site.urls)),
-        (r'', include('staticfiles.urls')),
+        (r'', include('django.contrib.staticfiles.urls')),
     )
