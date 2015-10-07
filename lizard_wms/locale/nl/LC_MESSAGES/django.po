@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-#   <admin@example.com>, 2013.
+#   <admin@example.com>, 2013, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: Lizard 5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-07 09:54-0500\n"
-"PO-Revision-Date: 2015-10-07 14:58+0000\n"
+"PO-Revision-Date: 2015-10-07 15:01+0000\n"
 "Last-Translator: admin <admin@example.com>\n"
 "Language-Team: Dutch (http://translations.lizard.net/projects/p/lizard5/team/"
 "nl/)\n"
@@ -92,7 +92,7 @@ msgstr "URL van de legenda"
 
 #: models.py:237
 msgid "Select the mimetype of the GetFeatureInfo"
-msgstr ""
+msgstr "Selecteer het mimetype van de GetFeatureInfo"
 
 #: models.py:242
 msgid "show legend"
@@ -122,7 +122,7 @@ msgstr "Nummer waarop de categoriën onderling geordend worden."
 
 #: models.py:255
 msgid "Time positions"
-msgstr ""
+msgstr "tijdstippen"
 
 #: models.py:260 models.py:757
 msgid "WMS source"
@@ -191,27 +191,27 @@ msgstr "WMS filterpagina's"
 
 #: models.py:794
 msgid "The name on the button."
-msgstr ""
+msgstr "De naam op de knop"
 
 #: models.py:798
 msgid "CQL filter"
-msgstr ""
+msgstr "CQL filter"
 
 #: models.py:799
 msgid "The filter for the wms layer."
-msgstr ""
+msgstr "Het filter voor de wms laag"
 
 #: models.py:804
 msgid "The order of the buttons."
-msgstr ""
+msgstr "De volgorde van de knoppen"
 
 #: models.py:808
 msgid "Display"
-msgstr ""
+msgstr "naam die getoond wordt"
 
 #: models.py:809
 msgid "Is this button displayed?"
-msgstr ""
+msgstr "Wordt deze knop getoond?"
 
 #: popup_renderers.py:44
 msgid "Text"
@@ -223,7 +223,7 @@ msgstr "Link naar een afbeelding"
 
 #: popup_renderers.py:46
 msgid "Link to an image, full table width"
-msgstr ""
+msgstr "link naar een afbeelding"
 
 #: popup_renderers.py:47
 msgid "Integer"
