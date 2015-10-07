@@ -6,16 +6,17 @@
 #   <admin@example.com>, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: lizardsystem\n"
+"Project-Id-Version: Lizard 5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-07 09:54-0500\n"
-"PO-Revision-Date: 2013-03-14 16:15+0000\n"
+"PO-Revision-Date: 2015-10-07 14:58+0000\n"
 "Last-Translator: admin <admin@example.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: nl\n"
+"Language-Team: Dutch (http://translations.lizard.net/projects/p/lizard5/team/"
+"nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: admin.py:88
@@ -205,9 +206,8 @@ msgid "The order of the buttons."
 msgstr ""
 
 #: models.py:808
-#, fuzzy
 msgid "Display"
-msgstr "naam die getoond wordt"
+msgstr ""
 
 #: models.py:809
 msgid "Is this button displayed?"
@@ -222,9 +222,8 @@ msgid "Link to an image"
 msgstr "Link naar een afbeelding"
 
 #: popup_renderers.py:46
-#, fuzzy
 msgid "Link to an image, full table width"
-msgstr "Link naar een afbeelding"
+msgstr ""
 
 #: popup_renderers.py:47
 msgid "Integer"
@@ -277,6 +276,3 @@ msgstr "Waarde"
 #: templates/lizard_wms/popup.html:26
 msgid "No data"
 msgstr "Geen gegevens"
-
-#~ msgid "Add to selection"
-#~ msgstr "Voeg toe aan selectie"
