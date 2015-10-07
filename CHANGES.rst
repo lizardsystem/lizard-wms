@@ -5,7 +5,9 @@ Changelog of lizard-wms
 2.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Moved translations from lizardsystem project to lizard5 project (on
+  translations.lizard.net).
+  [reinout]
 
 
 2.0 (2014-12-15)
@@ -25,7 +27,7 @@ Changelog of lizard-wms
   use animations.
 
 - Updated to django 1.6.
-  
+
 
 1.31 (2013-09-02)
 -----------------
