@@ -8,41 +8,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lizardsystem\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-14 16:13+0000\n"
+"POT-Creation-Date: 2015-10-07 09:54-0500\n"
 "PO-Revision-Date: 2013-03-14 16:15+0000\n"
 "Last-Translator: admin <admin@example.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: admin.py:86
+#: admin.py:88
 msgid "Update all bounding boxes"
 msgstr "Update de afbakening"
 
-#: admin.py:92
+#: admin.py:94
 msgid "Set the not-yet-set bounding boxes"
 msgstr "Update de nog niet bekende afbakeningen"
 
-#: models.py:89
+#: models.py:81
 msgid "title"
 msgstr "titel"
 
-#: models.py:92 models.py:619
+#: models.py:84 models.py:746
 msgid "slug"
 msgstr "ID in URL"
 
-#: models.py:94 models.py:195 popup_renderers.py:48
+#: models.py:86 models.py:213 popup_renderers.py:50
 msgid "URL"
 msgstr "URL"
 
-#: models.py:96
+#: models.py:88
 msgid "version"
 msgstr "versie"
 
-#: models.py:100
+#: models.py:92
 msgid ""
 "Version number for WMS service. Not used. 1.1.1 is used because owslib can "
 "only handle 1.1.1."
@@ -50,31 +50,31 @@ msgstr ""
 "Versienummer voor de WMS service. Niet gebruikt. 1.1.1 wordt gebruikt omdat "
 "owslib alleen die versie aankan."
 
-#: models.py:122
+#: models.py:109
 msgid "WMS connection"
 msgstr "WMS verbinding"
 
-#: models.py:123
+#: models.py:110
 msgid "WMS connections"
 msgstr "WMS verbindingen"
 
-#: models.py:192
+#: models.py:210
 msgid "layer name"
 msgstr "naam van de laag"
 
-#: models.py:194
+#: models.py:212
 msgid "display name"
 msgstr "naam die getoond wordt"
 
-#: models.py:199 models.py:573
+#: models.py:215 models.py:700
 msgid "description"
 msgstr "omschrijving"
 
-#: models.py:201
+#: models.py:218
 msgid "metadata"
 msgstr "metadata"
 
-#: models.py:202
+#: models.py:219
 msgid ""
 "Key/value metadata for for instance copyright.\n"
 "It should be a dictionary, so surround it with braces and use double "
@@ -85,138 +85,176 @@ msgstr ""
 "Het moet ingetypt worden met accolades en dubbele aanhalingstekens zoals\n"
 "{\"term1\":\"waarde\", \"term2\":\"waarde 2\"}.\n"
 
-#: models.py:210
+#: models.py:227
 msgid "legend URL"
 msgstr "URL van de legenda"
 
-#: models.py:219
+#: models.py:237
+msgid "Select the mimetype of the GetFeatureInfo"
+msgstr ""
+
+#: models.py:242
 msgid "show legend"
 msgstr "toon legenda"
 
-#: models.py:220
+#: models.py:243
 msgid "Uncheck it if you want to hide the legend."
 msgstr "Vink dit uit als je de legenda hiervan niet wil tonen."
 
-#: models.py:223
+#: models.py:246
 msgid "enable search"
 msgstr "sta zoeken toe"
 
-#: models.py:225
+#: models.py:248
 msgid "Uncheck it if you don't want a click on the map to search us."
 msgstr ""
 "Vink dit uit als je niet wilt dat hierin gezocht wordt als er op de kaart "
 "geklikt wordt."
 
-#: models.py:228 models.py:588
+#: models.py:251 models.py:715 models.py:803
 msgid "index"
 msgstr "index"
 
-#: models.py:229
+#: models.py:252
 msgid "Number used for ordering categories relative to each other."
 msgstr "Nummer waarop de categoriën onderling geordend worden."
 
-#: models.py:234 models.py:630
+#: models.py:255
+msgid "Time positions"
+msgstr ""
+
+#: models.py:260 models.py:757
 msgid "WMS source"
 msgstr "WMS bron"
 
-#: models.py:235
+#: models.py:261
 msgid "WMS sources"
 msgstr "WMS bronnen"
 
-#: models.py:569 models.py:622
+#: models.py:696 models.py:749 models.py:793
 msgid "name"
 msgstr "naam"
 
-#: models.py:576
+#: models.py:703
 msgid "visible"
 msgstr "zichtbaar"
 
-#: models.py:579
+#: models.py:706
 msgid "use as id"
 msgstr "gebruik als ID"
 
-#: models.py:582
+#: models.py:709
 msgid "render as"
 msgstr "weergeven als..."
 
-#: models.py:586
+#: models.py:713
 msgid "in hover"
 msgstr "in de tooltip"
 
-#: models.py:594
+#: models.py:721
 msgid "feature line"
 msgstr "feature"
 
-#: models.py:595
+#: models.py:722
 msgid "feature lines"
 msgstr "features"
 
-#: models.py:620
+#: models.py:747
 msgid "Set automatically from the name."
 msgstr "Dit wordt automatisch ingevuld aan de hand van de naam"
 
-#: models.py:624
+#: models.py:751
 msgid "Title of the page. If empty, the WMS source's name is used."
 msgstr ""
 "Titel van de pagina. Als het leeg is wordt de naam van de WMS bron gebruikt."
 
-#: models.py:631
+#: models.py:758
 msgid "WMS source for which we show filters."
 msgstr "WMS bron waar we de filters voor tonen."
 
-#: models.py:636
+#: models.py:763
 msgid "available filters"
 msgstr "Beschikbare filters"
 
-#: models.py:638
+#: models.py:765
 msgid "Feature lines of our WMS source that we use as filters."
 msgstr "Features van onze WMS bron die we als filters gebruiken."
 
-#: models.py:643
+#: models.py:770
 msgid "WMS filter page"
 msgstr "WMS filterpagina"
 
-#: models.py:644
+#: models.py:771
 msgid "WMS filter pages"
 msgstr "WMS filterpagina's"
 
-#: popup_renderers.py:43
+#: models.py:794
+msgid "The name on the button."
+msgstr ""
+
+#: models.py:798
+msgid "CQL filter"
+msgstr ""
+
+#: models.py:799
+msgid "The filter for the wms layer."
+msgstr ""
+
+#: models.py:804
+msgid "The order of the buttons."
+msgstr ""
+
+#: models.py:808
+#, fuzzy
+msgid "Display"
+msgstr "naam die getoond wordt"
+
+#: models.py:809
+msgid "Is this button displayed?"
+msgstr ""
+
+#: popup_renderers.py:44
 msgid "Text"
 msgstr "Tekst"
 
-#: popup_renderers.py:44
+#: popup_renderers.py:45
 msgid "Link to an image"
 msgstr "Link naar een afbeelding"
 
-#: popup_renderers.py:45
+#: popup_renderers.py:46
+#, fuzzy
+msgid "Link to an image, full table width"
+msgstr "Link naar een afbeelding"
+
+#: popup_renderers.py:47
 msgid "Integer"
 msgstr "Geheel getal"
 
-#: popup_renderers.py:46
+#: popup_renderers.py:48
 msgid "Float with two decimals"
 msgstr "Twee cijfers achter de komma"
 
-#: popup_renderers.py:47
+#: popup_renderers.py:49
 msgid "Excel date format"
 msgstr "Excel datumformaat"
 
-#: popup_renderers.py:49
+#: popup_renderers.py:51
 msgid "URL-like text"
 msgstr "URL-achtige tekst"
 
-#: popup_renderers.py:50
+#: popup_renderers.py:52
 msgid "URL shown as 'click here' link"
 msgstr "URL die als 'klik hier' getoond wordt"
 
-#: popup_renderers.py:51
+#: popup_renderers.py:53
 msgid "Google column chart"
 msgstr "Google kolomgrafiek"
 
-#: popup_renderers.py:107
+#: popup_renderers.py:133
 msgid "Error converting data to a graph"
 msgstr "Fout bij het converteren naar een grafiek"
 
-#: popup_renderers.py:122
+#: popup_renderers.py:148
 msgid "Click here for more information"
 msgstr "Klik hier voor meer informatie"
 
@@ -236,10 +274,9 @@ msgstr "Attribuut"
 msgid "Value"
 msgstr "Waarde"
 
-#: templates/lizard_wms/popup.html:37
-msgid "Add to selection"
-msgstr "Voeg toe aan selectie"
-
-#: templates/lizard_wms/popup.html:44
+#: templates/lizard_wms/popup.html:26
 msgid "No data"
 msgstr "Geen gegevens"
+
+#~ msgid "Add to selection"
+#~ msgstr "Voeg toe aan selectie"

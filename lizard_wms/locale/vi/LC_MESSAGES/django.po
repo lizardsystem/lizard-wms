@@ -7,72 +7,72 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lizardsystem\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-14 16:13+0000\n"
+"POT-Creation-Date: 2015-10-07 09:54-0500\n"
 "PO-Revision-Date: 2013-03-14 16:13+0000\n"
 "Last-Translator: admin <admin@example.com>\n"
 "Language-Team: Vietnamese (http://translations.lizard.net/projects/p/"
 "lizardsystem/team/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: admin.py:86
+#: admin.py:88
 msgid "Update all bounding boxes"
 msgstr ""
 
-#: admin.py:92
+#: admin.py:94
 msgid "Set the not-yet-set bounding boxes"
 msgstr ""
 
-#: models.py:89
+#: models.py:81
 msgid "title"
 msgstr ""
 
-#: models.py:92 models.py:619
+#: models.py:84 models.py:746
 msgid "slug"
 msgstr ""
 
-#: models.py:94 models.py:195 popup_renderers.py:48
+#: models.py:86 models.py:213 popup_renderers.py:50
 msgid "URL"
 msgstr ""
 
-#: models.py:96
+#: models.py:88
 msgid "version"
 msgstr ""
 
-#: models.py:100
+#: models.py:92
 msgid ""
 "Version number for WMS service. Not used. 1.1.1 is used because owslib can "
 "only handle 1.1.1."
 msgstr ""
 
-#: models.py:122
+#: models.py:109
 msgid "WMS connection"
 msgstr ""
 
-#: models.py:123
+#: models.py:110
 msgid "WMS connections"
 msgstr ""
 
-#: models.py:192
+#: models.py:210
 msgid "layer name"
 msgstr ""
 
-#: models.py:194
+#: models.py:212
 msgid "display name"
 msgstr ""
 
-#: models.py:199 models.py:573
+#: models.py:215 models.py:700
 msgid "description"
 msgstr ""
 
-#: models.py:201
+#: models.py:218
 msgid "metadata"
 msgstr ""
 
-#: models.py:202
+#: models.py:219
 msgid ""
 "Key/value metadata for for instance copyright.\n"
 "It should be a dictionary, so surround it with braces and use double "
@@ -80,135 +80,171 @@ msgid ""
 "like {\"key\": \"value\", \"key2\": \"value2\"}.\n"
 msgstr ""
 
-#: models.py:210
+#: models.py:227
 msgid "legend URL"
 msgstr ""
 
-#: models.py:219
+#: models.py:237
+msgid "Select the mimetype of the GetFeatureInfo"
+msgstr ""
+
+#: models.py:242
 msgid "show legend"
 msgstr ""
 
-#: models.py:220
+#: models.py:243
 msgid "Uncheck it if you want to hide the legend."
 msgstr ""
 
-#: models.py:223
+#: models.py:246
 msgid "enable search"
 msgstr ""
 
-#: models.py:225
+#: models.py:248
 msgid "Uncheck it if you don't want a click on the map to search us."
 msgstr ""
 
-#: models.py:228 models.py:588
+#: models.py:251 models.py:715 models.py:803
 msgid "index"
 msgstr ""
 
-#: models.py:229
+#: models.py:252
 msgid "Number used for ordering categories relative to each other."
 msgstr ""
 
-#: models.py:234 models.py:630
+#: models.py:255
+msgid "Time positions"
+msgstr ""
+
+#: models.py:260 models.py:757
 msgid "WMS source"
 msgstr ""
 
-#: models.py:235
+#: models.py:261
 msgid "WMS sources"
 msgstr ""
 
-#: models.py:569 models.py:622
+#: models.py:696 models.py:749 models.py:793
 msgid "name"
 msgstr ""
 
-#: models.py:576
+#: models.py:703
 msgid "visible"
 msgstr ""
 
-#: models.py:579
+#: models.py:706
 msgid "use as id"
 msgstr ""
 
-#: models.py:582
+#: models.py:709
 msgid "render as"
 msgstr ""
 
-#: models.py:586
+#: models.py:713
 msgid "in hover"
 msgstr ""
 
-#: models.py:594
+#: models.py:721
 msgid "feature line"
 msgstr ""
 
-#: models.py:595
+#: models.py:722
 msgid "feature lines"
 msgstr ""
 
-#: models.py:620
+#: models.py:747
 msgid "Set automatically from the name."
 msgstr ""
 
-#: models.py:624
+#: models.py:751
 msgid "Title of the page. If empty, the WMS source's name is used."
 msgstr ""
 
-#: models.py:631
+#: models.py:758
 msgid "WMS source for which we show filters."
 msgstr ""
 
-#: models.py:636
+#: models.py:763
 msgid "available filters"
 msgstr ""
 
-#: models.py:638
+#: models.py:765
 msgid "Feature lines of our WMS source that we use as filters."
 msgstr ""
 
-#: models.py:643
+#: models.py:770
 msgid "WMS filter page"
 msgstr ""
 
-#: models.py:644
+#: models.py:771
 msgid "WMS filter pages"
 msgstr ""
 
-#: popup_renderers.py:43
-msgid "Text"
+#: models.py:794
+msgid "The name on the button."
+msgstr ""
+
+#: models.py:798
+msgid "CQL filter"
+msgstr ""
+
+#: models.py:799
+msgid "The filter for the wms layer."
+msgstr ""
+
+#: models.py:804
+msgid "The order of the buttons."
+msgstr ""
+
+#: models.py:808
+msgid "Display"
+msgstr ""
+
+#: models.py:809
+msgid "Is this button displayed?"
 msgstr ""
 
 #: popup_renderers.py:44
-msgid "Link to an image"
+msgid "Text"
 msgstr ""
 
 #: popup_renderers.py:45
-msgid "Integer"
+msgid "Link to an image"
 msgstr ""
 
 #: popup_renderers.py:46
-msgid "Float with two decimals"
+msgid "Link to an image, full table width"
 msgstr ""
 
 #: popup_renderers.py:47
-msgid "Excel date format"
+msgid "Integer"
+msgstr ""
+
+#: popup_renderers.py:48
+msgid "Float with two decimals"
 msgstr ""
 
 #: popup_renderers.py:49
-msgid "URL-like text"
-msgstr ""
-
-#: popup_renderers.py:50
-msgid "URL shown as 'click here' link"
+msgid "Excel date format"
 msgstr ""
 
 #: popup_renderers.py:51
+msgid "URL-like text"
+msgstr ""
+
+#: popup_renderers.py:52
+msgid "URL shown as 'click here' link"
+msgstr ""
+
+#: popup_renderers.py:53
 msgid "Google column chart"
 msgstr ""
 
-#: popup_renderers.py:107
+#: popup_renderers.py:133
 msgid "Error converting data to a graph"
 msgstr ""
 
-#: popup_renderers.py:122
+#: popup_renderers.py:148
 msgid "Click here for more information"
 msgstr ""
 
@@ -228,10 +264,6 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: templates/lizard_wms/popup.html:37
-msgid "Add to selection"
-msgstr ""
-
-#: templates/lizard_wms/popup.html:44
+#: templates/lizard_wms/popup.html:26
 msgid "No data"
 msgstr ""

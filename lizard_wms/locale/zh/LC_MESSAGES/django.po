@@ -8,42 +8,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lizardsystem\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-14 16:13+0000\n"
+"POT-Creation-Date: 2015-10-07 09:54-0500\n"
 "PO-Revision-Date: 2013-05-07 13:00+0000\n"
 "Last-Translator: Zhanguo Bai <zhanguo.bai@wur.nl>\n"
 "Language-Team: Chinese (http://translations.lizard.net/projects/p/"
 "lizardsystem/team/zh/)\n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: admin.py:86
+#: admin.py:88
 msgid "Update all bounding boxes"
 msgstr "更新所有边界框"
 
-#: admin.py:92
+#: admin.py:94
 msgid "Set the not-yet-set bounding boxes"
 msgstr "设置尚未设置的边界框"
 
-#: models.py:89
+#: models.py:81
 msgid "title"
 msgstr "标题"
 
-#: models.py:92 models.py:619
+#: models.py:84 models.py:746
 msgid "slug"
 msgstr "？？"
 
-#: models.py:94 models.py:195 popup_renderers.py:48
+#: models.py:86 models.py:213 popup_renderers.py:50
 msgid "URL"
 msgstr "网址"
 
-#: models.py:96
+#: models.py:88
 msgid "version"
 msgstr "版本"
 
-#: models.py:100
+#: models.py:92
 msgid ""
 "Version number for WMS service. Not used. 1.1.1 is used because owslib can "
 "only handle 1.1.1."
@@ -51,31 +51,31 @@ msgstr ""
 "网站管理系统服务版本号。未使用。 用1.1.1版本，因为owslib只能处理1.1.1服务版"
 "本。"
 
-#: models.py:122
+#: models.py:109
 msgid "WMS connection"
 msgstr "网站管理系统连接"
 
-#: models.py:123
+#: models.py:110
 msgid "WMS connections"
 msgstr "网站管理系统连接"
 
-#: models.py:192
+#: models.py:210
 msgid "layer name"
 msgstr "图层名称"
 
-#: models.py:194
+#: models.py:212
 msgid "display name"
 msgstr "显示名称"
 
-#: models.py:199 models.py:573
+#: models.py:215 models.py:700
 msgid "description"
 msgstr "描述"
 
-#: models.py:201
+#: models.py:218
 msgid "metadata"
 msgstr "元数据"
 
-#: models.py:202
+#: models.py:219
 msgid ""
 "Key/value metadata for for instance copyright.\n"
 "It should be a dictionary, so surround it with braces and use double "
@@ -86,135 +86,173 @@ msgstr ""
 "这应该是一本字典，所以围绕着它与括号使用双引号，\n"
 "如{“键”：“值”，“键”：“值2”}。\n"
 
-#: models.py:210
+#: models.py:227
 msgid "legend URL"
 msgstr "图例网址"
 
-#: models.py:219
+#: models.py:237
+msgid "Select the mimetype of the GetFeatureInfo"
+msgstr ""
+
+#: models.py:242
 msgid "show legend"
 msgstr "显示图例"
 
-#: models.py:220
+#: models.py:243
 msgid "Uncheck it if you want to hide the legend."
 msgstr "如果你想隐藏图例，请取消选中"
 
-#: models.py:223
+#: models.py:246
 msgid "enable search"
 msgstr "启用搜索"
 
-#: models.py:225
+#: models.py:248
 msgid "Uncheck it if you don't want a click on the map to search us."
 msgstr "如果你不想要在地图上点击搜索我们，请取消选中"
 
-#: models.py:228 models.py:588
+#: models.py:251 models.py:715 models.py:803
 msgid "index"
 msgstr "索引"
 
-#: models.py:229
+#: models.py:252
 msgid "Number used for ordering categories relative to each other."
 msgstr "用于排定相互关联类别顺序的数"
 
-#: models.py:234 models.py:630
+#: models.py:255
+msgid "Time positions"
+msgstr ""
+
+#: models.py:260 models.py:757
 msgid "WMS source"
 msgstr "网站管理系统源码"
 
-#: models.py:235
+#: models.py:261
 msgid "WMS sources"
 msgstr "网站管理系统源码"
 
-#: models.py:569 models.py:622
+#: models.py:696 models.py:749 models.py:793
 msgid "name"
 msgstr "名称"
 
-#: models.py:576
+#: models.py:703
 msgid "visible"
 msgstr "可视"
 
-#: models.py:579
+#: models.py:706
 msgid "use as id"
 msgstr "使用ID"
 
-#: models.py:582
+#: models.py:709
 msgid "render as"
 msgstr "呈现为"
 
-#: models.py:586
+#: models.py:713
 msgid "in hover"
 msgstr "悬停"
 
-#: models.py:594
+#: models.py:721
 msgid "feature line"
 msgstr "特征线"
 
-#: models.py:595
+#: models.py:722
 msgid "feature lines"
 msgstr "特征线"
 
-#: models.py:620
+#: models.py:747
 msgid "Set automatically from the name."
 msgstr "根据名称自动设置"
 
-#: models.py:624
+#: models.py:751
 msgid "Title of the page. If empty, the WMS source's name is used."
 msgstr "标题页。如该页为空白，将采用网站管理系统源名称"
 
-#: models.py:631
+#: models.py:758
 msgid "WMS source for which we show filters."
 msgstr "过滤器显示网站管理系统源"
 
-#: models.py:636
+#: models.py:763
 msgid "available filters"
 msgstr "可用过滤器"
 
-#: models.py:638
+#: models.py:765
 msgid "Feature lines of our WMS source that we use as filters."
 msgstr "我们用作过滤器的网络管理系统源特征线"
 
-#: models.py:643
+#: models.py:770
 msgid "WMS filter page"
 msgstr "网站管理系统过滤器页面"
 
-#: models.py:644
+#: models.py:771
 msgid "WMS filter pages"
 msgstr "网站管理系统过滤器页面"
 
-#: popup_renderers.py:43
+#: models.py:794
+msgid "The name on the button."
+msgstr ""
+
+#: models.py:798
+msgid "CQL filter"
+msgstr ""
+
+#: models.py:799
+msgid "The filter for the wms layer."
+msgstr ""
+
+#: models.py:804
+msgid "The order of the buttons."
+msgstr ""
+
+#: models.py:808
+#, fuzzy
+msgid "Display"
+msgstr "显示名称"
+
+#: models.py:809
+msgid "Is this button displayed?"
+msgstr ""
+
+#: popup_renderers.py:44
 msgid "Text"
 msgstr "文本内容"
 
-#: popup_renderers.py:44
+#: popup_renderers.py:45
 msgid "Link to an image"
 msgstr "图片链接"
 
-#: popup_renderers.py:45
+#: popup_renderers.py:46
+#, fuzzy
+msgid "Link to an image, full table width"
+msgstr "图片链接"
+
+#: popup_renderers.py:47
 msgid "Integer"
 msgstr "整数"
 
-#: popup_renderers.py:46
+#: popup_renderers.py:48
 msgid "Float with two decimals"
 msgstr "浮点数据格式，保留两位小数"
 
-#: popup_renderers.py:47
+#: popup_renderers.py:49
 msgid "Excel date format"
 msgstr "Excel日期格式"
 
-#: popup_renderers.py:49
+#: popup_renderers.py:51
 msgid "URL-like text"
 msgstr "网址"
 
-#: popup_renderers.py:50
+#: popup_renderers.py:52
 msgid "URL shown as 'click here' link"
 msgstr "URL显示为“点击这里”链接"
 
-#: popup_renderers.py:51
+#: popup_renderers.py:53
 msgid "Google column chart"
 msgstr "谷歌柱形图"
 
-#: popup_renderers.py:107
+#: popup_renderers.py:133
 msgid "Error converting data to a graph"
 msgstr "数据转换为图型时错误"
 
-#: popup_renderers.py:122
+#: popup_renderers.py:148
 msgid "Click here for more information"
 msgstr "点击此处了解更多信息"
 
@@ -234,10 +272,9 @@ msgstr "属性"
 msgid "Value"
 msgstr "数值"
 
-#: templates/lizard_wms/popup.html:37
-msgid "Add to selection"
-msgstr "添加到选区"
-
-#: templates/lizard_wms/popup.html:44
+#: templates/lizard_wms/popup.html:26
 msgid "No data"
 msgstr "无数据"
+
+#~ msgid "Add to selection"
+#~ msgstr "添加到选区"
