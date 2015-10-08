@@ -2,7 +2,7 @@ Changelog of lizard-wms
 ===================================================
 
 
-2.1 (unreleased)
+2.1 (2015-10-08)
 ----------------
 
 - Moved translations from lizardsystem project to lizard5 project (on
