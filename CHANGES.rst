@@ -9,6 +9,8 @@ Changelog of lizard-wms
   translations.lizard.net).
   [reinout]
 
+- Added more NL translations (and empty arabic translation files).
+  [reinout]
 
 2.0 (2014-12-15)
 ----------------
